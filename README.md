@@ -1,2 +1,2 @@
 # LAIG-projects
-Repository to host Laboratório de Aplicações com Interface Gráfica projects
+Repository to host Graphical Applications Laboratory projects
