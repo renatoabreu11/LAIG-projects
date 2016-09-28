@@ -27,7 +27,8 @@ MySceneGraph.prototype.onXMLReady=function()
 	var rootElement = this.reader.xmlDoc.documentElement;
 	
 	// Here should go the calls for different functions to parse the various blocks
-	var error = this.parseGlobalsExample(rootElement);
+	var error = this.parseViews(rootElement);
+	//this.parseViews(rootElement);
 
 	if (error != null) {
 		this.onXMLError(error);
@@ -84,11 +85,38 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	};
 
 };
+
+MySceneGraph.prototype.parseViews= function(rootElement) {
 	
+	var elems =  rootElement.getElementsByTagName('views');
+	if (elems == null) {
+		return "views element is missing.";
+	}
+
+	if (elems.length != 1) {
+		return "either zero or more than one 'views' element found.";
+	}
+
+	var views = elems[0];
+	this.default = this.reader.getString(views, 'default');
+
+	//perspectives
+	var elems2 = elems.getElementsByTagName('perspective');
+	if (elems2.length < 1) {
+		return "no 'perpective' element found.";
+
+	var perspectives = elems2[0];
+	//this.from
+
+
+	console.log("views read from file: "+this.default);
+
+};	
+
+
 /*
  * Callback to be executed on any read error
  */
- 
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: "+message);	
 	this.loadedOk=false;
