@@ -64,7 +64,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	this.cullface = this.reader.getItem(globals, 'cullface', ["back","front","none", "frontandback"]);
 	this.cullorder = this.reader.getItem(globals, 'cullorder', ["ccw","cw"]);
 
-	console.log("Globals read from file: {background=" + this.background + ", drawmode=" + this.drawmode + ", cullface=" + this.cullface + ", cullorder=" + this.cullorder + "}");
+	console.log("Globals read from file: {background="+this.background+", drawmode="+this.drawmode + ", cullface=" + this.cullface + ", cullorder=" + this.cullorder + "}");
 
 	var tempList=rootElement.getElementsByTagName('list');
 
@@ -88,30 +88,63 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 
 MySceneGraph.prototype.parseViews= function(rootElement) {
 	
-	var elems =  rootElement.getElementsByTagName('views');
-	if (elems == null) {
+	//VIEWS
+	var elemsViews =  rootElement.getElementsByTagName('views');
+	if (elemsViews == null) {
 		return "views element is missing.";
 	}
 
-	if (elems.length != 1) {
+	if (elemsViews.length != 1) {
 		return "either zero or more than one 'views' element found.";
 	}
 
-	var views = elems[0];
+	var views = elemsViews[0];
 	this.default = this.reader.getString(views, 'default');
 
-	//perspectives
-	var elems2 = elems.getElementsByTagName('perspective');
-	if (elems2.length < 1) {
+	//VIEWS->PERSPECTIVE
+	var elemsPersp = views.getElementsByTagName('perspective');
+	if (elemsPersp.length < 1)
 		return "no 'perpective' element found.";
 
-	var perspectives = elems2[0];
-	//this.from
+	for(var i=0; i<elemsPersp.length; i++)
+	{
+		console.log("PERSPECTIVE "+i+":");
+		var perspective = elemsPersp[i];
+		var id = this.reader.getString(perspective, 'id');
+		var near = this.reader.getFloat(perspective, 'near');
+		var far = this.reader.getFloat(perspective, 'far');
+		var angle = this.reader.getFloat(perspective, 'angle');
+		console.log("id="+id+", near="+near+", far="+far+", angle="+angle);
 
+		//VIEWS->PERSPECTIVE->FROM
+		var elemsFrom = perspective.getElementsByTagName('from');
+		if(elemsFrom == null)
+			return "no 'from' element found in a 'perspective'";
+		if(elemsFrom.length != 1)
+			return "either zero or more than one 'from' element found in a 'perspective'."
+		var from = elemsFrom[0];
+		var fromCoords = [];
+		fromCoords[0] = this.reader.getFloat(from, 'x');
+		fromCoords[1] = this.reader.getFloat(from, 'y');
+		fromCoords[2] = this.reader.getFloat(from, 'z');
+		console.log("from: ("+fromCoords[0]+","+fromCoords[1]+","+fromCoords[2]+")");
+		
+		//VIEWS->PERSPECTIVE->TO
+		var elemsTo = perspective.getElementsByTagName('to');
+		if(elemsTo == null)
+			return "no 'to' element found in a 'perspective'";
+		if(elemsFrom.length != 1)
+			return "either zero or more than one 'to' element found in a 'perspective'."
+		var to = elemsTo[0];
+		var toCoords = [];
+		toCoords[0] = this.reader.getFloat(to, 'x');
+		toCoords[1] = this.reader.getFloat(to, 'y');
+		toCoords[2] = this.reader.getFloat(to, 'z');
+		console.log("to: ("+toCoords[0]+","+toCoords[1]+","+toCoords[2]+")");
 
-	console.log("views read from file: "+this.default);
+	}
 
-};	
+};
 
 
 /*
