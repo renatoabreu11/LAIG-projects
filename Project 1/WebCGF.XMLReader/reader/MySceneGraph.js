@@ -27,7 +27,7 @@ MySceneGraph.prototype.onXMLReady=function()
 	var rootElement = this.reader.xmlDoc.documentElement;
 	
 	// Here should go the calls for different functions to parse the various blocks
-	var error = this.parseLights(rootElement);
+	var error = this.parseMaterials(rootElement);
 	//this.parseViews(rootElement);
 
 	if (error != null) {
@@ -123,11 +123,11 @@ MySceneGraph.prototype.parseViews= function(rootElement) {
 		if(elemsFrom.length != 1)
 			return "either zero or more than one 'from' element found in a 'perspective'.";
 		var from = elemsFrom[0];
-		var fromCoords = [];
-		fromCoords[0] = this.reader.getFloat(from, 'x');
-		fromCoords[1] = this.reader.getFloat(from, 'y');
-		fromCoords[2] = this.reader.getFloat(from, 'z');
-		console.log("from: ("+fromCoords[0]+","+fromCoords[1]+","+fromCoords[2]+")");
+		var fromInfo = [];
+		fromInfo[0] = this.reader.getFloat(from, 'x');
+		fromInfo[1] = this.reader.getFloat(from, 'y');
+		fromInfo[2] = this.reader.getFloat(from, 'z');
+		console.log("from: ("+fromInfo[0]+","+fromInfo[1]+","+fromInfo[2]+")");
 		
 		//VIEWS->PERSPECTIVE->TO
 		var elemsTo = perspective.getElementsByTagName('to');
@@ -136,11 +136,11 @@ MySceneGraph.prototype.parseViews= function(rootElement) {
 		if(elemsFrom.length != 1)
 			return "either zero or more than one 'to' element found in a 'perspective'."
 		var to = elemsTo[0];
-		var toCoords = [];
-		toCoords[0] = this.reader.getFloat(to, 'x');
-		toCoords[1] = this.reader.getFloat(to, 'y');
-		toCoords[2] = this.reader.getFloat(to, 'z');
-		console.log("to: ("+toCoords[0]+","+toCoords[1]+","+toCoords[2]+")");
+		var toInfo = [];
+		toInfo[0] = this.reader.getFloat(to, 'x');
+		toInfo[1] = this.reader.getFloat(to, 'y');
+		toInfo[2] = this.reader.getFloat(to, 'z');
+		console.log("to: ("+toInfo[0]+","+toInfo[1]+","+toInfo[2]+")");
 
 	}
 
@@ -178,56 +178,56 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 		if(elemsLocation == null)
 			return "no 'location' element found in an 'omni'";
 		if(elemsLocation.length != 1)
-			return "either zero or more than one 'location' element found in a 'location'.";
+			return "either zero or more than one 'location' element found in an 'omni'.";
 		var location = elemsLocation[0];
-		var locationCoords = [];
-		locationCoords[0] = this.reader.getFloat(location, 'x');
-		locationCoords[1] = this.reader.getFloat(location, 'y');
-		locationCoords[2] = this.reader.getFloat(location, 'z');
-		locationCoords[3] = this.reader.getFloat(location, 'w');
-		console.log("location: "+locationCoords);
+		var locationInfo = [];
+		locationInfo[0] = this.reader.getFloat(location, 'x');
+		locationInfo[1] = this.reader.getFloat(location, 'y');
+		locationInfo[2] = this.reader.getFloat(location, 'z');
+		locationInfo[3] = this.reader.getFloat(location, 'w');
+		console.log("location: "+locationInfo);
 
 		//LIGHTS->OMNI->AMBIENT
 		var elemsAmbient = omni.getElementsByTagName('ambient');
 		if(elemsAmbient == null)
 			return "no 'ambient' element found in an 'omni'";
 		if(elemsAmbient.length != 1)
-			return "either zero or more than one 'ambient' element found in a 'omni'.";
+			return "either zero or more than one 'ambient' element found in an 'omni'.";
 		var ambient = elemsAmbient[0];
-		var ambientCoords = [];
-		ambientCoords[0] = this.reader.getFloat(ambient, 'r');
-		ambientCoords[1] = this.reader.getFloat(ambient, 'g');
-		ambientCoords[2] = this.reader.getFloat(ambient, 'b');
-		ambientCoords[3] = this.reader.getFloat(ambient, 'a');
-		console.log("ambient: "+ambientCoords);
+		var ambientInfo = [];
+		ambientInfo[0] = this.reader.getFloat(ambient, 'r');
+		ambientInfo[1] = this.reader.getFloat(ambient, 'g');
+		ambientInfo[2] = this.reader.getFloat(ambient, 'b');
+		ambientInfo[3] = this.reader.getFloat(ambient, 'a');
+		console.log("ambient: "+ambientInfo);
 
 		//LIGHTS->OMNI->DIFFUSE
 		var elemsDiffuse = omni.getElementsByTagName('diffuse');
 		if(elemsDiffuse == null)
 			return "no 'diffuse' element found in an 'omni'";
 		if(elemsDiffuse.length != 1)
-			return "either zero or more than one 'diffuse' element found in a 'omni'.";
+			return "either zero or more than one 'diffuse' element found in an 'omni'.";
 		var diffuse = elemsDiffuse[0];
-		var diffuseCoords = [];
-		diffuseCoords[0] = this.reader.getFloat(diffuse, 'r');
-		diffuseCoords[1] = this.reader.getFloat(diffuse, 'g');
-		diffuseCoords[2] = this.reader.getFloat(diffuse, 'b');
-		diffuseCoords[3] = this.reader.getFloat(diffuse, 'a');
-		console.log("diffuse: "+diffuseCoords);
+		var diffuseInfo = [];
+		diffuseInfo[0] = this.reader.getFloat(diffuse, 'r');
+		diffuseInfo[1] = this.reader.getFloat(diffuse, 'g');
+		diffuseInfo[2] = this.reader.getFloat(diffuse, 'b');
+		diffuseInfo[3] = this.reader.getFloat(diffuse, 'a');
+		console.log("diffuse: "+diffuseInfo);
 
 		//LIGHTS->OMNI->SPECULAR
 		var elemsSpecular = omni.getElementsByTagName('specular');
 		if(elemsSpecular == null)
 			return "no 'specular' element found in an 'omni'";
 		if(elemsSpecular.length != 1)
-			return "either zero or more than one 'specular' element found in a 'omni'.";
+			return "either zero or more than one 'specular' element found in an 'omni'.";
 		var specular = elemsSpecular[0];
-		var specularCoords = [];
-		specularCoords[0] = this.reader.getFloat(specular, 'r');
-		specularCoords[1] = this.reader.getFloat(specular, 'g');
-		specularCoords[2] = this.reader.getFloat(specular, 'b');
-		specularCoords[3] = this.reader.getFloat(specular, 'a');
-		console.log("specular: "+specularCoords);
+		var specularInfo = [];
+		specularInfo[0] = this.reader.getFloat(specular, 'r');
+		specularInfo[1] = this.reader.getFloat(specular, 'g');
+		specularInfo[2] = this.reader.getFloat(specular, 'b');
+		specularInfo[3] = this.reader.getFloat(specular, 'a');
+		console.log("specular: "+specularInfo);
 
 	}
 
@@ -249,70 +249,149 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 		//LIGHTS->SPOT->TARGET
 		var elemtsTarget = spot.getElementsByTagName('target');
 		if(elemtsTarget == null)
-			return "no 'target' element found in an 'spot'";
+			return "no 'target' element found in a 'spot'";
 		if(elemtsTarget.length != 1)
 			return "either zero or more than one 'target' element found in a 'spot'.";
 		var target = elemtsTarget[0];
-		var targetCoords = [];
-		targetCoords[0] = this.reader.getFloat(target, 'x');
-		targetCoords[1] = this.reader.getFloat(target, 'y');
-		targetCoords[2] = this.reader.getFloat(target, 'z');
-		console.log("target: "+targetCoords);
+		var targetInfo = [];
+		targetInfo[0] = this.reader.getFloat(target, 'x');
+		targetInfo[1] = this.reader.getFloat(target, 'y');
+		targetInfo[2] = this.reader.getFloat(target, 'z');
+		console.log("target: "+targetInfo);
 
 		//LIGHTS->SPOT->LOCATION
 		var elemsLocation = spot.getElementsByTagName('location');
 		if(elemsLocation == null)
-			return "no 'location' element found in an 'spot'";
+			return "no 'location' element found in a 'spot'";
 		if(elemsLocation.length != 1)
 			return "either zero or more than one 'location' element found in a 'spot'.";
 		var location = elemsLocation[0];
-		var locationCoords = [];
-		locationCoords[0] = this.reader.getFloat(location, 'x');
-		locationCoords[1] = this.reader.getFloat(location, 'y');
-		locationCoords[2] = this.reader.getFloat(location, 'z');
-		console.log("location: "+locationCoords);
+		var locationInfo = [];
+		locationInfo[0] = this.reader.getFloat(location, 'x');
+		locationInfo[1] = this.reader.getFloat(location, 'y');
+		locationInfo[2] = this.reader.getFloat(location, 'z');
+		console.log("location: "+locationInfo);
 
 		//LIGHTS->SPOT->AMBIENT
 		var elemsAmbient = spot.getElementsByTagName('ambient');
 		if(elemsAmbient == null)
-			return "no 'ambient' element found in an 'spot'";
+			return "no 'ambient' element found in a 'spot'";
 		if(elemsAmbient.length != 1)
 			return "either zero or more than one 'ambient' element found in a 'spot'.";
 		var ambient = elemsAmbient[0];
-		var ambientCoords = [];
-		ambientCoords[0] = this.reader.getFloat(ambient, 'r');
-		ambientCoords[1] = this.reader.getFloat(ambient, 'g');
-		ambientCoords[2] = this.reader.getFloat(ambient, 'b');
-		ambientCoords[3] = this.reader.getFloat(ambient, 'a');
-		console.log("ambient: "+ambientCoords);
+		var ambientInfo = [];
+		ambientInfo[0] = this.reader.getFloat(ambient, 'r');
+		ambientInfo[1] = this.reader.getFloat(ambient, 'g');
+		ambientInfo[2] = this.reader.getFloat(ambient, 'b');
+		ambientInfo[3] = this.reader.getFloat(ambient, 'a');
+		console.log("ambient: "+ambientInfo);
 
 		//LIGHTS->SPOT->DIFFUSE
 		var elemsDiffuse = spot.getElementsByTagName('diffuse');
 		if(elemsDiffuse == null)
-			return "no 'diffuse' element found in an 'spot'";
+			return "no 'diffuse' element found in a 'spot'";
 		if(elemsDiffuse.length != 1)
 			return "either zero or more than one 'diffuse' element found in a 'spot'.";
 		var diffuse = elemsDiffuse[0];
-		var diffuseCoords = [];
-		diffuseCoords[0] = this.reader.getFloat(diffuse, 'r');
-		diffuseCoords[1] = this.reader.getFloat(diffuse, 'g');
-		diffuseCoords[2] = this.reader.getFloat(diffuse, 'b');
-		diffuseCoords[3] = this.reader.getFloat(diffuse, 'a');
-		console.log("diffuse: "+diffuseCoords);
+		var diffuseInfo = [];
+		diffuseInfo[0] = this.reader.getFloat(diffuse, 'r');
+		diffuseInfo[1] = this.reader.getFloat(diffuse, 'g');
+		diffuseInfo[2] = this.reader.getFloat(diffuse, 'b');
+		diffuseInfo[3] = this.reader.getFloat(diffuse, 'a');
+		console.log("diffuse: "+diffuseInfo);
 
 		//LIGHTS->SPOT->SPECULAR
 		var elemsSpecular = spot.getElementsByTagName('specular');
 		if(elemsSpecular == null)
-			return "no 'specular' element found in an 'spot'";
+			return "no 'specular' element found in a 'spot'";
 		if(elemsSpecular.length != 1)
 			return "either zero or more than one 'specular' element found in a 'spot'.";
 		var specular = elemsSpecular[0];
-		var specularCoords = [];
-		specularCoords[0] = this.reader.getFloat(specular, 'r');
-		specularCoords[1] = this.reader.getFloat(specular, 'g');
-		specularCoords[2] = this.reader.getFloat(specular, 'b');
-		specularCoords[3] = this.reader.getFloat(specular, 'a');
-		console.log("specular: "+specularCoords);
+		var specularInfo = [];
+		specularInfo[0] = this.reader.getFloat(specular, 'r');
+		specularInfo[1] = this.reader.getFloat(specular, 'g');
+		specularInfo[2] = this.reader.getFloat(specular, 'b');
+		specularInfo[3] = this.reader.getFloat(specular, 'a');
+		console.log("specular: "+specularInfo);
+
+	}
+}
+
+MySceneGraph.prototype.parseMaterials= function(rootElement) {
+	
+	var elems =  rootElement.getElementsByTagName('materials');
+	if (elems == null) {
+		return "materials element is missing.";
+	}
+	if (elems.length != 1) {
+		return "either zero or more than one 'materials' element found.";
+	}
+
+	//MATERIALS->MATERIAL
+	var materials = elems[0].getElementsByTagName('material');
+	if(materials==null) return "no 'material' element found in 'materials'";
+	for(var i=0; i<materials.length; i++)
+	{
+		var material = materials[i];
+		var id = this.reader.getString(material, 'id');
+		console.log("id="+id);
+
+		//MATERIALS->MATERIAL->EMISSION
+		var elemsEmission = material.getElementsByTagName('emission');
+		if(elemsEmission==null) return "no 'emission' found in a 'material'";
+		if(elemsEmission.length!=1) return "either zero or more than one 'emission' found in a 'material'";
+		var emission = elemsEmission[0];
+		emissionInfo=[];
+		emissionInfo[0]=this.reader.getFloat(emission, 'r');
+		emissionInfo[1]=this.reader.getFloat(emission, 'g');
+		emissionInfo[2]=this.reader.getFloat(emission, 'b');
+		emissionInfo[3]=this.reader.getFloat(emission, 'a');
+		console.log("emission="+emissionInfo);
+
+		//MATERIALS->MATERIAL->AMBIENT
+		var elemsAmbient = material.getElementsByTagName('ambient');
+		if(elemsAmbient==null) return "no 'ambient' found in a 'material'";
+		if(elemsAmbient.length!=1) return "either zero or more than one 'ambient' found in a 'material'";
+		var ambient = elemsAmbient[0];
+		ambientInfo=[];
+		ambientInfo[0]=this.reader.getFloat(ambient, 'r');
+		ambientInfo[1]=this.reader.getFloat(ambient, 'g');
+		ambientInfo[2]=this.reader.getFloat(ambient, 'b');
+		ambientInfo[3]=this.reader.getFloat(ambient, 'a');
+		console.log("ambient="+ambientInfo);
+
+		//MATERIALS->MATERIAL->DIFFUSE
+		var elemsDiffuse = material.getElementsByTagName('diffuse');
+		if(elemsDiffuse==null) return "no 'diffuse' found in a 'material'";
+		if(elemsDiffuse.length!=1) return "either zero or more than one 'diffuse' found in a 'material'";
+		var diffuse = elemsDiffuse[0];
+		diffuseInfo=[];
+		diffuseInfo[0]=this.reader.getFloat(diffuse, 'r');
+		diffuseInfo[1]=this.reader.getFloat(diffuse, 'g');
+		diffuseInfo[2]=this.reader.getFloat(diffuse, 'b');
+		diffuseInfo[3]=this.reader.getFloat(diffuse, 'a');
+		console.log("diffuse="+diffuseInfo);
+
+		//MATERIALS->MATERIAL->SPECULAR
+		var elemsSpecular = material.getElementsByTagName('specular');
+		if(elemsSpecular==null) return "no 'specular' found in a 'material'";
+		if(elemsSpecular.length!=1) return "either zero or more than one 'specular' found in a 'material'";
+		var specular = elemsSpecular[0];
+		specularInfo=[];
+		specularInfo[0]=this.reader.getFloat(specular, 'r');
+		specularInfo[1]=this.reader.getFloat(specular, 'g');
+		specularInfo[2]=this.reader.getFloat(specular, 'b');
+		specularInfo[3]=this.reader.getFloat(specular, 'a');
+		console.log("specular="+specularInfo);
+
+		//MATERIALS->MATERIAL->SHININESS
+		var elemsShininess = material.getElementsByTagName('shininess');
+		if(elemsShininess==null) return "no 'shininess' found in a 'material'";
+		if(elemsShininess.length!=1) return "either zero or more than one 'shininess' found in a 'material'";
+		var shininess = elemsShininess[0];
+		var value=this.reader.getFloat(shininess, 'value');
+		console.log("value="+value);
+
 
 	}
 }
