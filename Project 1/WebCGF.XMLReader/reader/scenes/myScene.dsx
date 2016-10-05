@@ -9,16 +9,26 @@
 
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="ss" axis_length="ff" />
+    <scene root="root" axis_length="3" />
     
-    <views default="ss" >
+    <views default="asf" >
     
         <!-- declaracao obrigatoria de pelo menos uma vista; -->
         <!-- se varias vistas declaradas, o default e' a -->
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da --> 
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="ASF" near="2" far="3" angle="2">
+        <perspective id="first" near="2" far="3" angle="2">
+            <from x="2" y="5" z="2" />
+            <to x="3" y="32" z="4" />
+        </perspective>
+
+        <perspective id="second" near="2" far="3" angle="2">
+            <from x="2" y="5" z="2" />
+            <to x="3" y="32" z="4" />
+        </perspective>
+
+        <perspective id="third" near="2" far="3" angle="2">
             <from x="2" y="5" z="2" />
             <to x="3" y="32" z="4" />
         </perspective>
@@ -39,19 +49,26 @@
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="ss" enabled="1" >
-            <location x="ff" y="ff" z="ff" w="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
+            <location x="2" y="3" z="4" w="5" />
+            <ambient r="3" g="5" b="5" a="5" />
+            <diffuse r="3" g="5" b="5" a="5" />
+            <specular r="3" g="5" b="5" a="5" />
+        </omni>
+
+       <omni id="sa" enabled="1" >
+            <location x="2" y="3" z="4" w="5" />
+            <ambient r="3" g="5" b="5" a="5" />
+            <diffuse r="3" g="5" b="5" a="5" />
+            <specular r="3" g="5" b="5" a="5" />
         </omni>
         
-        <spot id="ss" enabled="0" angle="ff" exponent="ff">
+        <spot id="asg" enabled="0" angle="3" exponent="2">
             <!-- atencao, "target" e' diferente de "direction" -->
-            <target x="ff" y="ff" z="ff" />
-            <location x="ff" y="ff" z="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
+            <target x="5" y="5" z="5" />
+            <location x="5" y="5" z="5" />
+            <ambient r="3" g="5" b="5" a="5" />
+            <diffuse r="3" g="5" b="5" a="5" />
+            <specular r="3" g="5" b="5" a="5" />
         </spot>
     </lights>
     
@@ -70,7 +87,8 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="ss" file="ss" length_s="ff" length_t="ff" />  
+        <texture id="ss" file="ss" length_s="3" length_t="5" />  
+        <texture id="sa" file="ss" length_s="2" length_t="3" />  
         
     </textures>
 
@@ -80,11 +98,11 @@
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <material id="ss" >
-            <emission r="ff" g="ff" b="ff" a="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
-            <shininess value="ff" />
+            <emission r="1" g="1" b="1" a="1" />
+            <ambient r="1" g="1" b="1" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+            <shininess value="2" />
         </material>
         
     </materials>
@@ -97,9 +115,9 @@
         <transformation id="ss">
            <!-- instrucoes a usar sem limite nem ordem -->
            <!-- deve existir pelo menos uma transformacao -->
-           <translate x="ff" y="ff" z="ff" />
+           <translate x="2" y="2" z="3" />
            <rotate axis="z" angle="5" />
-           <scale x="ff" y="ff" z="ff" />
+           <scale x="3" y="4" z="5" />
         </transformation>
         
     </transformations>
@@ -115,13 +133,16 @@
             <!--     rectangle, triangle, cylinder, sphere, torus -->
             <!-- os parametros devem ser interpretados, genericamente como-->
             <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
-            <rectangle x1="ff" y1="ff" x2="ff" y2="ff" />
-            <triangle x1="ff" y1="ff" z1="ff" x2="ff" y2="ff" z2="ff" x3="ff" y3="ff" z3="ff" />
-            <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" />
-            <sphere radius="ff" slices="ii" stacks="ii" />
-            <torus inner="ff" outer="ff" slices="ii" loops="ii" />
+            <rectangle x1="2" y1="3" x2="5" y2="6" />
+            <!-- <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" /> -->
+            <!-- <sphere radius="ff" slices="ii" stacks="ii" /> -->
+            <!-- <torus inner="ff" outer="ff" slices="ii" loops="ii" /> -->
             
         </primitive>
+
+        <primitive id="sa">
+            <triangle x1="2" y1="3" z1="4" x2="5" y2="6" z2="7" x3="8" y3="3" z3="1" />
+        </primitive>        
         
     </primitives>
     
