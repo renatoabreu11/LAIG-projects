@@ -15,6 +15,7 @@ function MySceneGraph(filename, scene) {
 	this.materials = [];
 	this.transformations = [];
 	this.primitives = [];
+	this.components = [];
 
 
 	this.defaultView;
@@ -620,6 +621,84 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement, blockInfo) {
 };
 
 MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
+	//COMPONENTS
+	var componentsBlock = blockInfo[0];
+
+	var componentBlock = this.getElements('component', componentsBlock, 1);
+	if(componentBlock==null)
+		return;
+
+	//COMPONENTS->COMPONENT
+	for(var i=0; i<componentBlock.length; i++)
+	{
+		var component = componentBlock[i];
+		var compCounter = this.components.length;
+		var id = this.reader.getString(component, 'id');
+		var idExists = false;
+
+		for(var j=0; j<compCounter; j++) {
+			if(this.components[j]["id"] == id) {
+				this.blockWarnings.push("Component with id: "+id+" already exists.");
+				idExists=true;
+			}
+		}
+
+		if(!idExists) {
+			this.components[compCounter]=[];
+			this.components[compCounter]["id"]=id;
+
+			//COMPONENTS->COMPONENT->TRANSFORMATION
+			var transformationBlock = this.getElements('transformation',componentBlock ,1);
+			if(transformationBlock==null)
+				return;
+			this.components[compCounter]["transformation"]=[];
+
+			//COMPONENTS->COMPONENT->TRANSFORMATION->TRANSFORMATIONREF
+			var transformationRefBlock=this.getElements('transformationref',transformationBlock[0]);
+			if(transformationRefBlock==null)
+				return;
+			this.components[compCounter]["transformation"]["transformationref"]=[];
+			this.components[compCounter]["transformation"]["transformationref"]["id"]=this.reader.getString(transformationRefBlock[0],'id');
+
+			//COMPONENTS->COMPONENT->TRANSFORMATION->TRANSLATE
+			var translateBlock=this.getElements('translate',transformationBlock[0]);
+			if(translateBlock==null)
+				return;
+			this.components[compCounter]["transformation"]["translate"]=[];
+			this.components[compCounter]["transformation"]["translate"]=this.readValues(['x','y','z'],translateBlock[0]);
+
+
+			//COMPONENTS->COMPONENT->TRANSFORMATION->ROTATE
+			var rotateBlock=this.getElements('rotate',transformationBlock[0]);
+			if(rotateBlock==null)
+				return;
+			this.components[compCounter]["transformation"]["rotate"]=[];
+			this.components[compCounter]["transformation"]["rotate"]=this.readValues(['axis','angle'],rotateBlock[0]);
+
+			//COMPONENTS->COMPONENT->TRANSFORMATION->SCALE
+			var scaleBlock=this.getElements('scale',transformationBlock[0]);
+			if(scaleBlock==null)
+				return;
+			this.components[compCounter]["transformation"]["scale"]=[];
+			this.components[compCounter]["transformation"]["scale"]=this.readValues(['x','y','z'],scaleBlock[0]);
+
+//TODO  ------------------------------------------------------------------------------------------
+			//COMPONENTS->COMPONENT->TRANSFORMATION->MATERIALS
+			var materialsBlock = this.getElements('materials', componentBlock, 1);
+			if(materialsBlock==null)
+				return;
+
+			var textureBlock = this.getElements('texture', componentBlock, 0);
+			if(textureBlock==null)
+				return;
+
+			var childrenBlock = this.getElements('children', componentBlock, 1);
+			if(childrenBlock==null)
+				return;
+		}
+
+	}
+
 	
 };
 
