@@ -647,21 +647,22 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 			this.components[compCounter]=[];
 			this.components[compCounter]["id"]=id;
 
+
 			//COMPONENTS->COMPONENT->TRANSFORMATION
-			var transformationBlock = this.getElements('transformation',componentBlock ,1);
+			var transformationBlock = this.getElements('transformation',componentBlock[0] ,0);
 			if(transformationBlock==null)
 				return;
 			this.components[compCounter]["transformation"]=[];
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION->TRANSFORMATIONREF
-			var transformationRefBlock=this.getElements('transformationref',transformationBlock[0]);
+			var transformationRefBlock=this.getElements('transformationref',transformationBlock[0], 0);
 			if(transformationRefBlock==null)
 				return;
 			this.components[compCounter]["transformation"]["transformationref"]=[];
 			this.components[compCounter]["transformation"]["transformationref"]["id"]=this.reader.getString(transformationRefBlock[0],'id');
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION->TRANSLATE
-			var translateBlock=this.getElements('translate',transformationBlock[0]);
+			var translateBlock=this.getElements('translate',transformationBlock[0], 0);
 			if(translateBlock==null)
 				return;
 			this.components[compCounter]["transformation"]["translate"]=[];
@@ -669,33 +670,112 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION->ROTATE
-			var rotateBlock=this.getElements('rotate',transformationBlock[0]);
+			var rotateBlock=this.getElements('rotate',transformationBlock[0], 0);
 			if(rotateBlock==null)
 				return;
 			this.components[compCounter]["transformation"]["rotate"]=[];
 			this.components[compCounter]["transformation"]["rotate"]=this.readValues(['axis','angle'],rotateBlock[0]);
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION->SCALE
-			var scaleBlock=this.getElements('scale',transformationBlock[0]);
+			var scaleBlock=this.getElements('scale',transformationBlock[0], 0);
 			if(scaleBlock==null)
 				return;
 			this.components[compCounter]["transformation"]["scale"]=[];
 			this.components[compCounter]["transformation"]["scale"]=this.readValues(['x','y','z'],scaleBlock[0]);
 
-//TODO  ------------------------------------------------------------------------------------------
-			//COMPONENTS->COMPONENT->TRANSFORMATION->MATERIALS
-			var materialsBlock = this.getElements('materials', componentBlock, 1);
+
+			//COMPONENTS->COMPONENT->MATERIALS
+			var materialsBlock = this.getElements('materials', componentBlock[0], 0);
 			if(materialsBlock==null)
 				return;
+			
+			//COMPONENTS->COMPONENT->MATERIALS->MATERIAL
+			var materialBlock = this.getElements('material',materialsBlock[0],1);
+			if(materialBlock==null)
+				return;
 
-			var textureBlock = this.getElements('texture', componentBlock, 0);
+			this.components[compCounter]["materials"]=[];
+			for(var j=0; j<materialBlock.length; j++){
+				var material = materialBlock[j];
+				var matCounter=this.components[compCounter]["materials"].length;
+				var id = this.reader.getString(material, 'id');
+				var idExists=false;
+
+				for(var k=0; k<matCounter; k++){
+					if(this.components[compCounter]["materials"][k]==id){
+						this.blockWarnings.push("Material with id: "+id+" already exists in this component.");
+						idExists=true;
+					}
+				}
+
+				if(!idExists){
+					this.components[compCounter]["materials"][matCounter]=id;
+				}
+			}
+
+			//COMPONENTS->COMPONENT->TEXTURE
+			var textureBlock = this.getElements('texture', componentBlock[0], 0);
 			if(textureBlock==null)
 				return;
+			this.components[compCounter]["texture"]=this.reader.getString(textureBlock[0],'id');
 
-			var childrenBlock = this.getElements('children', componentBlock, 1);
+
+			//COMPONENTS->COMPONENT->CHILDREN
+			var childrenBlock = this.getElements('children', componentBlock[0], 0);
 			if(childrenBlock==null)
 				return;
+			this.components[compCounter]["children"]=[];
+
+			//COMPONENTS->COMPONENT->CHILDREN->COMPONENTREF
+			var compRefBlock = this.getElements('componentref', childrenBlock[0],1);
+			if(compRefBlock==null)
+				return;
+
+			this.components[compCounter]["children"]["componentref"]=[];
+			for(var j=0; j<compRefBlock.length; j++){
+				var compRef = compRefBlock[j];
+				var compRefCounter=this.components[compCounter]["children"]["componentref"].length;
+				var id = this.reader.getString(compRef, 'id');
+				var idExists=false;
+
+				for(var k=0; k<compRefCounter; k++){
+					if(this.components[compCounter]["children"]["componentref"][k]==id){
+						this.blockWarnings.push("Componentref with id: "+id+" already exists in this component.");
+						idExists=true;
+					}
+				}
+
+				if(!idExists){
+					this.components[compCounter]["children"]["componentref"][compRefCounter]=id;
+				}
+			}
+
+			//COMPONENTS->COMPONENT->CHILDREN->PRIMITIVEREF
+			var primRefBlock = this.getElements('primitiveref', childrenBlock[0],1);
+			if(primRefBlock==null)
+				return;
+
+			this.components[compCounter]["children"]["primitiveref"]=[];
+			for(var j=0; j<primRefBlock.length; j++){
+				var primRef = primRefBlock[j];
+				var primRefCounter=this.components[compCounter]["children"]["primitiveref"].length;
+				var id = this.reader.getString(primRef, 'id');
+				var idExists=false;
+
+				for(var k=0; k<primRefCounter; k++){
+					if(this.components[compCounter]["children"]["primitiveref"][k]==id){
+						this.blockWarnings.push("Primitiveref with id: "+id+" already exists in this component.");
+						idExists=true;
+					}
+				}
+
+				if(!idExists){
+					this.components[compCounter]["children"]["primitiveref"][compRefCounter]=id;
+				}
+			}
+
 		}
+		console.log(this.components);
 
 	}
 
