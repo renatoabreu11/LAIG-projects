@@ -9,28 +9,33 @@
 
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="root" axis_length="3" />
+    <scene root="root" axis_length="15.0" />
     
-    <views default="asf" >
+    <views default="normal" >
     
         <!-- declaracao obrigatoria de pelo menos uma vista; -->
         <!-- se varias vistas declaradas, o default e' a -->
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da --> 
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="first" near="2" far="3" angle="2">
-            <from x="2" y="5" z="2" />
-            <to x="3" y="32" z="4" />
+        <perspective id="normal" near="0.2" far="500.0" angle="60.0">
+            <from x="15" y="15" z="15.0" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="second" near="2" far="3" angle="2">
-            <from x="2" y="5" z="2" />
-            <to x="3" y="32" z="4" />
+        <perspective id="far away" near="0.2" far="500.0" angle="90.0">
+            <from x="15" y="15.0" z="15.0" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="third" near="2" far="3" angle="2">
-            <from x="2" y="5" z="2" />
-            <to x="3" y="32" z="4" />
+        <perspective id="Z axis" near="0.2" far="500.0" angle="60.0">
+            <from x="2" y="15.0" z="15.0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+
+        <perspective id="X axis" near="0.2" far="500.0" angle="60.0">
+            <from x="15" y="15.0" z="2.0" />
+            <to x="0" y="0" z="0" />
         </perspective>
         
     </views>
@@ -38,8 +43,8 @@
 
     <illumination doublesided="1" local="0" >
     
-        <ambient r="0.1" g="0.4" b="0.1" a="0.5" />
-        <background r="0.5" g="0.2" b="0.3" a="0.6" />
+        <ambient r="0.5" g="1" b="0.5" a="0.5" />
+        <background r="0" g="0" b="0" a="1" />
         
     </illumination>
     
@@ -48,21 +53,30 @@
     
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <omni id="ss" enabled="1" >
-            <location x="2" y="3" z="4" w="5" />
-            <ambient r="3" g="5" b="5" a="5" />
-            <diffuse r="3" g="5" b="5" a="5" />
-            <specular r="3" g="5" b="5" a="5" />
+        <omni id="light1" enabled="1" >
+            <location x="2" y="3" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
         </omni>
 
-       <omni id="sa" enabled="1" >
+       <omni id="light2" enabled="0" >
             <location x="2" y="3" z="4" w="5" />
             <ambient r="3" g="5" b="5" a="5" />
             <diffuse r="3" g="5" b="5" a="5" />
             <specular r="3" g="5" b="5" a="5" />
         </omni>
         
-        <spot id="asg" enabled="0" angle="3" exponent="2">
+        <spot id="light3" enabled="0" angle="3" exponent="2">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <target x="5" y="5" z="5" />
+            <location x="5" y="5" z="5" />
+            <ambient r="3" g="5" b="5" a="5" />
+            <diffuse r="3" g="5" b="5" a="5" />
+            <specular r="3" g="5" b="5" a="5" />
+        </spot>
+
+        <spot id="light4" enabled="0" angle="3" exponent="2">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="5" y="5" z="5" />
             <location x="5" y="5" z="5" />
@@ -87,8 +101,8 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="ss" file="ss" length_s="3" length_t="5" />  
-        <texture id="sa" file="ss" length_s="2" length_t="3" />  
+        <texture id="ss" file="../res/brick.jpg" length_s="3" length_t="5" />  
+        <texture id="sa" file="../res/grass.jpg" length_s="2" length_t="3" />  
         
     </textures>
 
@@ -98,6 +112,14 @@
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <material id="ss" >
+            <emission r="1" g="1" b="1" a="1" />
+            <ambient r="1" g="1" b="1" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+            <shininess value="2" />
+        </material>
+
+        <material id="s1" >
             <emission r="1" g="1" b="1" a="1" />
             <ambient r="1" g="1" b="1" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />

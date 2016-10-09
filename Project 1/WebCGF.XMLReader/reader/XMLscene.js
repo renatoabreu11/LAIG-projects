@@ -24,10 +24,11 @@ XMLscene.prototype.init = function (application) {
 };
 
 XMLscene.prototype.initLights = function () {
-
 	this.lights[0].setPosition(2, 3, 3, 1);
     this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
     this.lights[0].update();
+   	this.lights[0].setVisible(true);
+    this.lights[0].enable();
 };
 
 XMLscene.prototype.initCameras = function () {
@@ -45,10 +46,24 @@ XMLscene.prototype.setDefaultAppearance = function () {
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () 
 {
-	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
-	this.lights[0].setVisible(true);
-    this.lights[0].enable();
+	this.gl.clearColor(this.graph.illumination["background"]["r"],this.graph.illumination["background"]["g"],
+						this.graph.illumination["background"]["b"],this.graph.illumination["background"]["a"]);
+	
+	this.setAmbient(this.graph.illumination["ambient"]["r"],this.graph.illumination["ambient"]["g"],
+						this.graph.illumination["ambient"]["b"],this.graph.illumination["ambient"]["a"]);
+
+	//last value is thickness
+    this.axis= new CGFaxis(this, this.graph.axisLength, 0.05);
+
+    //this.camera = this.graph.getDefaultView();
+
+    this.graph.loadLights();
 };
+
+XMLscene.prototype.nextView = function(){
+	this.graph.setNextView();
+	this.camera = this.graph.getDefaultView();
+}
 
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup

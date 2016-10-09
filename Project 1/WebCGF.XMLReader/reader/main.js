@@ -11,14 +11,14 @@ function getUrlVars() {
     return vars;
 }	 
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js',
 
 main=function()
 {
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
     var myScene = new XMLscene();
-    var myInterface = new CGFinterface();
+    var myInterface = new MyInterface();
 
     app.init();
 
@@ -35,6 +35,7 @@ main=function()
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
 	var myGraph = new MySceneGraph(filename, myScene);
+    myInterface.addLights();
 	
 	// start
     app.run();

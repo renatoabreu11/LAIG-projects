@@ -9,8 +9,7 @@ function MySceneGraph(filename, scene) {
 	//Scene block values
 	this.views = [];
 	this.illumination = [];
-	this.omniLights = [];
-	this.spotLights = [];
+	this.lights = [];
 	this.textures = [];
 	this.materials = [];
 	this.transformations = [];
@@ -90,7 +89,7 @@ MySceneGraph.prototype.parseBlocks= function(rootElement, blocksTag) {
 
 		if(skipBlock == 0){
 			switch(i){
-				/*case 0:{
+				case 0:{
 					this.parseGlobals(rootElement, elements);
 					console.log('Scene name:', this.root);
 					console.log('Axis length:', this.axisLength);
@@ -108,8 +107,7 @@ MySceneGraph.prototype.parseBlocks= function(rootElement, blocksTag) {
 				}
 				case 3:{
 					this.parseLights(rootElement, elements); 
-					console.log(this.omniLights);
-					console.log(this.spotLights);
+					console.log(this.lights);
 					break;
 				}
 				case 4:{
@@ -131,7 +129,7 @@ MySceneGraph.prototype.parseBlocks= function(rootElement, blocksTag) {
 					 this.parsePrimitives(rootElement, elements);
 					 console.log(this.primitives);
 					 break;
-				}*/
+				}
 				case 8: this.parseComponents(rootElement, elements); break;
 				default: break;
 			}
@@ -144,7 +142,7 @@ MySceneGraph.prototype.parseGlobals= function(rootElement, blockInfo) {
 	var scene = blockInfo[0];
 	this.root = this.reader.getString(scene, 'root');
 	if(this.root == null){
-		this.blockWarnings.push("Root object is missing");
+		this.elementsErrors.push("Root object is missing");
 	}
 
 	this.axisLength = this.reader.getFloat(scene, 'axis_length');
@@ -190,6 +188,7 @@ MySceneGraph.prototype.parseViews= function(rootElement, blockInfo) {
 			this.checkFloatValue(this.views[viewsCounter]["far"], 'Far');
 			this.views[viewsCounter]["angle"] = this.reader.getFloat(perspective, 'angle');
 			this.checkFloatValue(this.views[viewsCounter]["angle"], 'Angle');
+			this.views[viewsCounter]["angle"] *= Math.PI/180;
 
 			//VIEWS->PERSPECTIVE->FROM
 			var fromBlock = this.getElements('from', perspective, 0);
@@ -249,155 +248,155 @@ MySceneGraph.prototype.parseIllumination= function(rootElement, blockInfo) {
 
 MySceneGraph.prototype.parseLights= function(rootElement, blockInfo) {
 	//LIGHTS
-	var omniBlock = this.getElements('omni', blockInfo[0], 1);
-	if (omniBlock == null) {
+	var lightsBlock = blockInfo[0];
+	var nLights = lightsBlock.children.length;
+
+	if(nLights == 0){
+		this.elementsErrors.push("At least one light (spot or omni type) must be present")
 		return;
 	}
 
-	var spotBlock = this.getElements('spot', blockInfo[0], 1);
-	if (spotBlock == null) {
-		return;
-	}
-
-	//LIGHTS->OMNI
-	for(var i=0; i < omniBlock.length; i++)
-	{
-		var omni = omniBlock[i];
-		var omniCounter = this.omniLights.length;
-		var id = this.reader.getString(omni, 'id');
-		var idExists = false;
-
-		for(var k = 0; k < this.omniLights.length; k++){
-			if(this.omniLights[k]["id"] == id){
-				this.blockWarnings.push("Omni light with id: " + id + " already exists");
-				idExists = true;
+	for(var i=0; i < nLights; i++){
+		var light = lightsBlock.children[i];
+		switch(light.tagName){
+			case "omni":{
+				this.parseOmniLight(light);
+				break;
 			}
-		}
-
-		for(var k = 0; k < this.spotLights.length; k++){
-			if(this.spotLights[k]["id"] == id){
-				this.blockWarnings.push("Spot light with equal id as this omni light already exists");
-				idExists = true;
+			case "spot":{
+				this.parseSpotLight(light);
+				break;
 			}
-		}
-
-
-		if(!idExists){
-			this.omniLights[omniCounter] = [];
-			this.omniLights[omniCounter]["id"] = id;
-			this.omniLights[omniCounter]["enabled"] = this.reader.getBoolean(omni, 'enabled');
-
-			//LIGHTS->OMNI->LOCATION
-			var locationBlock = this.getElements('location', omni, 0);
-			if(locationBlock == null)
-				return;		
-
-			this.omniLights[omniCounter]["location"] = [];
-			this.omniLights[omniCounter]["location"] = this.readValues(['x', 'y', 'z', 'w'], locationBlock[0]);
-
-			//LIGHTS->OMNI->AMBIENT
-			var ambientBlock = this.getElements('ambient', omni, 0);
-			if(ambientBlock == null)
-				return;		
-
-			this.omniLights[omniCounter]["ambient"] = [];
-			this.omniLights[omniCounter]["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
-
-			//LIGHTS->OMNI->DIFFUSE
-			var diffuseBlock = this.getElements('diffuse', omni, 0);
-			if(diffuseBlock == null)
-				return;		
-
-			this.omniLights[omniCounter]["diffuse"] = [];
-			this.omniLights[omniCounter]["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
-
-			//LIGHTS->OMNI->SPECULAR
-			var specularBlock = this.getElements('specular', omni, 0);
-			if(specularBlock == null)
-				return;		
-
-			this.omniLights[omniCounter]["specular"] = [];
-			this.omniLights[omniCounter]["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
-		}
-	}
-
-	//LIGHTS->SPOT
-	for(var i=0; i<spotBlock.length; i++)
-	{
-		var spot = spotBlock[i];
-		var spotCounter = this.spotLights.length;
-		var id = this.reader.getString(spot, 'id');
-		var idExists = false;
-
-		for(var k = 0; k < this.spotLights.length; k++){
-			if(this.spotLights[k]["id"] == id){
-				this.blockWarnings.push("Spot light with id: " + id + " already exists");
-				idExists = true;
-			}
-		}
-
-		for(var k = 0; k < this.omniLights.length; k++){
-			if(this.omniLights[k]["id"] == id){
-				this.blockWarnings.push("Omni light with equal id as this spot light already exists");
-				idExists = true;
-			}
-		}
-
-		if(!idExists){
-			this.spotLights[spotCounter] = [];
-			this.spotLights[spotCounter]["id"] = id;
-			this.spotLights[spotCounter]["enabled"] = this.reader.getBoolean(spot, 'enabled');
-
-			this.spotLights[spotCounter]["angle"] = this.reader.getFloat(spot, 'angle');
-			this.checkFloatValue(this.spotLights[spotCounter]["angle"], 'Angle');
-
-			this.spotLights[spotCounter]["exponent"] = this.reader.getFloat(spot, 'exponent');
-			this.checkFloatValue(this.spotLights[spotCounter]["exponent"], 'Exponent');
-
-			//LIGHTS->SPOT->TARGET
-			var targetBlock = this.getElements('target', spot, 0);
-			if(targetBlock == null)
-				return;		
-
-			this.spotLights[spotCounter]["target"] = [];
-			this.spotLights[spotCounter]["target"] = this.readValues(['x', 'y', 'z'], targetBlock[0]);
-
-
-			//LIGHTS->SPOT->LOCATION
-			var locationBlock = this.getElements('location', spot, 0);
-			if(locationBlock == null)
-				return;		
-
-			this.spotLights[spotCounter]["location"] = [];
-			this.spotLights[spotCounter]["location"] = this.readValues(['x', 'y', 'z'], locationBlock[0]);
-
-			//LIGHTS->SPOT->AMBIENT
-			var ambientBlock = this.getElements('ambient', spot, 0);
-			if(ambientBlock == null)
-				return;		
-
-			this.spotLights[spotCounter]["ambient"] = [];
-			this.spotLights[spotCounter]["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
-
-			//LIGHTS->SPOT->DIFFUSE
-			var diffuseBlock = this.getElements('diffuse', spot, 0);
-			if(diffuseBlock == null)
-				return;		
-
-			this.spotLights[spotCounter]["diffuse"] = [];
-			this.spotLights[spotCounter]["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
-
-			//LIGHTS->SPOT->SPECULAR
-			var specularBlock = this.getElements('specular', spot, 0);
-			if(specularBlock == null)
-				return;		
-
-
-			this.spotLights[spotCounter]["specular"] = [];
-			this.spotLights[spotCounter]["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
 		}
 	}
 };
+
+MySceneGraph.prototype.parseOmniLight= function(light) {
+	//LIGHTS->OMNI
+
+	var id = this.reader.getString(light, 'id');
+	var idExists = false;
+
+	for(var k = 0; k < this.lights.length; k++){
+		if(this.lights[k]["id"] == id){
+			this.blockWarnings.push(this.lights[k]["type"] + " with id: " + id + " already exists");
+			idExists = true;
+		}
+	}
+
+	var lightCounter = this.lights.length;
+
+	if(!idExists){
+		this.lights[lightCounter] = [];
+		this.lights[lightCounter]["id"] = id;
+		this.lights[lightCounter]["type"] = "omni";
+		this.lights[lightCounter]["enabled"] = this.reader.getBoolean(light, 'enabled');
+
+		//LIGHTS->OMNI->LOCATION
+		var locationBlock = this.getElements('location', light, 0);
+		if(locationBlock == null)
+			return;		
+
+		this.lights[lightCounter]["location"] = [];
+		this.lights[lightCounter]["location"] = this.readValues(['x', 'y', 'z', 'w'], locationBlock[0]);
+
+		//LIGHTS->OMNI->AMBIENT
+		var ambientBlock = this.getElements('ambient', light, 0);
+		if(ambientBlock == null)
+			return;		
+
+		this.lights[lightCounter]["ambient"] = [];
+		this.lights[lightCounter]["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
+
+		//LIGHTS->OMNI->DIFFUSE
+		var diffuseBlock = this.getElements('diffuse', light, 0);
+		if(diffuseBlock == null)
+			return;		
+
+		this.lights[lightCounter]["diffuse"] = [];
+		this.lights[lightCounter]["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
+
+		//LIGHTS->OMNI->SPECULAR
+		var specularBlock = this.getElements('specular', light, 0);
+		if(specularBlock == null)
+			return;		
+
+		this.lights[lightCounter]["specular"] = [];
+		this.lights[lightCounter]["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
+	}
+}
+
+MySceneGraph.prototype.parseSpotLight= function(light) {
+	//LIGHTS->SPOT
+
+	var id = this.reader.getString(light, 'id');
+	var idExists = false;
+
+	for(var k = 0; k < this.lights.length; k++){
+		if(this.lights[k]["id"] == id){
+			this.blockWarnings.push(this.lights[k]["type"] + " with id: " + id + " already exists");
+			idExists = true;
+		}
+	}
+
+	var lightCounter = this.lights.length;
+
+	if(!idExists){
+		this.lights[lightCounter] = [];
+		this.lights[lightCounter]["id"] = id;
+		this.lights[lightCounter]["type"] = "spot";
+		this.lights[lightCounter]["enabled"] = this.reader.getBoolean(light, 'enabled');
+
+		this.lights[lightCounter]["angle"] = this.reader.getFloat(light, 'angle');
+		this.checkFloatValue(this.lights[lightCounter]["angle"], 'Angle');
+		this.lights[lightCounter]["angle"] *= Math.PI/180;
+
+		this.lights[lightCounter]["exponent"] = this.reader.getFloat(light, 'exponent');
+		this.checkFloatValue(this.lights[lightCounter]["exponent"], 'Exponent');
+
+		//LIGHTS->SPOT->TARGET
+		var targetBlock = this.getElements('target', light, 0);
+		if(targetBlock == null)
+			return;		
+
+		this.lights[lightCounter]["target"] = [];
+		this.lights[lightCounter]["target"] = this.readValues(['x', 'y', 'z'], targetBlock[0]);
+
+
+		//LIGHTS->SPOT->LOCATION
+		var locationBlock = this.getElements('location', light, 0);
+		if(locationBlock == null)
+			return;		
+
+		this.lights[lightCounter]["location"] = [];
+		this.lights[lightCounter]["location"] = this.readValues(['x', 'y', 'z'], locationBlock[0]);
+
+		//LIGHTS->SPOT->AMBIENT
+		var ambientBlock = this.getElements('ambient', light, 0);
+		if(ambientBlock == null)
+			return;		
+
+		this.lights[lightCounter]["ambient"] = [];
+		this.lights[lightCounter]["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
+
+		//LIGHTS->SPOT->DIFFUSE
+		var diffuseBlock = this.getElements('diffuse', light, 0);
+		if(diffuseBlock == null)
+			return;		
+
+		this.lights[lightCounter]["diffuse"] = [];
+		this.lights[lightCounter]["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
+
+		//LIGHTS->SPOT->SPECULAR
+		var specularBlock = this.getElements('specular', light, 0);
+		if(specularBlock == null)
+			return;		
+
+
+		this.lights[lightCounter]["specular"] = [];
+		this.lights[lightCounter]["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
+	}
+}
 
 MySceneGraph.prototype.parseTextures= function(rootElement, blockInfo) {
 	var texturesBlock = blockInfo[0];
@@ -443,9 +442,9 @@ MySceneGraph.prototype.parseMaterials= function(rootElement, blockInfo) {
 
 	for(var i=0; i < matBlock.length; i++)
 	{
-		var material = matBlock[i];
+		var materialInfo = matBlock[i];
 		var mCounter = this.materials.length; //valid materials tag counter
-		var id = this.reader.getString(material, 'id');
+		var id = this.reader.getString(materialInfo, 'id');
 		var idExists = false;
 
 		for(var k = 0; k < this.materials.length; k++){
@@ -456,48 +455,56 @@ MySceneGraph.prototype.parseMaterials= function(rootElement, blockInfo) {
 		}
 
 		if(!idExists){
-			this.materials[mCounter] = [];
-			this.materials[mCounter]["id"] = id;
+			var material = [];
 
 			//MATERIALS->MATERIAL->EMISSION
-			var emissionBlock = this.getElements('emission', material, 0);
+			var emissionBlock = this.getElements('emission', materialInfo, 0);
 			if(emissionBlock == null)
 				return;
 
-			this.materials[mCounter]["emission"] = [];
-			this.materials[mCounter]["emission"] = this.readValues(['r', 'g', 'b', 'a'], emissionBlock[0]);
+			material["emission"] = [];
+			material["emission"] = this.readValues(['r', 'g', 'b', 'a'], emissionBlock[0]);
 
 			//MATERIALS->MATERIAL->AMBIENT
-			var ambientBlock = this.getElements('ambient', material, 0);
+			var ambientBlock = this.getElements('ambient', materialInfo, 0);
 			if(ambientBlock == null)
 				return;
 
-			this.materials[mCounter]["ambient"] = [];
-			this.materials[mCounter]["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
+			material["ambient"] = [];
+			material["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
 
 			//MATERIALS->MATERIAL->DIFFUSE
-			var diffuseBlock = this.getElements('diffuse', material, 0);
+			var diffuseBlock = this.getElements('diffuse', materialInfo, 0);
 			if(diffuseBlock == null)
 				return;		
 
-			this.materials[mCounter]["diffuse"] = [];
-			this.materials[mCounter]["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
+			material["diffuse"] = [];
+			material["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
 
 			//MATERIALS->MATERIAL->SPECULAR
-			var specularBlock = this.getElements('specular', material, 0);
+			var specularBlock = this.getElements('specular', materialInfo, 0);
 			if(specularBlock == null)
 				return;		
 
-			this.materials[mCounter]["specular"] = [];
-			this.materials[mCounter]["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
+			material["specular"] = [];
+			material["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
 
 			//MATERIALS->MATERIAL->SHININESS
-			var shininessBlock = this.getElements('shininess', material, 0);
+			var shininessBlock = this.getElements('shininess', materialInfo, 0);
 			if(shininessBlock == null)
 				return;
 
-			this.materials[mCounter]["shininess"] = this.reader.getFloat(shininessBlock[0], 'value');
-			this.checkFloatValue(this.materials[mCounter]["shininess"], "Shininess");
+			material["shininess"] = this.reader.getFloat(shininessBlock[0], 'value');
+			this.checkFloatValue(material["shininess"], "Shininess");
+
+			var appearance = new CGFappearance(this.scene);
+			appearance.setSpecular(material["specular"]["r"], material["specular"]["g"], material["specular"]["b"], material["specular"]["a"]);
+			appearance.setAmbient(material["ambient"]["r"], material["ambient"]["g"], material["ambient"]["b"], material["ambient"]["a"]);
+			appearance.setDiffuse(material["diffuse"]["r"], material["diffuse"]["g"], material["diffuse"]["b"], material["diffuse"]["a"]);			
+			appearance.setShininess(material["shininess"]);
+			appearance.setEmission(material["emission"]["r"], material["emission"]["g"], material["emission"]["b"], material["emission"]["a"]);
+
+			this.materials[id] = appearance;
 		}
 	}
 };
@@ -782,6 +789,66 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 	
 };
 
+//new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+
+/*
+ * Returns the view selected as default
+ */
+MySceneGraph.prototype.getDefaultView=function() 
+{
+	for(var k = 0; k < this.views.length; k++){
+		if(this.views[k]["id"] == this.defaultView){
+			var view = this.views[k];
+			var fov = view["angle"];
+			var near = view["near"];
+			var far = view["far"];
+			var position = view["from"];
+			var target = view["to"];
+			return new CGFcamera(fov, near, far, vec3.fromValues(position["x"], position["y"], position["z"]), 
+									vec3.fromValues(target["x"], target["y"], target["z"]));
+		}
+	}
+}
+
+/*
+ * The default view changes to the next on the list
+ */
+MySceneGraph.prototype.setNextView=function() 
+{
+	for(var k = 0; k < this.views.length; k++){
+		if(this.views[k]["id"] == this.defaultView){
+			if(k + 1 == this.views.length)
+				this.defaultView = this.views[0]["id"];
+			else this.defaultView = this.views[k + 1]["id"];
+			return;
+		}
+	}
+}
+
+MySceneGraph.prototype.loadLights = function(){
+	for(var i = 0; i < this.lights.length; i++){
+		var light = this.lights[i];
+		this.scene.lights[i].setPosition(light["location"]["x"], light["location"]["y"], light["location"]["z"], light["location"]["w"]);
+		this.scene.lights[i].setDiffuse(light["diffuse"]["r"], light["diffuse"]["g"], light["diffuse"]["b"], light["diffuse"]["a"]);
+		this.scene.lights[i].setAmbient(light["ambient"]["r"], light["ambient"]["g"], light["ambient"]["b"], light["ambient"]["a"]);
+		this.scene.lights[i].setSpecular(light["specular"]["r"], light["specular"]["g"], light["specular"]["b"], light["specular"]["a"]);
+	
+		if(light["enabled"])
+			this.scene.lights[i].enable();
+
+		if(light["type"] == "spot"){
+			this.scene.lights[i].setSpotCutOff(light["angle"]);
+			this.scene.lights[i].setSpotExponent(light["exponent"]);
+			this.scene.lights[i].setSpotDirection(light["target"]["x"], light["target"]["y"], light["target"]["z"]);
+		}
+
+		this.scene.lights[i].setVisible(true);
+		this.scene.lights[i].update();
+	}
+}
+
+
+
 //@param isList -> if the block to inspect can have more than one element than we just need to check if the number
 //of tags is less than 1
 MySceneGraph.prototype.getElements= function(tag, block, isList){
@@ -821,10 +888,11 @@ MySceneGraph.prototype.onXMLWarning=function (message) {
 	console.warn("XML Loading warning: "+ message);
 };
 
-/*
-	Auxiliar functions
-*/
+/********************** Auxiliar functions **********************************/
 
+/*
+	This function receives a list of parameters and a block of information. Then it reads the respectives elements from the block
+*/
 MySceneGraph.prototype.readValues= function(list, block){
 	var values = [];
 	for(var j = 0; j < list.length; j++){
@@ -834,7 +902,9 @@ MySceneGraph.prototype.readValues= function(list, block){
 	return values;
 }
 
-
+/*
+	Checks if the float passed as arg is valid
+*/
 MySceneGraph.prototype.checkFloatValue= function(value, name){
 	if(value == null){
 		this.blockWarnings.push(name + " value is missing");
