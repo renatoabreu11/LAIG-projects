@@ -101,8 +101,8 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="ss" file="../res/brick.jpg" length_s="3" length_t="5" />  
-        <texture id="sa" file="../res/grass.jpg" length_s="2" length_t="3" />  
+        <texture id="brick" file="../res/brick.jpg" length_s="3" length_t="5" />  
+        <texture id="grass" file="../res/grass.jpg" length_s="2" length_t="3" />  
         
     </textures>
 
@@ -111,7 +111,7 @@
     
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <material id="ss" >
+        <material id="s1" >
             <emission r="1" g="1" b="1" a="1" />
             <ambient r="1" g="1" b="1" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
@@ -119,7 +119,7 @@
             <shininess value="2" />
         </material>
 
-        <material id="s1" >
+        <material id="s2" >
             <emission r="1" g="1" b="1" a="1" />
             <ambient r="1" g="1" b="1" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
@@ -134,7 +134,7 @@
     
         <!-- Deve existir um ou mais blocos "transformation" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <transformation id="ss">
+        <transformation id="transf">
            <!-- instrucoes a usar sem limite nem ordem -->
            <!-- deve existir pelo menos uma transformacao -->
            <translate x="2" y="2" z="3" />
@@ -149,7 +149,7 @@
     
         <!-- Deve existir um ou mais blocos "primitive" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <primitive id="ss">
+        <primitive id="rect">
            
             <!-- apenas pode existir UMA das seguintes tags: -->
             <!--     rectangle, triangle, cylinder, sphere, torus -->
@@ -162,7 +162,7 @@
             
         </primitive>
 
-        <primitive id="sa">
+        <primitive id="tr">
             <triangle x1="2" y1="3" z1="4" x2="5" y2="6" z2="7" x3="8" y3="3" z3="1" />
         </primitive>        
         
@@ -171,22 +171,22 @@
     
     <components>
         
-        <component id="ss">
+        <component id="comp">
         
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
             
                 <!-- deve conter uma referencia a uma das "transformation" -->
                 <!-- declaradas anteriormente -->
-                <transformationref id="ss" />
+                <transformationref id="transf" />
                 
                 <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
-                <translate x="ff" y="ff" z="ff" />
-                <rotate axis="cc" angle="ff" />
-                <scale x="ff" y="ff" z="ff" />
+                <translate x="0" y="0" z="0" />
+                <rotate axis="x" angle="0" />
+                <scale x="1" y="1" z="1" />
             </transformation>
        
             <!-- declaracao obrigatoria de pelo menos um material; -->
@@ -196,7 +196,7 @@
             <!-- o material muda para o proximo material da lista; do --> 
             <!-- ultimo material da lista volta ao primeiro -->
             <materials>
-                <material id="ss" />
+                <material id="s1" />
             </materials>
                          
             <!-- declaracao obrigatoria de texture -->
@@ -204,7 +204,7 @@
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="ss" />
+            <texture id="brick" />
             
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
@@ -212,8 +212,8 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                <componentref id="ss" />
-                <primitiveref id="ss" />
+                <componentref id="comp" />
+                <primitiveref id="tr" />
                 
             </children>
             
