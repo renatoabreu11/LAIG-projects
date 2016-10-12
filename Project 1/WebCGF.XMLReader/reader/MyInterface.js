@@ -34,7 +34,7 @@ MyInterface.prototype.init = function(application) {
 MyInterface.prototype.addLights = function() {
 	for(var i = 0; i < this.scene.graph.lights.length; i++){
 		var light = this.scene.graph.lights[i];
-		//console.log(light);
+		console.log(light)
 		this.lightGroup.add(this.scene, light["id"]);
 	}
 }
