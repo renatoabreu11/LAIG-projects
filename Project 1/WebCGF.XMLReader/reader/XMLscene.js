@@ -11,24 +11,18 @@ XMLscene.prototype.init = function (application) {
 
     this.initCameras();
 
-    this.initLights();
-
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+    this.enableTextures(true);
+
 	this.axis=new CGFaxis(this);
 };
 
 XMLscene.prototype.initLights = function () {
-	this.lights[0].setPosition(2, 3, 3, 1);
-    this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
-    this.lights[0].update();
-   	this.lights[0].setVisible(true);
-    this.lights[0].enable();
 };
 
 XMLscene.prototype.initCameras = function () {
@@ -56,13 +50,20 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.axis= new CGFaxis(this, this.graph.axisLength, 0.05);
 
     //this.camera = this.graph.getDefaultView();
-
     this.graph.loadLights();
+    for(var i = 0; i < this.lights.length; i++){
+    	
+	}
+    this.interface.addLights();
 };
 
 XMLscene.prototype.nextView = function(){
 	this.graph.setNextView();
 	this.camera = this.graph.getDefaultView();
+}
+
+XMLscene.prototype.setInterface = function(myInterface){
+	this.interface = myInterface;
 }
 
 XMLscene.prototype.display = function () {
@@ -91,7 +92,9 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk)
 	{
-		this.lights[0].update();
+		for(var i = 0; i < this.lights.length; i++){
+				this.lights[i].update();
+		}
 	};	
 };
 
