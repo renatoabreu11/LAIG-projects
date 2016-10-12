@@ -58,7 +58,30 @@ XMLscene.prototype.onGraphLoaded = function ()
     //this.camera = this.graph.getDefaultView();
 
     this.graph.loadLights();
+
+    this.primitives=[];
+	this.loadPrimitives();
 };
+
+XMLscene.prototype.loadPrimitives = function(){
+	for(var primitive in this.graph.primitives){
+		var prim = this.graph.primitives[primitive];
+		var index = this.primitives.length;
+		switch(prim['tag']){
+			case 'rectangle':
+				var values = prim['rectangle'];
+				this.primitives[index] = new MyQuad(this,values['x1'],values['y1'],values['x2'],values['y2']);
+				break;
+			case 'triangle':
+				var values = prim['triangle'];
+				this.primitives[index] = new MyTriangle(this,values['x1'],values['y1'],values['x2'],values['y2']);
+				break;;
+			default:
+				console.log(prim['tag']);
+				break;
+		}
+	}
+}
 
 XMLscene.prototype.nextView = function(){
 	this.graph.setNextView();
@@ -94,22 +117,8 @@ XMLscene.prototype.display = function () {
 		this.lights[0].update();
 	};
 
-	for(var primitive in this.graph.primitives){
-		var prim = this.graph.primitives[primitive];
-		switch(prim['tag']){
-			case 'rectangle':
-				var values = prim['rectangle'];
-				var rect = new MyQuad(this,values['x1'],values['y1'],values['x2'],values['y2']);
-				console.log("rectangle="+prim['id']);
-				rect.display();
-				break;
-			case 'triangle':
-				console.log("triangle="+prim['id']);
-				break;
-			default:
-				console.log(prim['tag']);
-				break;
-		}
+	for(var prim in this.primitives){
+		this.primitives[prim].display();
 	}
 };
 
