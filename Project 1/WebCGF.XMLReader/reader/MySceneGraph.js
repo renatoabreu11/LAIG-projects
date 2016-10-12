@@ -517,6 +517,7 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 	if(transBlock == null)
 		return;
 
+	this.transformations=[];
 	for(var i=0; i < transBlock.length; i++)
 	{
 		var transformation = transBlock[i];
@@ -524,7 +525,7 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 		var id = this.reader.getString(transformation, 'id');
 		var idExists = false;
 
-		for(var k = 0; k < this.transformations.length; k++){
+		for(var k in this.transformations.length){
 			if(this.transformations[k]["id"] == id){
 				this.blockWarnings.push("Transformation with id: " + id + " already exists");
 				idExists = true;
@@ -535,8 +536,8 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 			var matrix = mat4.create();
 			matrix = mat4.identity(matrix);
 
-			this.transformations[tCount] = [];
-			this.transformations[tCount]["id"] = id;
+			this.transformations[id] = [];
+			this.transformations[id]["id"] = id;
 
 			var nTransforms = transformation.children.length;
 			if(nTransforms == 0){
@@ -575,7 +576,7 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 					}
 				}
 			}
-			this.transformations[tCount]["matrix"] = matrix;
+			this.transformations[id]["matrix"] = matrix;
 		}
 	}
 };
@@ -653,44 +654,44 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 		}
 
 		if(!idExists) {
-			this.components[compCounter]=[];
-			this.components[compCounter]["id"]=id;
+			this.components[id]=[];
+			this.components[id]["id"]=id;
 
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION
 			var transformationBlock = this.getElements('transformation',componentBlock[0] ,0);
 			if(transformationBlock==null)
 				return;
-			this.components[compCounter]["transformation"]=[];
+			this.components[id]["transformation"]=[];
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION->TRANSFORMATIONREF
 			var transformationRefBlock=this.getElements('transformationref',transformationBlock[0], 0);
 			if(transformationRefBlock==null)
 				return;
-			this.components[compCounter]["transformation"]["transformationref"]=[];
-			this.components[compCounter]["transformation"]["transformationref"]["id"]=this.reader.getString(transformationRefBlock[0],'id');
+			this.components[id]["transformation"]["transformationref"]=[];
+			this.components[id]["transformation"]["transformationref"]["id"]=this.reader.getString(transformationRefBlock[0],'id');
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION->TRANSLATE
 			var translateBlock=this.getElements('translate',transformationBlock[0], 0);
 			if(translateBlock==null)
 				return;
-			this.components[compCounter]["transformation"]["translate"]=[];
-			this.components[compCounter]["transformation"]["translate"]=this.readValues(['x','y','z'],translateBlock[0]);
+			this.components[id]["transformation"]["translate"]=[];
+			this.components[id]["transformation"]["translate"]=this.readValues(['x','y','z'],translateBlock[0]);
 
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION->ROTATE
 			var rotateBlock=this.getElements('rotate',transformationBlock[0], 0);
 			if(rotateBlock==null)
 				return;
-			this.components[compCounter]["transformation"]["rotate"]=[];
-			this.components[compCounter]["transformation"]["rotate"]=this.readValues(['axis','angle'],rotateBlock[0]);
+			this.components[id]["transformation"]["rotate"]=[];
+			this.components[id]["transformation"]["rotate"]=this.readValues(['axis','angle'],rotateBlock[0]);
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION->SCALE
 			var scaleBlock=this.getElements('scale',transformationBlock[0], 0);
 			if(scaleBlock==null)
 				return;
-			this.components[compCounter]["transformation"]["scale"]=[];
-			this.components[compCounter]["transformation"]["scale"]=this.readValues(['x','y','z'],scaleBlock[0]);
+			this.components[id]["transformation"]["scale"]=[];
+			this.components[id]["transformation"]["scale"]=this.readValues(['x','y','z'],scaleBlock[0]);
 
 
 			//COMPONENTS->COMPONENT->MATERIALS
@@ -703,22 +704,22 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 			if(materialBlock==null)
 				return;
 
-			this.components[compCounter]["materials"]=[];
+			this.components[id]["materials"]=[];
 			for(var j=0; j<materialBlock.length; j++){
 				var material = materialBlock[j];
-				var matCounter=this.components[compCounter]["materials"].length;
+				var matCounter=this.components[id]["materials"].length;
 				var id = this.reader.getString(material, 'id');
 				var idExists=false;
 
 				for(var k=0; k<matCounter; k++){
-					if(this.components[compCounter]["materials"][k]==id){
+					if(this.components[id]["materials"][k]==id){
 						this.blockWarnings.push("Material with id: "+id+" already exists in this component.");
 						idExists=true;
 					}
 				}
 
 				if(!idExists){
-					this.components[compCounter]["materials"][matCounter]=id;
+					this.components[id]["materials"][matCounter]=id;
 				}
 			}
 
@@ -726,36 +727,36 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 			var textureBlock = this.getElements('texture', componentBlock[0], 0);
 			if(textureBlock==null)
 				return;
-			this.components[compCounter]["texture"]=this.reader.getString(textureBlock[0],'id');
+			this.components[id]["texture"]=this.reader.getString(textureBlock[0],'id');
 
 
 			//COMPONENTS->COMPONENT->CHILDREN
 			var childrenBlock = this.getElements('children', componentBlock[0], 0);
 			if(childrenBlock==null)
 				return;
-			this.components[compCounter]["children"]=[];
+			this.components[id]["children"]=[];
 
 			//COMPONENTS->COMPONENT->CHILDREN->COMPONENTREF
 			var compRefBlock = this.getElements('componentref', childrenBlock[0],1);
 			if(compRefBlock==null)
 				return;
 
-			this.components[compCounter]["children"]["componentref"]=[];
+			this.components[id]["children"]["componentref"]=[];
 			for(var j=0; j<compRefBlock.length; j++){
 				var compRef = compRefBlock[j];
-				var compRefCounter=this.components[compCounter]["children"]["componentref"].length;
+				var compRefCounter=this.components[id]["children"]["componentref"].length;
 				var id = this.reader.getString(compRef, 'id');
 				var idExists=false;
 
 				for(var k=0; k<compRefCounter; k++){
-					if(this.components[compCounter]["children"]["componentref"][k]==id){
+					if(this.components[id]["children"]["componentref"][k]==id){
 						this.blockWarnings.push("Componentref with id: "+id+" already exists in this component.");
 						idExists=true;
 					}
 				}
 
 				if(!idExists){
-					this.components[compCounter]["children"]["componentref"][compRefCounter]=id;
+					this.components[id]["children"]["componentref"][compRefCounter]=id;
 				}
 			}
 
@@ -764,25 +765,24 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 			if(primRefBlock==null)
 				return;
 
-			this.components[compCounter]["children"]["primitiveref"]=[];
+			this.components[id]["children"]["primitiveref"]=[];
 			for(var j=0; j<primRefBlock.length; j++){
 				var primRef = primRefBlock[j];
-				var primRefCounter=this.components[compCounter]["children"]["primitiveref"].length;
+				var primRefCounter=this.components[id]["children"]["primitiveref"].length;
 				var id = this.reader.getString(primRef, 'id');
 				var idExists=false;
 
 				for(var k=0; k<primRefCounter; k++){
-					if(this.components[compCounter]["children"]["primitiveref"][k]==id){
+					if(this.components[id]["children"]["primitiveref"][k]==id){
 						this.blockWarnings.push("Primitiveref with id: "+id+" already exists in this component.");
 						idExists=true;
 					}
 				}
 
 				if(!idExists){
-					this.components[compCounter]["children"]["primitiveref"][compRefCounter]=id;
+					this.components[id]["children"]["primitiveref"][compRefCounter]=id;
 				}
 			}
-
 		}
 		console.log(this.components);
 

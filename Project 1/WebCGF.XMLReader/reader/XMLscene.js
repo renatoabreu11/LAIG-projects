@@ -74,12 +74,18 @@ XMLscene.prototype.loadPrimitives = function(){
 				break;
 			case 'triangle':
 				var values = prim['triangle'];
-				this.primitives[index] = new MyTriangle(this,values['x1'],values['y1'],values['x2'],values['y2']);
+				this.primitives[index] = new MyTriangle(this,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']);
 				break;;
 			default:
 				console.log(prim['tag']);
 				break;
 		}
+	}
+}
+
+XMLscene.prototype.getMatrix = function(id){
+	for(var idComp in this.graph.components){
+		
 	}
 }
 
@@ -117,8 +123,13 @@ XMLscene.prototype.display = function () {
 		this.lights[0].update();
 	};
 
-	for(var prim in this.primitives){
-		this.primitives[prim].display();
+	for(var idPrim in this.primitives){
+		
+		this.pushMatrix();
+		var matrix = getMatrix(idPrim);
+		multMatrix(matrix);
+		this.primitives[idPrim].display();
+		this.popMatrix();
 	}
 };
 
