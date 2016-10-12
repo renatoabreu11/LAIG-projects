@@ -92,6 +92,24 @@ XMLscene.prototype.display = function () {
 	if (this.graph.loadedOk)
 	{
 		this.lights[0].update();
-	};	
+	};
+
+	for(var primitive in this.graph.primitives){
+		var prim = this.graph.primitives[primitive];
+		switch(prim['tag']){
+			case 'rectangle':
+				var values = prim['rectangle'];
+				var rect = new MyQuad(this,values['x1'],values['y1'],values['x2'],values['y2']);
+				console.log("rectangle="+prim['id']);
+				rect.display();
+				break;
+			case 'triangle':
+				console.log("triangle="+prim['id']);
+				break;
+			default:
+				console.log(prim['tag']);
+				break;
+		}
+	}
 };
 
