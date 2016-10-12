@@ -588,6 +588,7 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement, blockInfo) {
 	if(primBlock == null)
 		return;
 
+	this.primitives=[];
 	for(var i=0; i < primBlock.length; i++)
 	{
 		var primitive = primBlock[i];
@@ -595,29 +596,30 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement, blockInfo) {
 		var id = this.reader.getString(primitive, 'id');
 		var idExists = false;
 
-		for(var k = 0; k < this.primitives.length; k++){
-			if(this.primitives[k]["id"] == id){
+		for(var k in this.primitives){
+			if(k["id"] == id){
 				this.blockWarnings.push("Primitive with id: " + id + " already exists");
 				idExists = true;
 			}
 		}
 
 		if(!idExists){
-			this.primitives[pCount] = [];
-			this.primitives[pCount]["id"] = id;
+			this.primitives[id]=[];
+			this.primitives[id]["id"] = id;
 
 			var nPrimitives = primitive.children.length;
 			if(nPrimitives > 1){
 				this.blockWarnings.push("More than one type of primitive per block");
 			} else{
 				var tagName = primitive.children[0].tagName;
+				this.primitives[id]['tag']=tagName;
 				switch(tagName){
 					case 'rectangle':{
-						this.primitives[pCount][tagName] = this.readValues(['x1', 'y1', 'x2', 'y2'], primitive.children[0])
+						this.primitives[id][tagName] = this.readValues(['x1', 'y1', 'x2', 'y2'], primitive.children[0])
 						break;
 					}
 					case 'triangle':{
-						this.primitives[pCount][tagName] = this.readValues(['x1', 'y1', 'z1', 'x2', 'y2', 'z2','x3', 'y3', 'z3'], primitive.children[0])
+						this.primitives[id][tagName] = this.readValues(['x1', 'y1', 'z1', 'x2', 'y2', 'z2','x3', 'y3', 'z3'], primitive.children[0])
 						break;
 					}
 					default: break;
@@ -846,7 +848,6 @@ MySceneGraph.prototype.loadLights = function(){
 		this.scene.lights[i].update();
 	}
 }
-
 
 
 //@param isList -> if the block to inspect can have more than one element than we just need to check if the number

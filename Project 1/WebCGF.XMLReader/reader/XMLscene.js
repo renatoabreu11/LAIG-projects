@@ -51,11 +51,29 @@ XMLscene.prototype.onGraphLoaded = function ()
 
     //this.camera = this.graph.getDefaultView();
     this.graph.loadLights();
-    for(var i = 0; i < this.lights.length; i++){
-    	
-	}
-    this.interface.addLights();
+    this.primitives=[];
+	this.loadPrimitives();
 };
+
+XMLscene.prototype.loadPrimitives = function(){
+	for(var primitive in this.graph.primitives){
+		var prim = this.graph.primitives[primitive];
+		var index = this.primitives.length;
+		switch(prim['tag']){
+			case 'rectangle':
+				var values = prim['rectangle'];
+				this.primitives[index] = new MyQuad(this,values['x1'],values['y1'],values['x2'],values['y2']);
+				break;
+			case 'triangle':
+				var values = prim['triangle'];
+				this.primitives[index] = new MyTriangle(this,values['x1'],values['y1'],values['x2'],values['y2']);
+				break;;
+			default:
+				console.log(prim['tag']);
+				break;
+		}
+	}
+}
 
 XMLscene.prototype.nextView = function(){
 	this.graph.setNextView();
@@ -94,6 +112,10 @@ XMLscene.prototype.display = function () {
 	{
 		for(var i = 0; i < this.lights.length; i++){
 				this.lights[i].update();
+		}
+
+		for(var prim in this.primitives){
+			this.primitives[prim].display();
 		}
 	};	
 };
