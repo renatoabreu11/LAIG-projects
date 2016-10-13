@@ -1,21 +1,9 @@
 /**
- * MyQuad
+ * Quad
  * @param gl {WebGLRenderingContext}
  * @constructor
  */
-
-/*function MyQuad(scene, minS=0, maxS=1, minT=0, maxT=1) {
-	CGFobject.call(this,scene);
-
-    this.minS = minS;
-    this.maxS = maxS;
-    this.minT = minT;
-    this.maxT = maxT;
-
-	this.initBuffers();
-}*/
-
-function MyQuad(scene, x1, y1, x2, y2) {
+function Rectangle(scene, x1, y1, x2, y2) {
 	CGFobject.call(this,scene);
 
     this.x1 = x1;
@@ -26,10 +14,10 @@ function MyQuad(scene, x1, y1, x2, y2) {
 	this.initBuffers();
 }
 
-MyQuad.prototype = Object.create(CGFobject.prototype);
-MyQuad.prototype.constructor=MyQuad;
+Rectangle.prototype = Object.create(CGFobject.prototype);
+Rectangle.prototype.constructor=Rectangle;
 
-MyQuad.prototype.initBuffers = function () {
+Rectangle.prototype.initBuffers = function () {
 	this.vertices = [
 		this.x1, this.y1, 0,
 		this.x2, this.y1, 0,
@@ -55,12 +43,19 @@ MyQuad.prototype.initBuffers = function () {
 		0, 0, 1
 	];
 
-/*    this.texCoords = [
-        this.maxS, this.minT,
-        this.minS, this.minT,
-        this.minS, this.maxT,
-        this.maxS, this.maxT
+	/*function MyQuad(scene, minS=0, maxS=1, minT=0, maxT=1) {
+    this.minS = minS;
+    this.maxS = maxS;
+    this.minT = minT;
+    this.maxT = maxT;
+	}*/
+
+    this.texCoords = [
+        1, 0,
+        0, 1,
+        0, 1,
+        1, 1
     ];
-*/
+
 	this.initGLBuffers();		//desenha no ecrã este objecto, a informação é passada para o WebGL.
 };

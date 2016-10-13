@@ -31,12 +31,8 @@ MyInterface.prototype.init = function(application) {
 	return true;
 };
 
-MyInterface.prototype.addLights = function() {
-	for(var i = 0; i < this.scene.graph.lights.length; i++){
-		var light = this.scene.graph.lights[i];
-		console.log(light)
-		this.lightGroup.add(this.scene, light["id"]);
-	}
+MyInterface.prototype.addLight = function(i, id){
+	this.lightGroup.add(this.scene.lightStatus, i, this.scene.lightStatus[i]).name(id);
 }
 
 /**
@@ -67,7 +63,7 @@ MyInterface.prototype.processKeyboard = function(event) {
 			break;
 		case(86):
 		case(86+32):
-			this.scene.nextView();
+			this.scene.updateCamera();
 			this.setActiveCamera(this.scene.camera);
 			break;
 	};

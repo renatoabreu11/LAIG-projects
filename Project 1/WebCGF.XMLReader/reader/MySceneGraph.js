@@ -41,8 +41,7 @@ function MySceneGraph(filename, scene) {
 /*
  * Callback to be executed after successful reading
  */
-MySceneGraph.prototype.onXMLReady=function() 
-{
+MySceneGraph.prototype.onXMLReady=function() {
 	console.log("XML Loading finished.");
 	var rootElement = this.reader.xmlDoc.documentElement;
 	
@@ -60,7 +59,6 @@ MySceneGraph.prototype.onXMLReady=function()
 		};
 		return;	
 	}else{
-	
 		this.loadedOk=true;
 	
 		// As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
@@ -74,9 +72,9 @@ MySceneGraph.prototype.onXMLReady=function()
 MySceneGraph.prototype.parseBlocks= function(rootElement, blocksTag) {
 	var skipBlock = 0;
 
+	//não esquecer de verificar as ordens da tag!!
 	for(var i = 0; i < blocksTag.length; i++){
 		var elements =  rootElement.getElementsByTagName(blocksTag[i]);
-
 		if (elements == null) {
 			this.elementsErrors.push(blocksTag[i] + " element is missing.");
 			skipBlock = 1;
@@ -90,54 +88,42 @@ MySceneGraph.prototype.parseBlocks= function(rootElement, blocksTag) {
 		if(skipBlock == 0){
 			switch(i){
 				case 0:{
-					this.parseGlobals(rootElement, elements);
-					console.log('Scene name:', this.root);
-					console.log('Axis length:', this.axisLength);
-					break;
+					this.parseGlobals(rootElement, elements); break;
 				}
 				case 1:{
-					this.parseViews(rootElement, elements); 
-					console.log(this.views)
-					break;
+					this.parseViews(rootElement, elements); break;
 				} 
 				case 2:{
-					this.parseIllumination(rootElement, elements);
-					console.log(this.illumination);
-					break;
+					this.parseIllumination(rootElement, elements); break;
 				}
 				case 3:{
-					this.parseLights(rootElement, elements); 
-					console.log(this.lights);
-					break;
+					this.parseLights(rootElement, elements);  break;
 				}
 				case 4:{
-					this.parseTextures(rootElement, elements); 
-					console.log(this.textures)
-					break;
+					this.parseTextures(rootElement, elements); break;
 				} 
 				case 5:{
-					this.parseMaterials(rootElement, elements); 
-					console.log(this.materials);
-					break;
+					this.parseMaterials(rootElement, elements); break;
 				}
 				case 6:{
-					this.parseTransformations(rootElement, elements); 
-					console.log(this.transformations)
-					break;
+					this.parseTransformations(rootElement, elements); break;
 				} 
 				case 7:{
-					 this.parsePrimitives(rootElement, elements);
-					 console.log(this.primitives);
-					 break;
+					 this.parsePrimitives(rootElement, elements); break;
 				}
-				case 8: this.parseComponents(rootElement, elements); break;
-				default: break;
+				case 8: //this.parseComponents(rootElement, elements); 
+					break;
+				default:{
+					break;
+				} 
 			}
 		} else skipBlock = 0;
 	}
 };
 
-
+/*
+ * Method that parses the global values, root name and axis length
+ */
 MySceneGraph.prototype.parseGlobals= function(rootElement, blockInfo) {
 	var scene = blockInfo[0];
 	this.root = this.reader.getString(scene, 'root');
@@ -149,6 +135,9 @@ MySceneGraph.prototype.parseGlobals= function(rootElement, blockInfo) {
 	this.checkFloatValue(this.axisLength, 'Axis length');
 };
 
+/*
+ * This method parses all the declared views and all of its elements
+ */ 
 MySceneGraph.prototype.parseViews= function(rootElement, blockInfo) {
 	var viewsBlock = blockInfo[0];
 
@@ -159,7 +148,6 @@ MySceneGraph.prototype.parseViews= function(rootElement, blockInfo) {
 
 	for(var i=0; i < perspBlock.length; i++)
 	{
-		var viewsCounter = this.views.length;
 		var perspective = perspBlock[i];
 
 		var id = this.reader.getString(perspective, 'id');
@@ -170,39 +158,38 @@ MySceneGraph.prototype.parseViews= function(rootElement, blockInfo) {
 		}
 
 		var idExists = false;
-		for(var k = 0; k < this.views.length; k++){
-			if(this.views[k]["id"] == id){
+		for(var view of this.views){
+			if(view["id"] == id){
 				this.blockWarnings.push("Perspective with id: " + id + " already exists");
 				idExists = true;
 			}
 		}
 
 		if(!idExists){
+			var view = [];
+			view["id"] = id;
 
-			this.views[viewsCounter] = [];
-			this.views[viewsCounter]["id"] = id;
-
-			this.views[viewsCounter]["near"] = this.reader.getFloat(perspective, 'near');
-			this.checkFloatValue(this.views[viewsCounter]["near"], 'Near');
-			this.views[viewsCounter]["far"] = this.reader.getFloat(perspective, 'far');
-			this.checkFloatValue(this.views[viewsCounter]["far"], 'Far');
-			this.views[viewsCounter]["angle"] = this.reader.getFloat(perspective, 'angle');
-			this.checkFloatValue(this.views[viewsCounter]["angle"], 'Angle');
-			this.views[viewsCounter]["angle"] *= Math.PI/180;
+			view["near"] = this.reader.getFloat(perspective, 'near');
+			this.checkFloatValue(view["near"], 'Near');
+			view["far"] = this.reader.getFloat(perspective, 'far');
+			this.checkFloatValue(view["far"], 'Far');
+			view["angle"] = this.reader.getFloat(perspective, 'angle');
+			this.checkFloatValue(view["angle"], 'Angle');
+			view["angle"] *= Math.PI/180;
 
 			//VIEWS->PERSPECTIVE->FROM
 			var fromBlock = this.getElements('from', perspective, 0);
 			if(fromBlock == null)
 				return;
-
-			this.views[viewsCounter]["from"] = this.readValues(['x', 'y', 'z'], fromBlock[0]);
+			view["from"] = this.readValues(['x', 'y', 'z'], fromBlock[0]);
 			
 			//VIEWS->PERSPECTIVE->TO
 			var toBlock = this.getElements('to', perspective, 0);
 			if(toBlock == null)
 				return;
-			
-			this.views[viewsCounter]["to"] = this.readValues(['x', 'y', 'z'], toBlock[0]);
+			view["to"] = this.readValues(['x', 'y', 'z'], toBlock[0]);
+
+			this.views.push(view);
 		}
 	}
 
@@ -211,8 +198,8 @@ MySceneGraph.prototype.parseViews= function(rootElement, blockInfo) {
 		this.blockWarnings.push("Default View is missing");
 	} else{
 		var idFound = false;
-		for(var k = 0; k < this.views.length; k++){
-			if(this.views[k]["id"] == this.defaultView){
+		for(var view of this.views){
+			if(view["id"] == this.defaultView){
 				idFound = true;
 				break;
 			}
@@ -226,6 +213,9 @@ MySceneGraph.prototype.parseViews= function(rootElement, blockInfo) {
 	}
 };
 
+/*
+ * Parses the illumination values
+ */
 MySceneGraph.prototype.parseIllumination= function(rootElement, blockInfo) {
 	var illuminationBlock = blockInfo[0];
 
@@ -246,6 +236,10 @@ MySceneGraph.prototype.parseIllumination= function(rootElement, blockInfo) {
 	this.illumination["background"] = this.readValues(['r', 'g', 'b', 'a'], backgroundBlock[0]);
 };
 
+/*
+ * Method that verifies the light block and calls the respective function to par
+ * parse the light, accordingly to its type
+ */
 MySceneGraph.prototype.parseLights= function(rootElement, blockInfo) {
 	//LIGHTS
 	var lightsBlock = blockInfo[0];
@@ -271,133 +265,125 @@ MySceneGraph.prototype.parseLights= function(rootElement, blockInfo) {
 	}
 };
 
-MySceneGraph.prototype.parseOmniLight= function(light) {
+/*
+ * Parses omni lights
+ */ 
+MySceneGraph.prototype.parseOmniLight= function(omni) {
 	//LIGHTS->OMNI
 
-	var id = this.reader.getString(light, 'id');
+	var id = this.reader.getString(omni, 'id');
 	var idExists = false;
 
-	for(var k = 0; k < this.lights.length; k++){
-		if(this.lights[k]["id"] == id){
-			this.blockWarnings.push(this.lights[k]["type"] + " with id: " + id + " already exists");
+	for(var light of this.lights){
+		if(light["id"] == id){
+			this.blockWarnings.push(light["type"] + " with id: " + id + " already exists");
 			idExists = true;
 		}
 	}
 
-	var lightCounter = this.lights.length;
-
 	if(!idExists){
-		this.lights[lightCounter] = [];
-		this.lights[lightCounter]["id"] = id;
-		this.lights[lightCounter]["type"] = "omni";
-		this.lights[lightCounter]["enabled"] = this.reader.getBoolean(light, 'enabled');
+		var light = [];
+		light["id"] = id;
+		light["type"] = "omni";
+		light["enabled"] = this.reader.getBoolean(omni, 'enabled');
 
 		//LIGHTS->OMNI->LOCATION
-		var locationBlock = this.getElements('location', light, 0);
+		var locationBlock = this.getElements('location', omni, 0);
 		if(locationBlock == null)
 			return;		
-
-		this.lights[lightCounter]["location"] = [];
-		this.lights[lightCounter]["location"] = this.readValues(['x', 'y', 'z', 'w'], locationBlock[0]);
+		light["location"] = this.readValues(['x', 'y', 'z', 'w'], locationBlock[0]);
 
 		//LIGHTS->OMNI->AMBIENT
-		var ambientBlock = this.getElements('ambient', light, 0);
+		var ambientBlock = this.getElements('ambient', omni, 0);
 		if(ambientBlock == null)
 			return;		
-
-		this.lights[lightCounter]["ambient"] = [];
-		this.lights[lightCounter]["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
+		light["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
 
 		//LIGHTS->OMNI->DIFFUSE
-		var diffuseBlock = this.getElements('diffuse', light, 0);
+		var diffuseBlock = this.getElements('diffuse', omni, 0);
 		if(diffuseBlock == null)
 			return;		
-
-		this.lights[lightCounter]["diffuse"] = [];
-		this.lights[lightCounter]["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
+		light["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
 
 		//LIGHTS->OMNI->SPECULAR
-		var specularBlock = this.getElements('specular', light, 0);
+		var specularBlock = this.getElements('specular', omni, 0);
 		if(specularBlock == null)
 			return;		
+		light["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
 
-		this.lights[lightCounter]["specular"] = [];
-		this.lights[lightCounter]["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
+		this.lights.push(light);
+		this.nLights++;
 	}
 }
 
-MySceneGraph.prototype.parseSpotLight= function(light) {
+/*
+ * Parses spot lights
+ */ 
+MySceneGraph.prototype.parseSpotLight= function(spot) {
 	//LIGHTS->SPOT
 
-	var id = this.reader.getString(light, 'id');
+	var id = this.reader.getString(spot, 'id');
 	var idExists = false;
 
-	for(var k = 0; k < this.lights.length; k++){
-		if(this.lights[k]["id"] == id){
-			this.blockWarnings.push(this.lights[k]["type"] + " with id: " + id + " already exists");
+	for(var light of this.lights){
+		if(light["id"] == id){
+			this.blockWarnings.push(light["type"] + " with id: " + id + " already exists");
 			idExists = true;
 		}
 	}
 
-	var lightCounter = this.lights.length;
-
 	if(!idExists){
-		this.lights[lightCounter] = [];
-		this.lights[lightCounter]["id"] = id;
-		this.lights[lightCounter]["type"] = "spot";
-		this.lights[lightCounter]["enabled"] = this.reader.getBoolean(light, 'enabled');
+		var light = [];
+		light["id"] = id;
+		light["type"] = "spot";
+		light["enabled"] = this.reader.getBoolean(spot, 'enabled');
 
-		this.lights[lightCounter]["angle"] = this.reader.getFloat(light, 'angle');
-		this.checkFloatValue(this.lights[lightCounter]["angle"], 'Angle');
-		this.lights[lightCounter]["angle"] *= Math.PI/180;
+		light["angle"] = this.reader.getFloat(spot, 'angle');
+		this.checkFloatValue(light["angle"], 'Angle');
+		light["angle"] *= Math.PI/180;
 
-		this.lights[lightCounter]["exponent"] = this.reader.getFloat(light, 'exponent');
-		this.checkFloatValue(this.lights[lightCounter]["exponent"], 'Exponent');
+		light["exponent"] = this.reader.getFloat(spot, 'exponent');
+		this.checkFloatValue(light["exponent"], 'Exponent');
 
 		//LIGHTS->SPOT->TARGET
-		var targetBlock = this.getElements('target', light, 0);
+		var targetBlock = this.getElements('target', spot, 0);
 		if(targetBlock == null)
 			return;		
-
-		this.lights[lightCounter]["target"] = [];
-		this.lights[lightCounter]["target"] = this.readValues(['x', 'y', 'z'], targetBlock[0]);
+		light["target"] = this.readValues(['x', 'y', 'z'], targetBlock[0]);
 
 
 		//LIGHTS->SPOT->LOCATION
-		var locationBlock = this.getElements('location', light, 0);
+		var locationBlock = this.getElements('location', spot, 0);
 		if(locationBlock == null)
 			return;		
-
-		this.lights[lightCounter]["location"] = [];
-		this.lights[lightCounter]["location"] = this.readValues(['x', 'y', 'z'], locationBlock[0]);
+		light["location"] = this.readValues(['x', 'y', 'z'], locationBlock[0]);
 
 		//LIGHTS->SPOT->AMBIENT
-		var ambientBlock = this.getElements('ambient', light, 0);
+		var ambientBlock = this.getElements('ambient', spot, 0);
 		if(ambientBlock == null)
 			return;		
-
-		this.lights[lightCounter]["ambient"] = [];
-		this.lights[lightCounter]["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
+		light["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
 
 		//LIGHTS->SPOT->DIFFUSE
-		var diffuseBlock = this.getElements('diffuse', light, 0);
+		var diffuseBlock = this.getElements('diffuse', spot, 0);
 		if(diffuseBlock == null)
 			return;		
-
-		this.lights[lightCounter]["diffuse"] = [];
-		this.lights[lightCounter]["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
+		light["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
 
 		//LIGHTS->SPOT->SPECULAR
-		var specularBlock = this.getElements('specular', light, 0);
+		var specularBlock = this.getElements('specular', spot, 0);
 		if(specularBlock == null)
 			return;		
+		light["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
 
-
-		this.lights[lightCounter]["specular"] = [];
-		this.lights[lightCounter]["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
+		this.lights.push(light)
+		this.nLights++;
 	}
 }
 
+/*
+ * Textures tag parser
+ */
 MySceneGraph.prototype.parseTextures= function(rootElement, blockInfo) {
 	var texturesBlock = blockInfo[0];
 
@@ -409,29 +395,32 @@ MySceneGraph.prototype.parseTextures= function(rootElement, blockInfo) {
 	for(var i=0; i < texBlock.length; i++)
 	{
 		var texture = texBlock[i];
-		var tCounter = this.textures.length; //valid texture tag counter
 		var id = this.reader.getString(texture, 'id');
 		var idExists = false;
 
-		for(var k = 0; k < this.textures.length; k++){
-			if(this.textures[k]["id"] == id){
+		for(tex of this.textures){
+			if(tex["id"] == id){
 				this.blockWarnings.push("Texture with id: " + id + " already exists");
 				idExists = true;
 			}
 		}
 
 		if(!idExists){
-			this.textures[tCounter] = [];
-			this.textures[tCounter]["id"] = id;
-			this.textures[tCounter]["file"] = this.reader.getString(texture, 'file');
-			this.textures[tCounter]["length_s"] = this.reader.getFloat(texture, 'length_s');
-			this.checkFloatValue(this.textures[tCounter]["length_s"], 'Length_s');
-			this.textures[tCounter]["length_t"] = this.reader.getFloat(texture, 'length_t');
-			this.checkFloatValue(this.textures[tCounter]["length_t"], 'Length_t');
+			var tex = [];
+			tex["id"] = id;
+			tex["file"] = this.reader.getString(texture, 'file');
+			tex["length_s"] = this.reader.getFloat(texture, 'length_s');
+			this.checkFloatValue(tex["length_s"], 'Length_s');
+			tex["length_t"] = this.reader.getFloat(texture, 'length_t');
+			this.checkFloatValue(tex["length_t"], 'Length_t');
+			this.textures.push(tex);
 		}
 	}
 };
 
+/*
+ * This function parses material block 
+ */
 MySceneGraph.prototype.parseMaterials= function(rootElement, blockInfo) {
 	var materialsBlock =  blockInfo[0];
 
@@ -443,12 +432,11 @@ MySceneGraph.prototype.parseMaterials= function(rootElement, blockInfo) {
 	for(var i=0; i < matBlock.length; i++)
 	{
 		var materialInfo = matBlock[i];
-		var mCounter = this.materials.length; //valid materials tag counter
 		var id = this.reader.getString(materialInfo, 'id');
 		var idExists = false;
 
-		for(var k = 0; k < this.materials.length; k++){
-			if(this.materials[k]["id"] == id){
+		for(var material of this.materials){
+			if(material["id"] == id){
 				this.blockWarnings.push("Material with id: " + id + " already exists");
 				idExists = true;
 			}
@@ -461,32 +449,24 @@ MySceneGraph.prototype.parseMaterials= function(rootElement, blockInfo) {
 			var emissionBlock = this.getElements('emission', materialInfo, 0);
 			if(emissionBlock == null)
 				return;
-
-			material["emission"] = [];
 			material["emission"] = this.readValues(['r', 'g', 'b', 'a'], emissionBlock[0]);
 
 			//MATERIALS->MATERIAL->AMBIENT
 			var ambientBlock = this.getElements('ambient', materialInfo, 0);
 			if(ambientBlock == null)
 				return;
-
-			material["ambient"] = [];
 			material["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
 
 			//MATERIALS->MATERIAL->DIFFUSE
 			var diffuseBlock = this.getElements('diffuse', materialInfo, 0);
 			if(diffuseBlock == null)
 				return;		
-
-			material["diffuse"] = [];
 			material["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
 
 			//MATERIALS->MATERIAL->SPECULAR
 			var specularBlock = this.getElements('specular', materialInfo, 0);
 			if(specularBlock == null)
 				return;		
-
-			material["specular"] = [];
 			material["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
 
 			//MATERIALS->MATERIAL->SHININESS
@@ -509,6 +489,10 @@ MySceneGraph.prototype.parseMaterials= function(rootElement, blockInfo) {
 	}
 };
 
+/*
+ * Parses the transformation info (scale, rotation, translate) applying
+ * the transormation to a indentity matrix. Then saves the matrix in the array
+ */
 MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 	var transformationsBlock = blockInfo[0];
 
@@ -517,16 +501,14 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 	if(transBlock == null)
 		return;
 
-	this.transformations=[];
 	for(var i=0; i < transBlock.length; i++)
 	{
 		var transformation = transBlock[i];
-		var tCount = this.transformations.length; //valid transformation tag counter
 		var id = this.reader.getString(transformation, 'id');
 		var idExists = false;
 
-		for(var k in this.transformations.length){
-			if(this.transformations[k]["id"] == id){
+		for(var transf of this.transformations){
+			if(transf["id"] == id){
 				this.blockWarnings.push("Transformation with id: " + id + " already exists");
 				idExists = true;
 			}
@@ -536,8 +518,8 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 			var matrix = mat4.create();
 			matrix = mat4.identity(matrix);
 
-			this.transformations[id] = [];
-			this.transformations[id]["id"] = id;
+			var transf = [];
+			transf["id"] = id;
 
 			var nTransforms = transformation.children.length;
 			if(nTransforms == 0){
@@ -576,11 +558,15 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 					}
 				}
 			}
-			this.transformations[id]["matrix"] = matrix;
+			transf["matrix"] = matrix;
+			this.transformations.push(transf);
 		}
 	}
 };
 
+/*
+ * Parses primitive of each type (rectangle, triangle, cylinder, sphere and torus)
+ */ 
 MySceneGraph.prototype.parsePrimitives= function(rootElement, blockInfo) {
 	var primitivesBlock = blockInfo[0];
 
@@ -589,44 +575,64 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement, blockInfo) {
 	if(primBlock == null)
 		return;
 
-	this.primitives=[];
 	for(var i=0; i < primBlock.length; i++)
 	{
 		var primitive = primBlock[i];
-		var pCount = this.primitives.length; //valid primitive tag counter
 		var id = this.reader.getString(primitive, 'id');
 		var idExists = false;
 
-		for(var k in this.primitives){
-			if(k["id"] == id){
+		for(var prim of this.primitives){
+			if(prim["id"] == id){
 				this.blockWarnings.push("Primitive with id: " + id + " already exists");
 				idExists = true;
 			}
 		}
 
 		if(!idExists){
-			this.primitives[id]=[];
-			this.primitives[id]["id"] = id;
+			var prim = [];
+			prim["id"] = id;
 
 			var nPrimitives = primitive.children.length;
 			if(nPrimitives > 1){
 				this.blockWarnings.push("More than one type of primitive per block");
 			} else{
 				var tagName = primitive.children[0].tagName;
-				this.primitives[id]['tag']=tagName;
+				prim['tag']=tagName;
 				switch(tagName){
 					case 'rectangle':{
-						this.primitives[id][tagName] = this.readValues(['x1', 'y1', 'x2', 'y2'], primitive.children[0])
+						prim[tagName] = this.readValues(['x1', 'y1', 'x2', 'y2'], primitive.children[0])
 						break;
 					}
 					case 'triangle':{
-						this.primitives[id][tagName] = this.readValues(['x1', 'y1', 'z1', 'x2', 'y2', 'z2','x3', 'y3', 'z3'], primitive.children[0])
+						prim[tagName] = this.readValues(['x1', 'y1', 'z1', 'x2', 'y2', 'z2','x3', 'y3', 'z3'], primitive.children[0])
+						break;
+					}
+					case 'cylinder':{
+						prim[tagName] = this.readValues(['base', 'top', 'height'], primitive.children[0]);
+						prim[tagName]["slices"] = this.reader.getInteger(primitive.children[0], 'slices');
+						prim[tagName]["stacks"] = this.reader.getInteger(primitive.children[0], 'stacks');
+						break;
+					}
+					case 'sphere':{
+						prim[tagName] = [];
+						prim[tagName]["radius"] = this.reader.getFloat(primitive.children[0], 'radius');
+						prim[tagName]["slices"] = this.reader.getInteger(primitive.children[0], 'slices');
+						prim[tagName]["stacks"] = this.reader.getInteger(primitive.children[0], 'stacks');
+						break;
+					}
+					case 'torus':{
+						prim[tagName] = [];
+						prim[tagName]["inner"] = this.reader.getFloat(primitive.children[0], 'inner');
+						prim[tagName]["outer"] = this.reader.getFloat(primitive.children[0], 'outer');
+						prim[tagName]["slices"] = this.reader.getInteger(primitive.children[0], 'slices');
+						prim[tagName]["loops"] = this.reader.getInteger(primitive.children[0], 'loops');
 						break;
 					}
 					default: break;
 				}
 			}
 		}
+		this.primitives.push(prim);
 	}
 };
 
@@ -717,10 +723,10 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 						idExists=true;
 					}
 				}
-
+/*
 				if(!idExists){
 					this.components[id]["materials"][matCounter]=id;
-				}
+				}*/
 			}
 
 			//COMPONENTS->COMPONENT->TEXTURE
@@ -787,20 +793,15 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 		console.log(this.components);
 
 	}
-
-	
 };
-
-//new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 
 /*
  * Returns the view selected as default
  */
 MySceneGraph.prototype.getDefaultView=function() 
 {
-	for(var k = 0; k < this.views.length; k++){
-		if(this.views[k]["id"] == this.defaultView){
-			var view = this.views[k];
+	for(view of this.views){
+		if(view["id"] == this.defaultView){
 			var fov = view["angle"];
 			var near = view["near"];
 			var far = view["far"];
@@ -826,29 +827,6 @@ MySceneGraph.prototype.setNextView=function()
 		}
 	}
 }
-
-MySceneGraph.prototype.loadLights = function(){
-	for(var i = 0; i < this.lights.length; i++){
-		var light = this.lights[i];
-		this.scene.lights[i].setPosition(light["location"]["x"], light["location"]["y"], light["location"]["z"], light["location"]["w"]);
-		this.scene.lights[i].setDiffuse(light["diffuse"]["r"], light["diffuse"]["g"], light["diffuse"]["b"], light["diffuse"]["a"]);
-		this.scene.lights[i].setAmbient(light["ambient"]["r"], light["ambient"]["g"], light["ambient"]["b"], light["ambient"]["a"]);
-		this.scene.lights[i].setSpecular(light["specular"]["r"], light["specular"]["g"], light["specular"]["b"], light["specular"]["a"]);
-	
-		if(light["enabled"])
-			this.scene.lights[i].enable();
-
-		if(light["type"] == "spot"){
-			this.scene.lights[i].setSpotCutOff(light["angle"]);
-			this.scene.lights[i].setSpotExponent(light["exponent"]);
-			this.scene.lights[i].setSpotDirection(light["target"]["x"], light["target"]["y"], light["target"]["z"]);
-		}
-
-		this.scene.lights[i].setVisible(true);
-		this.scene.lights[i].update();
-	}
-}
-
 
 //@param isList -> if the block to inspect can have more than one element than we just need to check if the number
 //of tags is less than 1

@@ -20,13 +20,7 @@ XMLscene.prototype.init = function (application) {
     this.enableTextures(true);
 
 	this.axis=new CGFaxis(this);
-};
-
-XMLscene.prototype.initLights = function () {
-};
-
-XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+	this.lightStatus = [];
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -35,6 +29,10 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);	
 };
+
+XMLscene.prototype.setInterface = function(myInterface){
+	this.interface = myInterface;
+}
 
 // Handler called when the graph is finally loaded. 
 // As loading is asynchronous, this may be called already after the application has started the run loop
@@ -46,14 +44,68 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.setAmbient(this.graph.illumination["ambient"]["r"],this.graph.illumination["ambient"]["g"],
 						this.graph.illumination["ambient"]["b"],this.graph.illumination["ambient"]["a"]);
 
-	//last value is thickness
-    this.axis= new CGFaxis(this, this.graph.axisLength, 0.05);
+    this.axis = new CGFaxis(this, this.graph.axisLength, 0.05);
+    this.camera = this.graph.getDefaultView();
+    this.interface.setActiveCamera(this.camera);
+    this.initLights();
 
-    //this.camera = this.graph.getDefaultView();
-    this.graph.loadLights();
     this.primitives=[];
 	this.loadPrimitives();
 };
+
+XMLscene.prototype.initCameras = function () {
+    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+};
+
+XMLscene.prototype.updateCamera = function () {
+	this.graph.setNextView();
+	this.camera = this.graph.getDefaultView();
+}
+
+XMLscene.prototype.initLights = function () {
+	var i = 0;
+	for(var light of this.graph.lights){
+		this.lights[i].setPosition(light["location"]["x"], light["location"]["y"], light["location"]["z"], light["location"]["w"]);
+		this.lights[i].setDiffuse(light["diffuse"]["r"], light["diffuse"]["g"], light["diffuse"]["b"], light["diffuse"]["a"]);
+		this.lights[i].setAmbient(light["ambient"]["r"], light["ambient"]["g"], light["ambient"]["b"], light["ambient"]["a"]);
+		this.lights[i].setSpecular(light["specular"]["r"], light["specular"]["g"], light["specular"]["b"], light["specular"]["a"]);
+
+		if(light["type"] == "spot"){
+			this.lights[i].setSpotCutOff(light["angle"]);
+			this.lights[i].setSpotExponent(light["exponent"]);
+			this.lights[i].setSpotDirection(light["target"]["x"], light["target"]["y"], light["target"]["z"]);
+		}
+
+		if(light["enabled"]){
+			this.lights[i].enable();
+			this.lights[i].setVisible(true);
+			this.lightStatus[i] = true;
+		}else{
+			this.lights[i].enable();
+			this.lightStatus[i] = false;
+		}
+		this.lights[i].update();
+		this.interface.addLight(i, light["id"])
+		i++;
+	}
+};
+
+XMLscene.prototype.updateLights = function () {
+	var i = 0;
+	for (i; i < this.lights.length; i++){
+		this.lights[i].update();
+	}
+
+	for(var j = 0; j < this.lightStatus.length; j++){
+		if(this.lightStatus[j]){
+			this.lights[j].enable();
+			this.lights[j].setVisible(true);
+		}else{
+			this.lights[j].disable();
+			this.lights[j].setVisible(false);
+		}
+	}
+}
 
 XMLscene.prototype.loadPrimitives = function(){
 	for(var primitive in this.graph.primitives){
@@ -62,32 +114,25 @@ XMLscene.prototype.loadPrimitives = function(){
 		switch(prim['tag']){
 			case 'rectangle':
 				var values = prim['rectangle'];
-				this.primitives[index] = new MyQuad(this,values['x1'],values['y1'],values['x2'],values['y2']);
+				this.primitives[index] = new Rectangle(this,values['x1'],values['y1'],values['x2'],values['y2']);
 				break;
 			case 'triangle':
 				var values = prim['triangle'];
-				this.primitives[index] = new MyTriangle(this,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']);
-				break;;
+				this.primitives[index] = new Triangle(this,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']);
+				break;
+			case 'cylinder':
+				var values = prim['cylinder'];
+				this.primitives[index] = new Cylinder(this,values['slices'],values['stacks']);
+				break;
+			case 'sphere':
+				var values = prim['sphere'];
+				this.primitives[index] = new Sphere(this,values['slices'],values['stacks']);
+				break;
 			default:
 				console.log(prim['tag']);
 				break;
 		}
 	}
-}
-
-XMLscene.prototype.getMatrix = function(id){
-	for(var idComp in this.graph.components){
-		
-	}
-}
-
-XMLscene.prototype.nextView = function(){
-	this.graph.setNextView();
-	this.camera = this.graph.getDefaultView();
-}
-
-XMLscene.prototype.setInterface = function(myInterface){
-	this.interface = myInterface;
 }
 
 XMLscene.prototype.display = function () {
@@ -114,18 +159,25 @@ XMLscene.prototype.display = function () {
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
-	if (this.graph.loadedOk)
-	{
-		for(var i = 0; i < this.lights.length; i++){
-				this.lights[i].update();
-		}
-
-	for(var idPrim in this.primitives){
-		
+	if (this.graph.loadedOk){
+		this.updateLights();
 		this.pushMatrix();
-		var matrix = getMatrix(idPrim);
-		multMatrix(matrix);
-		this.primitives[idPrim].display();
+		this.primitives[0].display();
+		this.popMatrix();
+
+		this.pushMatrix();
+		this.translate(0, 0, 2)
+		this.primitives[1].display();
+		this.popMatrix();
+
+		this.pushMatrix();
+		this.translate(2, 0, 0)
+		this.primitives[2].display();
+		this.popMatrix();
+
+		this.pushMatrix();
+		this.translate(4, 0, 4)
+		this.primitives[3].display();
 		this.popMatrix();
 	}
 };
