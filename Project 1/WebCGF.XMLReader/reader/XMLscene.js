@@ -130,7 +130,11 @@ XMLscene.prototype.loadPrimitives = function(){
 				break;
 			case 'sphere':
 				var values = prim['sphere'];
-				this.primitives[id]['primitive'] = new Sphere(this,values['slices'],values['stacks']);
+				this.primitives[id]['primitive'] = new Torus(this, values['radius'], values['slices'],values['stacks']);
+				break;
+			case 'torus':
+				var values = prim['torus'];
+				this.primitives[id]['primitive'] = new Torus(this, values['inner'], values['outer'], values['slices'],values['loops']);
 				break;
 			default:
 				console.log(prim['tag']);
@@ -179,7 +183,7 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 	if (this.graph.loadedOk){
-
+		//this.updateLights();
 		for(var primID in this.primitives){
 			this.pushMatrix();
 			var prim = this.primitives[primID];

@@ -174,9 +174,9 @@
             <sphere radius="3" slices="8" stacks="8" />
         </primitive>     
 
-        <!-- <primitive id="tor"> -->
-        <!--    <torus inner="2" outer="4" slices="4" loops="4" /> -->
-        <!-- </primitive>        -->
+        <primitive id="tor">
+            <torus inner="2" outer="4" slices="12" loops="12" />
+        </primitive>  
         
     </primitives>
     
