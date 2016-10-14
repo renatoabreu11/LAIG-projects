@@ -111,8 +111,9 @@ MySceneGraph.prototype.parseBlocks= function(rootElement, blocksTag) {
 				case 7:{
 					 this.parsePrimitives(rootElement, elements); break;
 				}
-				case 8: //this.parseComponents(rootElement, elements); 
-					break;
+				case 8:{
+					this.parseComponents(rootElement, elements); break;
+				}
 				default:{
 					break;
 				} 
@@ -648,151 +649,191 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 	for(var i=0; i<componentBlock.length; i++)
 	{
 		var component = componentBlock[i];
-		var compCounter = this.components.length;
 		var id = this.reader.getString(component, 'id');
 		var idExists = false;
 
-		for(var j=0; j<compCounter; j++) {
-			if(this.components[j]["id"] == id) {
+		for(var comp of this.components) {
+			if(comp.getID() == id) {
 				this.blockWarnings.push("Component with id: "+id+" already exists.");
 				idExists=true;
 			}
 		}
 
 		if(!idExists) {
-			this.components[id]=[];
-			this.components[id]["id"]=id;
-
+			var comp = new Component(this.scene, id);
 
 			//COMPONENTS->COMPONENT->TRANSFORMATION
-			var transformationBlock = this.getElements('transformation',componentBlock[0] ,0);
+			var transformationBlock = this.getElements('transformation', component, 0);
 			if(transformationBlock==null)
 				return;
-			this.components[id]["transformation"]=[];
-
-			//COMPONENTS->COMPONENT->TRANSFORMATION->TRANSFORMATIONREF
-			var transformationRefBlock=this.getElements('transformationref',transformationBlock[0], 0);
-			if(transformationRefBlock==null)
-				return;
-			this.components[id]["transformation"]["transformationref"]=[];
-			this.components[id]["transformation"]["transformationref"]["id"]=this.reader.getString(transformationRefBlock[0],'id');
-
-			//COMPONENTS->COMPONENT->TRANSFORMATION->TRANSLATE
-			var translateBlock=this.getElements('translate',transformationBlock[0], 0);
-			if(translateBlock==null)
-				return;
-			this.components[id]["transformation"]["translate"]=[];
-			this.components[id]["transformation"]["translate"]=this.readValues(['x','y','z'],translateBlock[0]);
-
-
-			//COMPONENTS->COMPONENT->TRANSFORMATION->ROTATE
-			var rotateBlock=this.getElements('rotate',transformationBlock[0], 0);
-			if(rotateBlock==null)
-				return;
-			this.components[id]["transformation"]["rotate"]=[];
-			this.components[id]["transformation"]["rotate"]=this.readValues(['axis','angle'],rotateBlock[0]);
-
-			//COMPONENTS->COMPONENT->TRANSFORMATION->SCALE
-			var scaleBlock=this.getElements('scale',transformationBlock[0], 0);
-			if(scaleBlock==null)
-				return;
-			this.components[id]["transformation"]["scale"]=[];
-			this.components[id]["transformation"]["scale"]=this.readValues(['x','y','z'],scaleBlock[0]);
-
+			comp.setTransformation(this.parseTransfInComponent(transformationBlock[0]));
 
 			//COMPONENTS->COMPONENT->MATERIALS
-			var materialsBlock = this.getElements('materials', componentBlock[0], 0);
+			var materialsBlock = this.getElements('materials', component, 0);
 			if(materialsBlock==null)
 				return;
-			
-			//COMPONENTS->COMPONENT->MATERIALS->MATERIAL
-			var materialBlock = this.getElements('material',materialsBlock[0],1);
-			if(materialBlock==null)
-				return;
 
-			this.components[id]["materials"]=[];
-			for(var j=0; j<materialBlock.length; j++){
-				var material = materialBlock[j];
-				var matCounter=this.components[id]["materials"].length;
-				var id = this.reader.getString(material, 'id');
-				var idExists=false;
-
-				for(var k=0; k<matCounter; k++){
-					if(this.components[id]["materials"][k]==id){
-						this.blockWarnings.push("Material with id: "+id+" already exists in this component.");
-						idExists=true;
+			var nMaterials = materialsBlock[0].children.length;
+			if(nMaterials == 0){
+				this.blockWarnings.push("At least one material id must be defined inside each component");
+			} else{
+				for(var j = 0; j < nMaterials; j++){
+					var material = materialsBlock[0].children[j];
+					var id = this.reader.getString(material, 'id');
+					//check if exists doens't work with this.materials. SOLVE THIS!
+					var index = this.checkIfExists(this.materials, id);
+					if(index == -1){
+						this.blockWarnings.push("Material with id: " + id + " referenced in component doesn't exist");
+					} else{
+						comp.addMaterial(this.materials[index]);
 					}
 				}
-/*
-				if(!idExists){
-					this.components[id]["materials"][matCounter]=id;
-				}*/
 			}
 
 			//COMPONENTS->COMPONENT->TEXTURE
-			var textureBlock = this.getElements('texture', componentBlock[0], 0);
+			var textureBlock = this.getElements('texture', component, 0);
 			if(textureBlock==null)
 				return;
-			this.components[id]["texture"]=this.reader.getString(textureBlock[0],'id');
 
+			var id = this.reader.getString(textureBlock[0],'id');
+			var index = this.checkIfExists(this.textures, id);
+			if(index == -1){
+				this.blockWarnings.push("Texture with id: " + id + " referenced in component doesn't exist");
+			} else{
+				comp.setTexture(this.textures[index]);
+			}
 
 			//COMPONENTS->COMPONENT->CHILDREN
-			var childrenBlock = this.getElements('children', componentBlock[0], 0);
+			var childrenBlock = this.getElements('children', component, 0);
 			if(childrenBlock==null)
 				return;
-			this.components[id]["children"]=[];
 
-			//COMPONENTS->COMPONENT->CHILDREN->COMPONENTREF
-			var compRefBlock = this.getElements('componentref', childrenBlock[0],1);
-			if(compRefBlock==null)
-				return;
+			this.parseChildsInComponent(childrenBlock[0], comp);
+			this.components.push(comp);
+		}
+	}
+};
 
-			this.components[id]["children"]["componentref"]=[];
-			for(var j=0; j<compRefBlock.length; j++){
-				var compRef = compRefBlock[j];
-				var compRefCounter=this.components[id]["children"]["componentref"].length;
-				var id = this.reader.getString(compRef, 'id');
-				var idExists=false;
+/*
+ * This function parses the transformation block existent in the component block passed as arg
+ */ 
+MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
+	var matrix = mat4.create();
+	matrix = mat4.identity(matrix);
+	var nTransforms = transformation.children.length;
+	if(nTransforms == 0){
+		return matrix;
+	} else{
+		for(var j = 0; j < nTransforms; j++){
+			var transf = transformation.children[j];
 
-				for(var k=0; k<compRefCounter; k++){
-					if(this.components[id]["children"]["componentref"][k]==id){
-						this.blockWarnings.push("Componentref with id: "+id+" already exists in this component.");
-						idExists=true;
-					}
+			//checks if only exists the transformationref
+			if(transf.tagName == 'transformationref' && nTransforms == 1){
+				var id = this.reader.getString(transf, 'id');
+				var index = this.checkIfExists(this.transformations, id);
+				if(index != -1){
+					return this.transformations[index]["matrix"];
+				}else{
+					this.blockWarnings.push("Transformationref with " + id + " within component doesn't exist");
+					return matrix;
 				}
-
-				if(!idExists){
-					this.components[id]["children"]["componentref"][compRefCounter]=id;
-				}
+			} else if(transf.tagName == 'transformationref' && nTransforms > 1){
+				this.blockWarnings.push("Transformationref and explicit transformations exist within the same component");
+				matrix = mat4.create();
+				matrix = mat4.identity(matrix);
+				return matrix;
 			}
-
-			//COMPONENTS->COMPONENT->CHILDREN->PRIMITIVEREF
-			var primRefBlock = this.getElements('primitiveref', childrenBlock[0],1);
-			if(primRefBlock==null)
-				return;
-
-			this.components[id]["children"]["primitiveref"]=[];
-			for(var j=0; j<primRefBlock.length; j++){
-				var primRef = primRefBlock[j];
-				var primRefCounter=this.components[id]["children"]["primitiveref"].length;
-				var id = this.reader.getString(primRef, 'id');
-				var idExists=false;
-
-				for(var k=0; k<primRefCounter; k++){
-					if(this.components[id]["children"]["primitiveref"][k]==id){
-						this.blockWarnings.push("Primitiveref with id: "+id+" already exists in this component.");
-						idExists=true;
+			var args = [];
+			switch(transf.tagName){
+				case 'translate':{
+					args = this.readValues(['x', 'y', 'z'], transf.children[j])
+					var translation = vec3.create();
+					vec3.set (translation, args.x, args.y, args.z);
+					mat4.translate(matrix, matrix, translation);
+					break;
+				}
+				case 'rotate':{
+					var axis = this.reader.getString(transf.children[j], 'axis');
+					var angle = this.reader.getFloat(transf.children[j], 'angle');
+					switch(axis){
+						case 'x': mat4.rotateX(matrix, matrix, angle); break;
+						case 'y': mat4.rotateY(matrix, matrix, angle); break;
+						case 'z': mat4.rotateZ(matrix, matrix, angle); break;
 					}
+					break;
 				}
-
-				if(!idExists){
-					this.components[id]["children"]["primitiveref"][compRefCounter]=id;
+				case 'scale':{
+					args = this.readValues(['x', 'y', 'z'], transf.children[j])
+					var scale = vec3.create();
+					vec3.set(scale, args.x, args.y, args.z);
+					mat4.scale(matrix, matrix, scale);
+					break;
 				}
+				default:
+					this.blockWarnings.push("Invalid transformation on block with id: " + id);
+					break;
 			}
 		}
-		console.log(this.components);
-
+		return matrix;
 	}
+};
+
+/*
+ * This function parses the children block existent in the respective component block
+ * and saves the information to the Component object
+ */ 
+MySceneGraph.prototype.parseChildsInComponent=function(block, comp) {
+	var nChilds = block.children.length;
+	if(nChilds == 0){
+		this.blockWarnings.push("No componentref nor primitiveref found!")
+		return;
+	} else{
+		for(var j = 0; j < nChilds; j++){
+			var child = block.children[j];
+			switch(child.tagName){
+				case 'componentref':{
+					var id = this.reader.getString(block.children[j],'id');
+					var exist = false;
+					for(component of this.components){
+						if(component.getId() == id){
+							comp.addChildComponent(component);
+							exist = true;
+							break;
+						}
+					}
+
+					if(!exist){
+						this.blockWarnings.push("Componentref with id " + id + " not found!");
+					}
+					break;
+				}
+				case 'primitiveref':{
+					var id = this.reader.getString(block.children[j],'id');
+					var index = this.checkIfExists(this.primitives, id);
+					if(index == -1){
+						this.blockWarnings.push("primitiveref with id " + id + " not found!");
+					}else{
+						comp.addChildPrimitive(this.primitives[index]);
+					}
+					break;
+				}
+				default:
+					this.blockWarnings.push("Invalid children tag name in component block")
+					break;
+			}
+		}
+	}
+};
+
+/*
+ * Check if the element with id exists in th array passed as arg
+ */
+MySceneGraph.prototype.checkIfExists =function(array, id){
+	for(var j = 0; j < array.length; j++){
+		if(id == array[j]["id"])
+			return j;
+	}
+	return -1;
 };
 
 /*
