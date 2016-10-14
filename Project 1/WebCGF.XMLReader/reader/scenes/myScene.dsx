@@ -223,10 +223,25 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
                 <primitiveref id="rect" />
-                <primitiveref id="tr" />
-                
+                <componentref id="comp2" />
             </children>
+        </component>
+
+        <component id="comp2">
+        	<transformation>
+        		<translate x="0" y="5" z="0" />
+        	</transformation>
+
+        	<materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
             
+                <primitiveref id="tr" />
+            </children>
         </component>
         
     </components>

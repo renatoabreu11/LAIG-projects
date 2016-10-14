@@ -7,7 +7,10 @@ function Component(scene, id) {
  	this.scene = scene;
  	this.id = id;
 
+ 	this.isChecked=false;
+ 	
  	this.transformation = null;
+ 	this.finalTransformation=null;
  	this.materials = null;
  	this.materialIndex = 0;
  	this.texture = null;
@@ -22,12 +25,9 @@ Component.prototype.getID= function() {
  	return this.id;
 }
 
-Component.prototype.getTransformation= function() {
- 	return this.transformation;
-}
-
 Component.prototype.setTransformation= function(transformation) {
  	this.transformation = transformation;
+ 	this.finalTransformation = transformation;
 }
 
 Component.prototype.addMaterial= function(material) {

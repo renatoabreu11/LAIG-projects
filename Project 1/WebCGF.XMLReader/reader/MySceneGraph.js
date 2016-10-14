@@ -751,15 +751,15 @@ MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
 			var args = [];
 			switch(transf.tagName){
 				case 'translate':{
-					args = this.readValues(['x', 'y', 'z'], transf.children[j])
+					args = this.readValues(['x', 'y', 'z'], transf);
 					var translation = vec3.create();
 					vec3.set (translation, args.x, args.y, args.z);
 					mat4.translate(matrix, matrix, translation);
 					break;
 				}
 				case 'rotate':{
-					var axis = this.reader.getString(transf.children[j], 'axis');
-					var angle = this.reader.getFloat(transf.children[j], 'angle');
+					var axis = this.reader.getString(transf, 'axis');
+					var angle = this.reader.getFloat(transf, 'angle');
 					angle=this.toRadians(angle);
 					switch(axis){
 						case 'x': mat4.rotateX(matrix, matrix, angle); break;
@@ -769,7 +769,7 @@ MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
 					break;
 				}
 				case 'scale':{
-					args = this.readValues(['x', 'y', 'z'], transf.children[j])
+					args = this.readValues(['x', 'y', 'z'], transf)
 					var scale = vec3.create();
 					vec3.set(scale, args.x, args.y, args.z);
 					mat4.scale(matrix, matrix, scale);
@@ -801,7 +801,7 @@ MySceneGraph.prototype.parseChildsInComponent=function(block, comp) {
 					var id = this.reader.getString(block.children[j],'id');
 					var exist = false;
 					for(component of this.components){
-						if(component.getId() == id){
+						if(component.getID() == id){
 							comp.addChildComponent(component);
 							exist = true;
 							break;
