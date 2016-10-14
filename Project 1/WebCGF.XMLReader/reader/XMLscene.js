@@ -160,25 +160,9 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 	if (this.graph.loadedOk){
-		this.updateLights();
-		this.pushMatrix();
-		this.primitives[0].display();
-		this.popMatrix();
 
-		this.pushMatrix();
-		this.translate(0, 0, 2)
-		this.primitives[1].display();
-		this.popMatrix();
-
-		this.pushMatrix();
-		this.translate(2, 0, 0)
-		this.primitives[2].display();
-		this.popMatrix();
-
-		this.pushMatrix();
-		this.translate(4, 0, 4)
-		this.primitives[3].display();
-		this.popMatrix();
+		//NAO SEI QUE LOOP É PRECISO USAR
+		}
 	}
 };
 

@@ -22,6 +22,10 @@ Component.prototype.getID= function() {
  	return this.id;
 }
 
+Component.prototype.getTransformation= function() {
+ 	return this.transformation;
+}
+
 Component.prototype.setTransformation= function(transformation) {
  	this.transformation = transformation;
 }

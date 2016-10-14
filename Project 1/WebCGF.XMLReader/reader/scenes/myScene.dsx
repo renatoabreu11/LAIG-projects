@@ -137,9 +137,9 @@
         <transformation id="transf">
            <!-- instrucoes a usar sem limite nem ordem -->
            <!-- deve existir pelo menos uma transformacao -->
-           <translate x="2" y="2" z="3" />
-           <rotate axis="z" angle="5" />
-           <scale x="3" y="4" z="5" />
+           <translate x="0" y="0" z="0" />
+           <rotate axis="x" angle="90" />
+           <scale x="1" y="1" z="1" />
         </transformation>
         
     </transformations>
@@ -155,7 +155,7 @@
             <!--     rectangle, triangle, cylinder, sphere, torus -->
             <!-- os parametros devem ser interpretados, genericamente como-->
             <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
-            <rectangle x1="1" y1="1" x2="-1" y2="-1" />
+            <rectangle x1="10" y1="10" x2="-10" y2="-10" />
             <!-- <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" /> -->
             <!-- <sphere radius="ff" slices="ii" stacks="ii" /> -->
             <!-- <torus inner="ff" outer="ff" slices="ii" loops="ii" /> -->
@@ -196,9 +196,7 @@
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
-                <translate x="0" y="0" z="0" />
-                <rotate axis="x" angle="0" />
-                <scale x="1" y="1" z="1" />
+                
             </transformation>
        
             <!-- declaracao obrigatoria de pelo menos um material; -->
@@ -224,7 +222,7 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                <componentref id="comp" />
+                <primitiveref id="rect" />
                 <primitiveref id="tr" />
                 
             </children>
