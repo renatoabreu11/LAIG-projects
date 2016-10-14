@@ -51,6 +51,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 
     this.primitives=[];
 	this.loadPrimitives();
+	this.loadTransformations();
 };
 
 XMLscene.prototype.initCameras = function () {
@@ -111,28 +112,46 @@ XMLscene.prototype.loadPrimitives = function(){
 	for(var primitive in this.graph.primitives){
 		var prim = this.graph.primitives[primitive];
 		var index = this.primitives.length;
+		var id = prim['id'];
+		this.primitives[id]=[];
+		this.primitives[id]['transformations']=[];
 		switch(prim['tag']){
 			case 'rectangle':
 				var values = prim['rectangle'];
-				this.primitives[index] = new Rectangle(this,values['x1'],values['y1'],values['x2'],values['y2']);
+				this.primitives[id]['primitive'] = new Rectangle(this,values['x1'],values['y1'],values['x2'],values['y2']);
 				break;
 			case 'triangle':
 				var values = prim['triangle'];
-				this.primitives[index] = new Triangle(this,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']);
+				this.primitives[id]['primitive'] = new Triangle(this,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']);
 				break;
 			case 'cylinder':
 				var values = prim['cylinder'];
-				this.primitives[index] = new Cylinder(this,values['slices'],values['stacks']);
+				this.primitives[id]['primitive'] = new Cylinder(this,values['slices'],values['stacks']);
 				break;
 			case 'sphere':
 				var values = prim['sphere'];
-				this.primitives[index] = new Sphere(this,values['slices'],values['stacks']);
+				this.primitives[id]['primitive'] = new Sphere(this,values['slices'],values['stacks']);
 				break;
 			default:
 				console.log(prim['tag']);
 				break;
 		}
 	}
+}
+
+XMLscene.prototype.loadTransformations = function() {
+	 var components = this.graph.components;
+	 for(var compIndex in components) { //iterate components
+	 	var comp = components[compIndex];
+	 	var transf = comp.getTransformation();
+	 	for(var primIndex in comp.children["primitives"]) { //iterate primitives
+	 		var primID = comp.children["primitives"][primIndex]['id'];
+	 		var size = this.primitives[primID]['transformations'].length;
+	 		this.primitives[primID]['transformations'][size]=transf;
+	 	}
+
+	 }
+
 }
 
 XMLscene.prototype.display = function () {
@@ -161,7 +180,15 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk){
 
-		//NAO SEI QUE LOOP É PRECISO USAR
+		for(var primID in this.primitives){
+			this.pushMatrix();
+			var prim = this.primitives[primID];
+			for(var transfIndex in prim['transformations']) {
+				var transfMatrix = prim['transformations'][transfIndex];
+				this.multMatrix(transfMatrix);
+			}
+			prim['primitive'].display();
+			this.popMatrix();
 		}
 	}
 };

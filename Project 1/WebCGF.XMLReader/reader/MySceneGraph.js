@@ -38,6 +38,10 @@ function MySceneGraph(filename, scene) {
 	this.reader.open('scenes/'+filename, this);  
 }
 
+MySceneGraph.prototype.toRadians=function(degrees){
+	return degrees*Math.PI/180;
+}
+
 /*
  * Callback to be executed after successful reading
  */
@@ -539,6 +543,7 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 						case 'rotate':{
 							var axis = this.reader.getString(transformation.children[j], 'axis');
 							var angle = this.reader.getFloat(transformation.children[j], 'angle');
+							angle=this.toRadians(angle);
 							switch(axis){
 								case 'x': mat4.rotateX(matrix, matrix, angle); break;
 								case 'y': mat4.rotateY(matrix, matrix, angle); break;
@@ -755,6 +760,7 @@ MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
 				case 'rotate':{
 					var axis = this.reader.getString(transf.children[j], 'axis');
 					var angle = this.reader.getFloat(transf.children[j], 'angle');
+					angle=this.toRadians(angle);
 					switch(axis){
 						case 'x': mat4.rotateX(matrix, matrix, angle); break;
 						case 'y': mat4.rotateY(matrix, matrix, angle); break;
