@@ -88,7 +88,7 @@ Component.prototype.initPrimitive =function(primitive){
 			break;
 		case 'sphere':
 			var values = primitive['sphere'];
-			this.children["primitives"].push(new Torus(this.scene, values['radius'], values['slices'],values['stacks']));
+			this.children["primitives"].push(new Sphere(this.scene, values['radius'], values['slices'],values['stacks']));
 			break;
 		case 'torus':
 			var values = primitive['torus'];

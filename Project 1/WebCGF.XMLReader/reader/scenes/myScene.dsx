@@ -171,7 +171,7 @@
         </primitive>
 
         <primitive id="sper">
-            <sphere radius="5" slices="8" stacks="8" />
+            <sphere radius=".5" slices="8" stacks="8" />
         </primitive>     
 
         <primitive id="tor">
@@ -376,7 +376,7 @@
             <transformation>
                 <rotate axis="y" angle="180" />
                 <translate x="0" y=".5" z=".5" />
-                <rotate axis="z" angle="-45" />
+                <rotate axis="z" angle="-45" />1.75
                 <translate x="0" y="5.5" z="1.75" />
             </transformation>
 
@@ -438,7 +438,7 @@
 
         <component id="armJoint">
             <transformation>
-                <translate x="0" y="0.5" z="-1" />
+                <translate x="0" y="0.62" z="-.63" />
             </transformation>
 
             <materials>
