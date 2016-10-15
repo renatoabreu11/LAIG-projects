@@ -104,75 +104,6 @@ XMLscene.prototype.updateLights = function () {
 	}
 }
 
-/*
-XMLscene.prototype.applyTransformationToComponent = function (transf, compID) {
-
-	//check if comp exists
-	var comp=null, index=null;
-
-	for (var i in this.graph.components) {
-		console.log(this.graph.components[i].id);
-			if(this.graph.components[i].id==compID){
-				comp=this.graph.components[i];
-				index=i;
-				break;
-			}
-		}
-	if(comp==null) {
-		console.log("Error: component not found to apply transformation");
-		return;
-	}
-
-	comp.isChecked=true;
-
-	//calculate new matrix
-	this.setMatrix(comp.transformation);
-	console.log(this.getMatrix());
-	this.multMatrix(transf);
-	console.log(this.getMatrix());
-	comp.finalTransformation=this.getMatrix();
-	this.loadIdentity();
-	//update component in this.graph.components
-	this.graph.components[index]=comp;
-
-	//apply transf to chidren
-	for(var i in comp.children['components']) {
-		var childID = comp.children['components'][i].id;
-		applyTransformationToComponent(comp.finalTransformation,childID);
-	}
-}
-
-XMLscene.prototype.loadTransformations = function() {
-	 var components = this.graph.components;
-
-	 for(var fatherCompIndex in components) { //iterate components
-	 	var fatherComp = components[fatherCompIndex];
-	 	if(fatherComp.isChecked)
-	 		continue;
-
-	 	var transf = fatherComp.transformation;
-	 	for(var childCompIndex in fatherComp.children["components"]) { //iterate child-components
-	 		var childComp = fatherComp.children["components"][childCompIndex];
-
-	 		var matrixBackup=this.getMatrix();
-	 		this.loadIdentity();
-	 		//apply transformation to comp and its children
-	 		this.applyTransformationToComponent(transf,childComp.getID());
-	 		this.setMatrix(matrixBackup);
-	 	}
-	 }
-
-	 for(var compIndex in components) { //iterate components
-	 	var comp = components[compIndex];
-	 	var transf = comp.finalTransformation;
-	 	for(var primIndex in comp.children["primitives"]) { //iterate primitives
-	 		var primID = comp.children["primitives"][primIndex]['id'];
-	 		var size = this.primitives[primID]['transformations'].length;
-	 		this.primitives[primID]['transformations'][size]=transf;
-	 	}
-	 }
-}*/
-
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
 	
@@ -199,9 +130,7 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk){
 		//this.updateLights();
-		for(var comp of this.graph.components){
-    		comp.display();
-    	}
+		this.graph.getRootComponent().display();
 	}
 };
 

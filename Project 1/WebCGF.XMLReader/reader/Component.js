@@ -10,7 +10,6 @@ function Component(scene, id) {
  	this.isChecked=false;
  	
  	this.transformation = null;
- 	this.finalTransformation=null;
  	this.materials = [];
  	this.materialIndex = 0;
  	this.texture = null;
@@ -30,9 +29,12 @@ Component.prototype.getID= function() {
  	return this.id;
 }
 
+Component.prototype.getTransformation= function() {
+ 	return this.transformation;
+}
+
 Component.prototype.setTransformation= function(transformation) {
  	this.transformation = transformation;
- 	this.finalTransformation = transformation;
 }
 
 Component.prototype.addMaterial= function(material) {
@@ -111,32 +113,6 @@ Component.prototype.checkComponents= function(components){
 	}
 }
 
-Component.prototype.applyComponent =function(primitive){
-	switch(primitive['tag']){
-		case 'rectangle':
-			var values = primitive['rectangle'];
-			this.children["primitives"].push(new Rectangle(this.scene,values['x1'],values['y1'],values['x2'],values['y2']));
-			break;
-		case 'triangle':
-			var values = primitive['triangle'];
-			this.children["primitives"].push(new Triangle(this.scene,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']));
-			break;
-		case 'cylinder':
-			var values = primitive['cylinder'];
-			this.children["primitives"].push(new Cylinder(this.scene,values['slices'],values['stacks']));
-			break;
-		case 'sphere':
-			var values = primitive['sphere'];
-			this.children["primitives"].push(new Torus(this.scene, values['radius'], values['slices'],values['stacks']));
-			break;
-		case 'torus':
-			var values = primitive['torus'];
-			this.children["primitives"].push(new Torus(this.scene, values['inner'], values['outer'], values['slices'],values['loops']));
-			break;
-	}
-};
-
-
 /*
  * Check if the element with id exists in th array passed as arg
  */
@@ -154,6 +130,10 @@ Component.prototype.display= function(){
 	for(var i = 0; i < this.children["primitives"].length; i++){
 		var prim = this.children["primitives"][i];
 		prim.display();
+	}
+	for(var i = 0; i < this.children["components"].length; i++){
+		var comp = this.children["components"][i];
+		comp.display();
 	}
 	this.scene.popMatrix();
 }

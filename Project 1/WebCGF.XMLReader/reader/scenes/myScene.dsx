@@ -183,7 +183,7 @@
     
     <components>
         
-        <component id="comp">
+        <component id="root">
         
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
@@ -239,7 +239,6 @@
             <texture id="brick" />
 
             <children>
-            
                 <primitiveref id="cyl" />
             </children>
         </component>

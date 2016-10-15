@@ -765,37 +765,17 @@ MySceneGraph.prototype.checkChildrenID= function() {
 		this.components[i].checkPrimitives(this.primitives);
 	}
 
+	var sceneExists = false;
 	for(var i = 0; i < this.components.length; i++){
 		this.components[i].checkComponents(this.components);
-	}
-}
-
-/*
-MySceneGraph.prototype.applyRelations= function() {
-	//complete father-child relations
-	for(fatherID in relations){
-		for(childID of relations[fatherID]){
-			var exist = false;
-			for(childComponent of this.components){
-				if(childComponent.getID() == childID){
-					exist = true;
-					for(fatherCompI in this.components){
-						var fatherComp=this.components[fatherCompI];
-						if(fatherComp.getID()==fatherID){
-							this.components[fatherCompI].addChildComponent(childComponent);
-							break;
-						}
-					}
-					break;
-				}
-			}
-			if(!exist){
-				this.blockWarnings.push("Componentref with id " + id + " not found!");
-			}
+		if(this.components[i].getID() == this.root){
+			sceneExists = true;
 		}
 	}
+	if(!sceneExists){
+		this.elementsErrors.push("Root component doesn't exist!!!")
+	}
 }
-*/
 
 MySceneGraph.prototype.computeTransformation=  function(type, matrix, block){
 	var args = [];
@@ -842,6 +822,15 @@ MySceneGraph.prototype.checkIfExists =function(array, id){
 	}
 	return -1;
 };
+
+MySceneGraph.prototype.getRootComponent =function(){
+	for(var i = 0; i < this.components.length; i++){
+		if(this.components[i].getID() == "root"){
+			return this.components[i];
+		}
+	}
+};
+
 
 /*
  * Returns the view selected as default
