@@ -643,6 +643,8 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement, blockInfo) {
 };
 
 MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
+	var relations=[];//relations[fatherID][childrenID]. each father needs to be linked to its children
+
 	//COMPONENTS
 	var componentsBlock = blockInfo[0];
 
@@ -713,8 +715,36 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 			if(childrenBlock==null)
 				return;
 
-			this.parseChildsInComponent(childrenBlock[0], comp);
+			var relation = this.parseChildsInComponent(childrenBlock[0], comp, componentBlock);
+			if(relation.length !=0){
+				relations[comp.id]=[];
+				relations[comp.id].push(relation);
+			}
 			this.components.push(comp);
+		}
+	}
+
+	//complete father-child relations
+	for(fatherID in relations){
+		for(childID of relations[fatherID]){
+			var exist = false;
+			for(childComponent of this.components){
+				if(childComponent.getID() == childID){
+					exist = true;
+					for(fatherCompI in this.components){
+						var fatherComp=this.components[fatherCompI];
+						if(fatherComp.getID()==fatherID){
+							console.log(fatherID+" -> "+childID);
+							this.components[fatherCompI].addChildComponent(childComponent);
+							break;
+						}
+					}
+					break;
+				}
+			}
+			if(!exist){
+				this.blockWarnings.push("Componentref with id " + id + " not found!");
+			}
 		}
 	}
 };
@@ -788,7 +818,9 @@ MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
  * This function parses the children block existent in the respective component block
  * and saves the information to the Component object
  */ 
-MySceneGraph.prototype.parseChildsInComponent=function(block, comp) {
+MySceneGraph.prototype.parseChildsInComponent=function(block, comp, allComp) {
+	var children=[];
+
 	var nChilds = block.children.length;
 	if(nChilds == 0){
 		this.blockWarnings.push("No componentref nor primitiveref found!")
@@ -799,18 +831,7 @@ MySceneGraph.prototype.parseChildsInComponent=function(block, comp) {
 			switch(child.tagName){
 				case 'componentref':{
 					var id = this.reader.getString(block.children[j],'id');
-					var exist = false;
-					for(component of this.components){
-						if(component.getID() == id){
-							comp.addChildComponent(component);
-							exist = true;
-							break;
-						}
-					}
-
-					if(!exist){
-						this.blockWarnings.push("Componentref with id " + id + " not found!");
-					}
+					children.push(id);
 					break;
 				}
 				case 'primitiveref':{
@@ -829,6 +850,7 @@ MySceneGraph.prototype.parseChildsInComponent=function(block, comp) {
 			}
 		}
 	}
+	return children;
 };
 
 /*

@@ -240,7 +240,7 @@
 
             <children>
             
-                <primitiveref id="tr" />
+                <primitiveref id="cyl" />
             </children>
         </component>
         

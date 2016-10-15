@@ -143,37 +143,6 @@ XMLscene.prototype.loadPrimitives = function(){
 	}
 }
 
-XMLscene.prototype.loadTransformations = function() {
-	 var components = this.graph.components;
-
-	 for(var fatherCompIndex in components) { //iterate components
-	 	var fatherComp = components[fatherCompIndex];
-	 	if(fatherComp.isChecked)
-	 		continue;
-
-	 	var transf = fatherComp.transformation;
-	 	for(var childCompIndex in fatherComp.children["components"]) { //iterate child-components
-	 		var childComp = fatherComp.children["components"][childCompIndex];
-
-	 		var matrixBackup=this.getMatrix();
-	 		this.loadIdentity();
-	 		//apply transformation to comp and its children
-	 		applyTransformationToComponent(transf,childComp.id);
-	 		this.setMatrix(matrixBackup);
-	 	}
-	 }
-
-	 for(var compIndex in components) { //iterate components
-	 	var comp = components[compIndex];
-	 	var transf = comp.transformation;
-	 	for(var primIndex in comp.children["primitives"]) { //iterate primitives
-	 		var primID = comp.children["primitives"][primIndex]['id'];
-	 		var size = this.primitives[primID]['transformations'].length;
-	 		this.primitives[primID]['transformations'][size]=transf;
-	 	}
-	 }
-}
-
 XMLscene.prototype.applyTransformationToComponent = function (transf, compID) {
 
 	//check if comp exists
@@ -205,6 +174,37 @@ XMLscene.prototype.applyTransformationToComponent = function (transf, compID) {
 		var childID = comp.children['components'][i].id;
 		applyTransformationToComponent(comp.finalTransformation,childID);
 	}
+}
+
+XMLscene.prototype.loadTransformations = function() {
+	 var components = this.graph.components;
+
+	 for(var fatherCompIndex in components) { //iterate components
+	 	var fatherComp = components[fatherCompIndex];
+	 	if(fatherComp.isChecked)
+	 		continue;
+
+	 	var transf = fatherComp.transformation;
+	 	for(var childCompIndex in fatherComp.children["components"]) { //iterate child-components
+	 		var childComp = fatherComp.children["components"][childCompIndex];
+
+	 		var matrixBackup=this.getMatrix();
+	 		this.loadIdentity();
+	 		//apply transformation to comp and its children
+	 		applyTransformationToComponent(transf,childComp.getID());
+	 		this.setMatrix(matrixBackup);
+	 	}
+	 }
+
+	 for(var compIndex in components) { //iterate components
+	 	var comp = components[compIndex];
+	 	var transf = comp.transformation;
+	 	for(var primIndex in comp.children["primitives"]) { //iterate primitives
+	 		var primID = comp.children["primitives"][primIndex]['id'];
+	 		var size = this.primitives[primID]['transformations'].length;
+	 		this.primitives[primID]['transformations'][size]=transf;
+	 	}
+	 }
 }
 
 XMLscene.prototype.display = function () {
