@@ -38,10 +38,6 @@ function MySceneGraph(filename, scene) {
 	this.reader.open('scenes/'+filename, this);  
 }
 
-MySceneGraph.prototype.toRadians=function(degrees){
-	return degrees*Math.PI/180;
-}
-
 /*
  * Callback to be executed after successful reading
  */
@@ -116,7 +112,9 @@ MySceneGraph.prototype.parseBlocks= function(rootElement, blocksTag) {
 					 this.parsePrimitives(rootElement, elements); break;
 				}
 				case 8:{
-					this.parseComponents(rootElement, elements); break;
+					this.parseComponents(rootElement, elements); 
+					this.checkChildrenID();
+					break;
 				}
 				default:{
 					break;
@@ -180,7 +178,7 @@ MySceneGraph.prototype.parseViews= function(rootElement, blockInfo) {
 			this.checkFloatValue(view["far"], 'Far');
 			view["angle"] = this.reader.getFloat(perspective, 'angle');
 			this.checkFloatValue(view["angle"], 'Angle');
-			view["angle"] *= Math.PI/180;
+			view["angle"] = this.toRadians(view["angle"]);
 
 			//VIEWS->PERSPECTIVE->FROM
 			var fromBlock = this.getElements('from', perspective, 0);
@@ -345,7 +343,7 @@ MySceneGraph.prototype.parseSpotLight= function(spot) {
 
 		light["angle"] = this.reader.getFloat(spot, 'angle');
 		this.checkFloatValue(light["angle"], 'Angle');
-		light["angle"] *= Math.PI/180;
+		light["angle"] = this.toRadians(light["angle"]);
 
 		light["exponent"] = this.reader.getFloat(spot, 'exponent');
 		this.checkFloatValue(light["exponent"], 'Exponent');
@@ -489,7 +487,10 @@ MySceneGraph.prototype.parseMaterials= function(rootElement, blockInfo) {
 			appearance.setShininess(material["shininess"]);
 			appearance.setEmission(material["emission"]["r"], material["emission"]["g"], material["emission"]["b"], material["emission"]["a"]);
 
-			this.materials[id] = appearance;
+			var mat = [];
+			mat["id"] = id;
+			mat["appear"] = appearance;
+ 			this.materials.push(mat);
 		}
 	}
 };
@@ -530,38 +531,9 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 			if(nTransforms == 0){
 				this.blockWarnings.push("At least one transformation must be present on block with id: " + i);
 			} else{
-				for(var j = 0; j < nTransforms; j++){
+				for(var j = nTransforms - 1; j >= 0; j--){
 					var tagName = transformation.children[j].tagName;
-					switch(tagName){
-						case 'translate':{
-							args = this.readValues(['x', 'y', 'z'], transformation.children[j])
-							var translation = vec3.create();
-							vec3.set (translation, args.x, args.y, args.z);
-							mat4.translate(matrix, matrix, translation);
-							break;
-						}
-						case 'rotate':{
-							var axis = this.reader.getString(transformation.children[j], 'axis');
-							var angle = this.reader.getFloat(transformation.children[j], 'angle');
-							angle=this.toRadians(angle);
-							switch(axis){
-								case 'x': mat4.rotateX(matrix, matrix, angle); break;
-								case 'y': mat4.rotateY(matrix, matrix, angle); break;
-								case 'z': mat4.rotateZ(matrix, matrix, angle); break;
-							}
-							break;
-						}
-						case 'scale':{
-							args = this.readValues(['x', 'y', 'z'], transformation.children[j])
-							var scale = vec3.create();
-							vec3.set(scale, args.x, args.y, args.z);
-							mat4.scale(matrix, matrix, scale);
-							break;
-						}
-						default:
-							this.blockWarnings.push("Invalid transformation on block with id: " + id);
-							break;
-					}
+					matrix = this.computeTransformation(tagName, matrix, transformation.children[j]);
 				}
 			}
 			transf["matrix"] = matrix;
@@ -687,7 +659,6 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 				for(var j = 0; j < nMaterials; j++){
 					var material = materialsBlock[0].children[j];
 					var id = this.reader.getString(material, 'id');
-					//check if exists doens't work with this.materials. SOLVE THIS!
 					var index = this.checkIfExists(this.materials, id);
 					if(index == -1){
 						this.blockWarnings.push("Material with id: " + id + " referenced in component doesn't exist");
@@ -714,16 +685,93 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 			var childrenBlock = this.getElements('children', component, 0);
 			if(childrenBlock==null)
 				return;
-
-			var relation = this.parseChildsInComponent(childrenBlock[0], comp, componentBlock);
-			if(relation.length !=0){
-				relations[comp.id]=[];
-				relations[comp.id].push(relation);
-			}
+			this.parseChildsInComponent(childrenBlock[0], comp)
 			this.components.push(comp);
 		}
 	}
+};
 
+/*
+ * This function parses the transformation block existent in the component block passed as arg
+ */ 
+MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
+	var matrix = mat4.create();
+	matrix = mat4.identity(matrix);
+	var nTransforms = transformation.children.length;
+	if(nTransforms == 0){
+		return matrix;
+	} else{
+		for(var j = nTransforms - 1; j >= 0; j--){
+			var transf = transformation.children[j];
+
+			//checks if only exists the transformationref
+			if(transf.tagName == 'transformationref' && nTransforms == 1){
+				var id = this.reader.getString(transf, 'id');
+				var index = this.checkIfExists(this.transformations, id);
+				if(index != -1){
+					return this.transformations[index]["matrix"];
+				}else{
+					this.blockWarnings.push("Transformationref with " + id + " within component doesn't exist");
+					return matrix;
+				}
+			} else if(transf.tagName == 'transformationref' && nTransforms > 1){
+				this.blockWarnings.push("Transformationref and explicit transformations exist within the same component");
+				matrix = mat4.create();
+				matrix = mat4.identity(matrix);
+				return matrix;
+			}
+			matrix = this.computeTransformation(transf.tagName, matrix, transf)
+		}
+		return matrix;
+	}
+};
+
+/*
+ * This function parses the children block existent in the respective component block
+ * and saves the information to the Component object
+ */ 
+MySceneGraph.prototype.parseChildsInComponent=function(block, comp) {
+	var nChilds = block.children.length;
+	if(nChilds == 0){
+		this.blockWarnings.push("No componentref nor primitiveref found!")
+		return;
+	} else{
+		for(var j = 0; j < nChilds; j++){
+			var child = block.children[j];
+			switch(child.tagName){
+				case 'componentref':{
+					var id = this.reader.getString(block.children[j],'id');
+					comp.addComponentID(id);
+					break;
+				}
+				case 'primitiveref':{
+					var id = this.reader.getString(block.children[j],'id');
+					comp.addPrimitiveID(id);
+					break;
+				}
+				default:
+					this.blockWarnings.push("Invalid children tag name in component block")
+					break;
+			}
+		}
+	}
+};
+
+/*
+ * Verifies if the component children's ids are valid
+ */
+MySceneGraph.prototype.checkChildrenID= function() {
+	for(var i = 0; i < this.components.length; i++){
+		this.components[i].checkPrimitives(this.primitives);
+	}
+
+	for(var i = 0; i < this.components.length; i++){
+		this.components[i].checkComponents(this.components);
+	}
+}
+
+/*
+MySceneGraph.prototype.applyRelations= function() {
 	//complete father-child relations
 	for(fatherID in relations){
 		for(childID of relations[fatherID]){
@@ -746,111 +794,43 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 			}
 		}
 	}
-};
+}
+*/
 
-/*
- * This function parses the transformation block existent in the component block passed as arg
- */ 
-MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
-	var matrix = mat4.create();
-	matrix = mat4.identity(matrix);
-	var nTransforms = transformation.children.length;
-	if(nTransforms == 0){
-		return matrix;
-	} else{
-		for(var j = 0; j < nTransforms; j++){
-			var transf = transformation.children[j];
-
-			//checks if only exists the transformationref
-			if(transf.tagName == 'transformationref' && nTransforms == 1){
-				var id = this.reader.getString(transf, 'id');
-				var index = this.checkIfExists(this.transformations, id);
-				if(index != -1){
-					return this.transformations[index]["matrix"];
-				}else{
-					this.blockWarnings.push("Transformationref with " + id + " within component doesn't exist");
-					return matrix;
-				}
-			} else if(transf.tagName == 'transformationref' && nTransforms > 1){
-				this.blockWarnings.push("Transformationref and explicit transformations exist within the same component");
-				matrix = mat4.create();
-				matrix = mat4.identity(matrix);
-				return matrix;
-			}
-			var args = [];
-			switch(transf.tagName){
-				case 'translate':{
-					args = this.readValues(['x', 'y', 'z'], transf);
-					var translation = vec3.create();
-					vec3.set (translation, args.x, args.y, args.z);
-					mat4.translate(matrix, matrix, translation);
-					break;
-				}
-				case 'rotate':{
-					var axis = this.reader.getString(transf, 'axis');
-					var angle = this.reader.getFloat(transf, 'angle');
-					angle=this.toRadians(angle);
-					switch(axis){
-						case 'x': mat4.rotateX(matrix, matrix, angle); break;
-						case 'y': mat4.rotateY(matrix, matrix, angle); break;
-						case 'z': mat4.rotateZ(matrix, matrix, angle); break;
-					}
-					break;
-				}
-				case 'scale':{
-					args = this.readValues(['x', 'y', 'z'], transf)
-					var scale = vec3.create();
-					vec3.set(scale, args.x, args.y, args.z);
-					mat4.scale(matrix, matrix, scale);
-					break;
-				}
-				default:
-					this.blockWarnings.push("Invalid transformation on block with id: " + id);
-					break;
-			}
+MySceneGraph.prototype.computeTransformation=  function(type, matrix, block){
+	var args = [];
+	switch(type){
+		case 'translate':{
+			args = this.readValues(['x', 'y', 'z'], block)
+			var translation = vec3.create();
+			vec3.set (translation, args.x, args.y, args.z);
+			mat4.translate(matrix, matrix, translation);
+			break;
 		}
-		return matrix;
-	}
-};
-
-/*
- * This function parses the children block existent in the respective component block
- * and saves the information to the Component object
- */ 
-MySceneGraph.prototype.parseChildsInComponent=function(block, comp, allComp) {
-	var children=[];
-
-	var nChilds = block.children.length;
-	if(nChilds == 0){
-		this.blockWarnings.push("No componentref nor primitiveref found!")
-		return;
-	} else{
-		for(var j = 0; j < nChilds; j++){
-			var child = block.children[j];
-			switch(child.tagName){
-				case 'componentref':{
-					var id = this.reader.getString(block.children[j],'id');
-					children.push(id);
-					break;
-				}
-				case 'primitiveref':{
-					var id = this.reader.getString(block.children[j],'id');
-					var index = this.checkIfExists(this.primitives, id);
-					if(index == -1){
-						this.blockWarnings.push("primitiveref with id " + id + " not found!");
-					}else{
-						comp.addChildPrimitive(this.primitives[index]);
-					}
-					break;
-				}
-				default:
-					this.blockWarnings.push("Invalid children tag name in component block")
-					break;
+		case 'rotate':{
+			var axis = this.reader.getString(block, 'axis');
+			var angle = this.reader.getFloat(block, 'angle');
+			angle=this.toRadians(angle);
+			switch(axis){
+				case 'x': mat4.rotateX(matrix, matrix, angle); break;
+				case 'y': mat4.rotateY(matrix, matrix, angle); break;
+				case 'z': mat4.rotateZ(matrix, matrix, angle); break;
 			}
+			break;
 		}
+		case 'scale':{
+			args = this.readValues(['x', 'y', 'z'], block)
+			var scale = vec3.create();
+			vec3.set(scale, args.x, args.y, args.z);
+			mat4.scale(matrix, matrix, scale);
+			break;
+		}
+		default:
+		this.blockWarnings.push("Invalid transformation on block with id: " + id);
+		break;
 	}
-	return children;
-};
+	return matrix;
+}
 
 /*
  * Check if the element with id exists in th array passed as arg
@@ -958,4 +938,11 @@ MySceneGraph.prototype.checkFloatValue= function(value, name){
 	} else if(isNaN(value)){
 		this.blockWarnings.push(name + " value isn't a float");
 	}
+}
+
+/*
+ * Converts an angle in degrees to radians
+ */
+MySceneGraph.prototype.toRadians=function(degrees){
+	return degrees*Math.PI/180;
 }

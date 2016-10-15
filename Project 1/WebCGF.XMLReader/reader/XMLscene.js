@@ -48,10 +48,6 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.camera = this.graph.getDefaultView();
     this.interface.setActiveCamera(this.camera);
     this.initLights();
-
-    this.primitives=[];
-	this.loadPrimitives();
-	this.loadTransformations();
 };
 
 XMLscene.prototype.initCameras = function () {
@@ -108,41 +104,7 @@ XMLscene.prototype.updateLights = function () {
 	}
 }
 
-XMLscene.prototype.loadPrimitives = function(){
-	for(var primitive in this.graph.primitives){
-		var prim = this.graph.primitives[primitive];
-		var index = this.primitives.length;
-		var id = prim['id'];
-		this.primitives[id]=[];
-		this.primitives[id]['transformations']=[];
-		switch(prim['tag']){
-			case 'rectangle':
-				var values = prim['rectangle'];
-				this.primitives[id]['primitive'] = new Rectangle(this,values['x1'],values['y1'],values['x2'],values['y2']);
-				break;
-			case 'triangle':
-				var values = prim['triangle'];
-				this.primitives[id]['primitive'] = new Triangle(this,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']);
-				break;
-			case 'cylinder':
-				var values = prim['cylinder'];
-				this.primitives[id]['primitive'] = new Cylinder(this,values['slices'],values['stacks']);
-				break;
-			case 'sphere':
-				var values = prim['sphere'];
-				this.primitives[id]['primitive'] = new Torus(this, values['radius'], values['slices'],values['stacks']);
-				break;
-			case 'torus':
-				var values = prim['torus'];
-				this.primitives[id]['primitive'] = new Torus(this, values['inner'], values['outer'], values['slices'],values['loops']);
-				break;
-			default:
-				console.log(prim['tag']);
-				break;
-		}
-	}
-}
-
+/*
 XMLscene.prototype.applyTransformationToComponent = function (transf, compID) {
 
 	//check if comp exists
@@ -209,7 +171,7 @@ XMLscene.prototype.loadTransformations = function() {
 	 		this.primitives[primID]['transformations'][size]=transf;
 	 	}
 	 }
-}
+}*/
 
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
@@ -237,16 +199,9 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk){
 		//this.updateLights();
-		for(var primID in this.primitives){
-			this.pushMatrix();
-			var prim = this.primitives[primID];
-			for(var transfIndex in prim['transformations']) {
-				var transfMatrix = prim['transformations'][transfIndex];
-				this.multMatrix(transfMatrix);
-			}
-			prim['primitive'].display();
-			this.popMatrix();
-		}
+		for(var comp of this.graph.components){
+    		comp.display();
+    	}
 	}
 };
 
