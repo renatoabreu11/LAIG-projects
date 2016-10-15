@@ -171,11 +171,11 @@
         </primitive>
 
         <primitive id="sper">
-            <sphere radius="3" slices="8" stacks="8" />
+            <sphere radius="5" slices="8" stacks="8" />
         </primitive>     
 
         <primitive id="tor">
-            <torus inner="2" outer="4" slices="12" loops="12" />
+            <torus inner="1" outer="4" slices="12" loops="12" />
         </primitive>  
         
     </primitives>
@@ -190,7 +190,6 @@
             
                 <!-- deve conter uma referencia a uma das "transformation" -->
                 <!-- declaradas anteriormente -->
-                <rotate axis="x" angle="90" />
                 
                 <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
@@ -222,14 +221,34 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                <primitiveref id="rect" />
+                <componentref id="ground" />
                 <componentref id="body" />
             </children>
         </component>
 
+
+
+        <component id="ground">
+        
+            <transformation>
+                <rotate axis="x" angle="90" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="brick" />
+            
+            <children>
+                <primitiveref id="rect" />
+            </children>
+        </component>
+
+
+
         <component id="body">
         	<transformation>
-        		<translate x="0" y="5" z="0" />
         	</transformation>
 
         	<materials>
@@ -239,12 +258,64 @@
             <texture id="brick" />
 
             <children>
+                <componentref id="halo" />
+                <componentref id="head" />
                 <componentref id="torso" />
+                <componentref id="leftLeg" />
+                <componentref id="rightLeg" />
+                <componentref id="leftArm" />
+                <componentref id="rightArm" />
             </children>
-
         </component>
+
+
+
+        <component id="halo">
             <transformation>
-                <translate x="1" y="5" z="1" />
+                <rotate axis="x" angle="90" />
+                <translate x="0" y="117" z="0" />
+                <scale x="0.2" y="0.075" z="0.2" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <primitiveref id="tor" />
+            </children>
+        </component>
+
+
+
+        <component id="head">
+            <transformation>
+                <translate x="0" y="7.5" z="-0.5" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <primitiveref id="cyl" />
+                <componentref id="neck" />
+                <!--<componentref id="leftEye" /> -->
+            </children>
+        </component>
+
+
+
+        <component id="neck">
+            <transformation>
+                <scale x="0.5" y="0.5" z="1" />
+                <translate x="0" y="0.5" z="0.5" />
+                <rotate axis="x" angle="90" />
             </transformation>
 
             <materials>
@@ -256,10 +327,174 @@
             <children>
                 <primitiveref id="cyl" />
             </children>
-        <component>
-
         </component>
-        
+
+
+
+        <component id="torso">
+            <transformation>
+                <scale x="1" y="2" z="3" />
+                <translate x="0" y="0" z="3" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <primitiveref id="cyl" />
+            </children>
+        </component>
+
+
+
+        <component id="leftArm">
+            <transformation>
+                <rotate axis="x" angle="15" />
+                <translate x="0" y="3.8" z="-2.75" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <componentref id="upperArm" />
+                <componentref id="lowerArm" />
+                <componentref id="armJoint" />
+            </children>
+        </component>
+
+
+
+        <component id="rightArm">
+            <transformation>
+                <rotate axis="y" angle="180" />
+                <translate x="0" y=".5" z=".5" />
+                <rotate axis="z" angle="-45" />
+                <translate x="0" y="5.5" z="1.75" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <componentref id="upperArm" />
+                <componentref id="lowerArm" />
+                <componentref id="armJoint" />
+            </children>
+        </component>
+
+
+
+        <component id="upperArm">
+            <transformation>
+                <translate x="0" y="0" z="-.5" />
+                <scale x=".5" y=".5" z="2" />
+                <rotate axis="x" angle="45" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <primitiveref id="cyl" />
+            </children>
+        </component>
+
+
+
+        <component id="lowerArm">
+            <transformation>
+                <translate x="0" y="0" z="-.5" />
+                <scale x=".5" y=".5" z="2" />
+                <rotate axis="x" angle="-45" />
+                <translate x="0" y="1.25" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <primitiveref id="cyl" />
+            </children>
+        </component>
+
+
+
+        <component id="armJoint">
+            <transformation>
+                <translate x="0" y="0.5" z="-1" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <primitiveref id="sper" />
+            </children>
+        </component>
+
+
+
+        <component id="leftLeg">
+            <transformation>
+                <scale x="0.5" y="0.5" z="3" />
+                <translate x="0" y="1" z="0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <primitiveref id="cyl" />
+            </children>
+        </component>
+
+
+
+        <component id="rightLeg">
+            <transformation>
+                <scale x="0.5" y="0.5" z="3" />
+                <translate x="0" y="-1" z="0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <primitiveref id="cyl" />
+            </children>
+        </component>
+
+
+
+
     </components>
 
 </dsx>

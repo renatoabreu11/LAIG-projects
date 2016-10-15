@@ -615,7 +615,6 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement, blockInfo) {
 };
 
 MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
-	var relations=[];//relations[fatherID][childrenID]. each father needs to be linked to its children
 
 	//COMPONENTS
 	var componentsBlock = blockInfo[0];
@@ -629,6 +628,8 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 	{
 		var component = componentBlock[i];
 		var id = this.reader.getString(component, 'id');
+		if(id==null)
+			console.log(component);
 		var idExists = false;
 
 		for(var comp of this.components) {
@@ -835,8 +836,7 @@ MySceneGraph.prototype.getRootComponent =function(){
 /*
  * Returns the view selected as default
  */
-MySceneGraph.prototype.getDefaultView=function() 
-{
+MySceneGraph.prototype.getDefaultView=function() {
 	for(view of this.views){
 		if(view["id"] == this.defaultView){
 			var fov = view["angle"];
@@ -853,8 +853,7 @@ MySceneGraph.prototype.getDefaultView=function()
 /*
  * The default view changes to the next on the list
  */
-MySceneGraph.prototype.setNextView=function() 
-{
+MySceneGraph.prototype.setNextView=function() {
 	for(var k = 0; k < this.views.length; k++){
 		if(this.views[k]["id"] == this.defaultView){
 			if(k + 1 == this.views.length)
@@ -907,8 +906,8 @@ MySceneGraph.prototype.onXMLWarning=function (message) {
 /********************** Auxiliar functions **********************************/
 
 /*
-	This function receives a list of parameters and a block of information. Then it reads the respectives elements from the block
-*/
+ * This function receives a list of parameters and a block of information. Then it reads the respectives elements from the block
+ */
 MySceneGraph.prototype.readValues= function(list, block){
 	var values = [];
 	for(var j = 0; j < list.length; j++){
