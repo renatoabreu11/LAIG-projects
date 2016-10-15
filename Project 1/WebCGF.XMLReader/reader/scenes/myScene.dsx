@@ -190,7 +190,7 @@
             
                 <!-- deve conter uma referencia a uma das "transformation" -->
                 <!-- declaradas anteriormente -->
-                <transformationref id="transf" />
+                <rotate axis="x" angle="90" />
                 
                 <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
@@ -223,13 +223,13 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
                 <primitiveref id="rect" />
-                <componentref id="comp2" />
+                <componentref id="body" />
             </children>
         </component>
 
-        <component id="comp2">
+        <component id="body">
         	<transformation>
-        		<translate x="0" y="2" z="0" />
+        		<translate x="0" y="5" z="0" />
         	</transformation>
 
         	<materials>
@@ -239,8 +239,25 @@
             <texture id="brick" />
 
             <children>
+                <componentref id="torso" />
+            </children>
+
+        </component>
+            <transformation>
+                <translate x="1" y="5" z="1" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
                 <primitiveref id="cyl" />
             </children>
+        <component>
+
         </component>
         
     </components>
