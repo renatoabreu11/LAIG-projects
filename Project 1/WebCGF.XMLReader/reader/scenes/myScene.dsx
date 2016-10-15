@@ -229,7 +229,7 @@
 
         <component id="comp2">
         	<transformation>
-        		<translate x="0" y="5" z="0" />
+        		<translate x="0" y="2" z="0" />
         	</transformation>
 
         	<materials>

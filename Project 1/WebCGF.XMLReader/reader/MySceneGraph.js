@@ -734,7 +734,6 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 					for(fatherCompI in this.components){
 						var fatherComp=this.components[fatherCompI];
 						if(fatherComp.getID()==fatherID){
-							console.log(fatherID+" -> "+childID);
 							this.components[fatherCompI].addChildComponent(childComponent);
 							break;
 						}

@@ -147,9 +147,11 @@ XMLscene.prototype.applyTransformationToComponent = function (transf, compID) {
 
 	//check if comp exists
 	var comp=null, index=null;
-	for (var i in this.components) {
-			if(this.components[i].id==compID){
-				comp=this.components[i];
+
+	for (var i in this.graph.components) {
+		console.log(this.graph.components[i].id);
+			if(this.graph.components[i].id==compID){
+				comp=this.graph.components[i];
 				index=i;
 				break;
 			}
@@ -163,11 +165,13 @@ XMLscene.prototype.applyTransformationToComponent = function (transf, compID) {
 
 	//calculate new matrix
 	this.setMatrix(comp.transformation);
+	console.log(this.getMatrix());
 	this.multMatrix(transf);
+	console.log(this.getMatrix());
 	comp.finalTransformation=this.getMatrix();
 	this.loadIdentity();
-	//update component in this.components
-	this.components[index]=comp;
+	//update component in this.graph.components
+	this.graph.components[index]=comp;
 
 	//apply transf to chidren
 	for(var i in comp.children['components']) {
@@ -191,14 +195,14 @@ XMLscene.prototype.loadTransformations = function() {
 	 		var matrixBackup=this.getMatrix();
 	 		this.loadIdentity();
 	 		//apply transformation to comp and its children
-	 		applyTransformationToComponent(transf,childComp.getID());
+	 		this.applyTransformationToComponent(transf,childComp.getID());
 	 		this.setMatrix(matrixBackup);
 	 	}
 	 }
 
 	 for(var compIndex in components) { //iterate components
 	 	var comp = components[compIndex];
-	 	var transf = comp.transformation;
+	 	var transf = comp.finalTransformation;
 	 	for(var primIndex in comp.children["primitives"]) { //iterate primitives
 	 		var primID = comp.children["primitives"][primIndex]['id'];
 	 		var size = this.primitives[primID]['transformations'].length;
