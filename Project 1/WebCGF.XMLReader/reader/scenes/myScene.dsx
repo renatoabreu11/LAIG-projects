@@ -969,6 +969,7 @@
        
             <materials>
                 <material id="s1" />
+                <material id="s2" />
             </materials>
                          
             <texture id="inherit" />
