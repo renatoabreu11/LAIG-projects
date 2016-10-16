@@ -174,7 +174,11 @@
 
         <primitive id="sper">
             <sphere radius=".5" slices="8" stacks="8" />
-        </primitive>     
+        </primitive>
+
+        <primitive id="boulder">
+            <sphere radius="1" slices="8" stacks="8" />
+        </primitive>
 
         <primitive id="tor">
             <torus inner="1" outer="4" slices="12" loops="12" />
@@ -206,7 +210,7 @@
                 <componentref id="ground" />
                 <componentref id="pyramids" />
                 <componentref id="body" />
-                <componentref id="mic" />
+                <componentref id="onyx" />
             </children>
         </component>
 
@@ -377,6 +381,8 @@
 
         <component id="body">
         	<transformation>
+        		<scale x=".5" y=".5" z=".5" />
+        		<translate x="0" y="0" z="-15" />
         	</transformation>
 
         	<materials>
@@ -387,6 +393,7 @@
 
             <children>
                 <componentref id="halo" />
+                <componentref id="mic" />
                 <componentref id="head" />
                 <componentref id="torso" />
                 <componentref id="leftLeg" />
@@ -431,7 +438,6 @@
             <children>
                 <primitiveref id="cyl" />
                 <componentref id="neck" />
-                <!--<componentref id="leftEye" /> -->
             </children>
         </component>
 
@@ -626,6 +632,176 @@
             <children>
                 <primitiveref id="sper" />
                 <primitiveref id="micPart" />
+            </children>
+        </component>
+
+
+        <component id="onyx">
+            <transformation>
+            	<translate x="0" y="0" z="15" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <componentref id="onyxBoulder1" />
+                <componentref id="onyxBoulder2" />
+                <componentref id="onyxBoulder3" />
+                <componentref id="onyxBoulder4" />
+                <componentref id="onyxBoulder5" />
+                <componentref id="onyxBoulder6" />
+                <componentref id="onyxBoulder7" />
+                <componentref id="onyxBoulder8" />
+                <componentref id="onyxBoulder9" />
+                <componentref id="onyxBoulder10" />
+                <componentref id="onyxBoulder11" />
+                <componentref id="onyxBoulder12" />
+            </children>
+        </component>
+
+
+        <component id="onyxBoulder1">
+            <transformation>
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onyxBoulder2">
+            <transformation>
+            	<scale x="1.2" y="1.2" z="1.2" />
+            	<translate x="-1" y="1" z="-1" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onyxBoulder3">
+            <transformation>
+            	<scale x="1.5" y="1.5" z="1.5" />
+            	<translate x="-2" y="2.2" z="-2" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onyxBoulder4">
+            <transformation>
+            	<scale x="1" y="1" z="1" />
+            	<translate x="-2.7" y="3.5" z="-2.7" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onyxBoulder5">
+            <transformation>
+            	<scale x="1.3" y="1.3" z="1.3" />
+            	<translate x="-2.7" y="4.5" z="-4" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onyxBoulder6">
+            <transformation>
+            	<scale x="1.6" y="1.6" z="1.6" />
+            	<translate x="-2.4" y="5.6" z="-5.4" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onyxBoulder7">
+            <transformation>
+            	<scale x="1.7" y="1.7" z="1.7" />
+            	<translate x="-1.5" y="7" z="-5.6" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onyxBoulder8">
+            <transformation>
+            	<scale x="1.9" y="1.9" z="1.9" />
+            	<translate x="0" y="8" z="-5.3" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
             </children>
         </component>
 
