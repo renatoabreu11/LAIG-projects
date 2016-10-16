@@ -144,7 +144,7 @@ Component.prototype.display= function(fatherTex, fatherMat){
 	if(this.texture["id"] == 'inherit'){
 		if(fatherTex["id"] != 'none'){
 			appearance["appear"].setTexture(fatherTex["info"]);
-		}
+		} else appearance["appear"].setTexture(null);
 		compTexture = fatherTex;
 	}else if(this.texture["id"] != 'none' && this.texture != null){
 		appearance["appear"].setTexture(this.texture["info"]);
