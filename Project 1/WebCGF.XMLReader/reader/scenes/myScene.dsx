@@ -167,7 +167,7 @@
         </primitive>
 
         <primitive id="cyl">
-            <cylinder base="1.5" top="1.5" height="5" slices="8" stacks="8" />
+            <cylinder base="1" top="1" height="1" slices="8" stacks="8" />
         </primitive>
 
         <primitive id="sper">
