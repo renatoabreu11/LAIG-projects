@@ -53,23 +53,23 @@
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="light1" enabled="1" >
-            <location x="0" y="0" z="0" w="1" />
-            <ambient r="0.5" g="0" b="0" a="1" />
+            <location x="-17.75" y="12.2" z="8.85" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="1" g="1" b="0" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
         </omni>
 
        <omni id="light2" enabled="1" >
-            <location x="7.5" y="7.5" z="7.5" w="1" />
+            <location x="12" y="15" z="-17.85" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.8" g="0.75" b="0.75" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
             <specular r="0" g="0" b="0" a="1" />
         </omni>
         
-        <spot id="light3" enabled="0" angle="40" exponent="0.2">
+        <spot id="light3" enabled="1" angle="60" exponent="1">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="0" y="7.5" z="0" />
-            <location x="0" y="0" z="0" />
+            <location x="-10.5" y="18" z="-12.5" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="0" g="0" b="0" a="1" />
@@ -77,7 +77,7 @@
 
         <spot id="light4" enabled="0" angle="60" exponent="0.1">
             <!-- atencao, "target" e' diferente de "direction" -->
-            <target x="7.5" y="7.5" z="7.5" />
+            <target x="7.5" y="0" z="7.5" />
             <location x="15" y="15" z="15" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
@@ -864,6 +864,7 @@
        
             <materials>
                 <material id="yellow" />
+                <material id="s1" />
             </materials>
                          
             <texture id="inherit" />

@@ -56,6 +56,7 @@ XMLscene.prototype.initCameras = function () {
 };
 
 XMLscene.prototype.updateCamera = function () {
+	console.log("hello")
 	this.graph.setNextView();
 	this.camera = this.graph.getDefaultView();
 }
@@ -136,7 +137,7 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 	if (this.graph.loadedOk){
-		//this.updateLights();
+		this.updateLights();
 		this.materialDefault.apply();
 		this.graph.getRootComponent().display(null, null);
 	}

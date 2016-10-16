@@ -67,7 +67,7 @@ MyInterface.prototype.processKeyboard = function(event) {
 			this.setActiveCamera(this.scene.camera);
 			break;
 		case(77):
-		case(7+32):
+		case(77+32):
 			this.scene.updateMaterials();
 			break;
 
