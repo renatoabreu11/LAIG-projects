@@ -135,7 +135,7 @@ XMLscene.prototype.display = function () {
 	if (this.graph.loadedOk){
 		//this.updateLights();
 		this.materialDefault.apply();
-		this.graph.getRootComponent().display(null);
+		this.graph.getRootComponent().display(null, null);
 	}
 };
 

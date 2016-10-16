@@ -416,9 +416,8 @@ MySceneGraph.prototype.parseTextures= function(rootElement, texturesBlock) {
 			this.checkFloatValue(tex["length_s"], 'Length_s');
 			tex["length_t"] = this.reader.getFloat(texture, 'length_t');
 			this.checkFloatValue(tex["length_t"], 'Length_t');
-			var appear = new CGFappearance(this.scene);
-			appear.loadTexture(tex["file"]);
-			tex["appear"] = appear;
+			var info = new CGFtexture(this.scene, tex["file"]);
+			tex["info"] = info;
 			this.textures.push(tex);
 		}
 	}
