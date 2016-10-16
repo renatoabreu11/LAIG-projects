@@ -406,7 +406,7 @@
         <component id="body">
         	<transformation>
         		<scale x=".5" y=".5" z=".5" />
-        		<translate x="0" y="0" z="-15" />
+        		<rotate axis="y" angle="-45" />
         	</transformation>
 
         	<materials>
@@ -662,7 +662,8 @@
 
         <component id="onix">
             <transformation>
-            	<translate x="0" y="0" z="15" />
+            	<rotate axis="y" angle="90" />
+            	<translate x="15" y="0" z="20" />
             </transformation>
        
             <materials>
