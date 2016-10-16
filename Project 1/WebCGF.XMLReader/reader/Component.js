@@ -82,7 +82,7 @@ Component.prototype.initPrimitive =function(primitive){
 			break;
 		case 'cylinder':
 			var values = primitive['cylinder'];
-			this.children["primitives"].push(new Cylinder(this.scene,values['slices'],values['stacks']));
+			this.children["primitives"].push(new Cylinder(this.scene,values['base'],values['top'], values['height'], values['slices'],values['stacks']));
 			break;
 		case 'sphere':
 			var values = primitive['sphere'];
@@ -108,6 +108,13 @@ Component.prototype.checkComponents= function(components){
 				}
 			}
 		}
+	}
+}
+
+Component.prototype.nextMaterial= function(){
+	this.materialIndex++;
+	if(this.materialIndex >= this.materials.length){
+		this.materialIndex = 0;
 	}
 }
 
@@ -142,14 +149,10 @@ Component.prototype.display= function(fatherTex, fatherMat){
 	}else if(this.texture["id"] != 'none' && this.texture != null){
 		appearance["appear"].setTexture(this.texture["info"]);
 	}
-
-	if(this.texture["id"] == 'none'){
-		this.scene.materialDefault.apply();
-		appearance["appear"].apply();
-	}else{
-		appearance["appear"].apply();
-	}
 	
+	appearance["appear"].apply();
+	
+
 
 	for(var i = 0; i < this.children["primitives"].length; i++){
 		var prim = this.children["primitives"][i];

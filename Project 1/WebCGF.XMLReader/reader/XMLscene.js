@@ -106,6 +106,9 @@ XMLscene.prototype.updateLights = function () {
 }
 
 XMLscene.prototype.updateMaterials = function () {
+	for(var component of this.graph.components){
+		component.nextMaterial();
+	}
 }
 
 XMLscene.prototype.display = function () {

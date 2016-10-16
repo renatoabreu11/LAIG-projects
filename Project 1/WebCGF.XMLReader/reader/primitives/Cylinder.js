@@ -2,10 +2,13 @@
  * Cylinder
  * @constructor
  */
- function Cylinder(scene, slices, stacks) {
+ function Cylinder(scene, base, top, height, slices, stacks) {
  	CGFobject.call(this,scene);
 	
 	this.slices = slices;
+	this.base = base;
+	this.top = top;
+	this.height = height;
 	this.stacks = stacks;
 
  	this.initBuffers();
@@ -21,6 +24,8 @@ Cylinder.prototype.constructor = Cylinder;
 	this.indices = [];
 	this.texCoords = [];
  	var ang = Math.PI*2/this.slices;
+ 	var zInc = this.height/this.stacks;
+ 	var radiusInc = (this.top - this.base)/this.height;
  	var x, y;
  	var counter = 0;
 
@@ -28,10 +33,10 @@ Cylinder.prototype.constructor = Cylinder;
 
 		for(var j = 0; j <= this.slices; j++){
 			//posição x e y dos dois vértices de uma mesma face
-			x = Math.cos(j * ang); 
-			y = Math.sin(j * ang);
+			x = (this.base + i * radiusInc)*Math.cos(j * ang); 
+			y = (this.base + i * radiusInc)*Math.sin(j * ang);
 
-			this.vertices.push(x, y, i / this.stacks);
+			this.vertices.push(x, y, this.height*i/this.stacks);
 			this.normals.push(x, y, 0);
 			this.texCoords.push(j / this.slices, i / this.stacks); 
 			counter++;	
@@ -57,7 +62,7 @@ Cylinder.prototype.constructor = Cylinder;
 		this.indices.push(i, counter, i + 1);
 	}
 
-	this.vertices.push(0, 0, 1);
+	this.vertices.push(0, 0, this.height);
 	this.normals.push(0, 0, 1);
 	this.texCoords.push(0.5, 0.5);
  	
