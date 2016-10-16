@@ -662,8 +662,8 @@
 
         <component id="onix">
             <transformation>
-            	<rotate axis="y" angle="90" />
-            	<translate x="15" y="0" z="20" />
+            	<rotate axis="y" angle="50" />
+            	<translate x="5" y="0" z="23" />
             </transformation>
        
             <materials>
@@ -980,7 +980,8 @@
 
         <component id="solrock">
             <transformation>
-                <translate x="15" y="0" z="0" />
+                <rotate axis="y" angle="-45" />
+                <translate x="20" y="0" z="8" />
             </transformation>
        
             <materials>
