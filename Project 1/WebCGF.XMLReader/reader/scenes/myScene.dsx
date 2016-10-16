@@ -54,7 +54,7 @@
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="light1" enabled="1" >
             <location x="0" y="0" z="0" w="1" />
-            <ambient r="0.5" g="1" b="0.5" a="0.5" />
+            <ambient r="0.5" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="0" a="1" />
         </omni>
@@ -103,6 +103,8 @@
         <texture id="brick" file="../res/brick.jpg" length_s="1" length_t="1.5" />
         <texture id="grass" file="../res/grass.jpg" length_s="2" length_t="1" />
         <texture id="skin" file="../res/skin.jpg" length_s="1" length_t="1" />
+        <texture id="sand" file="../res/sand.jpg" length_s="1" length_t="1" />
+        <texture id="troll" file="../res/troll.jpg" length_s="1" length_t="1" />
         
     </textures>
 
@@ -202,7 +204,7 @@
             
             <children>
                 <componentref id="ground" />
-                <componentref id="pyramid" />
+                <componentref id="pyramids" />
                 <componentref id="body" />
                 <componentref id="mic" />
             </children>
@@ -227,17 +229,75 @@
             </children>
         </component>
 
-
-        <component id="pyramid">
+         <component id="pyramids">
             <transformation>
-            	<translate x="-20" y="0" z="0" />
+                <translate x="-15" y="0" z="-15" />
             </transformation>
        
             <materials>
                 <material id="s1" />
             </materials>
                          
-            <texture id="brick" />
+            <texture id="sand" />
+            
+            <children>
+                <componentref id="pyramid1" />
+                <componentref id="pyramid2" />
+                <componentref id="pyramid3" />
+            </children>
+        </component>
+
+         <component id="pyramid1">
+            <transformation>
+                <translate x="27" y="0" z="-3" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <componentref id="pyramidWall1" />
+                <componentref id="pyramidWall2" />
+                <componentref id="pyramidWall3" />
+                <componentref id="pyramidWall4" />
+            </children>
+        </component>
+
+
+         <component id="pyramid2">
+            <transformation>
+                <translate x="-3" y="0" z="25" />
+                <scale x="0.95" y="0.8" z="0.95" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <componentref id="pyramidWall1" />
+                <componentref id="pyramidWall2" />
+                <componentref id="pyramidWall3" />
+                <componentref id="pyramidWall4" />
+            </children>
+        </component>
+
+        <component id="pyramid3">
+            <transformation>
+            	<translate x="4" y="0" z="2" />
+                <scale x="1" y="1.2" z="1" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
             
             <children>
                 <componentref id="pyramidWall1" />
@@ -366,7 +426,7 @@
                 <material id="s1" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="troll" />
 
             <children>
                 <primitiveref id="cyl" />

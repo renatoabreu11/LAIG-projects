@@ -10,6 +10,8 @@
 	this.top = top;
 	this.height = height;
 	this.stacks = stacks;
+	this.bottomCircle = new Circle(this.scene, this.base, this.slices);
+	this.topCircle = new Circle(this.scene, this.top, this.slices);
 
  	this.initBuffers();
  };
@@ -24,7 +26,6 @@ Cylinder.prototype.constructor = Cylinder;
 	this.indices = [];
 	this.texCoords = [];
  	var ang = Math.PI*2/this.slices;
- 	var zInc = this.height/this.stacks;
  	var radiusInc = (this.top - this.base)/this.height;
  	var x, y;
  	var counter = 0;
@@ -53,24 +54,18 @@ Cylinder.prototype.constructor = Cylinder;
 			this.indices.push(stack2+1, stack2, stack1);
  		} 
 	}
-
-	this.vertices.push(0, 0, 0);
-	this.normals.push(0, 0, 1);
-	this.texCoords.push(0.5, 0.5);
-
-	for(var i = 0; i < this.slices; i++){
-		this.indices.push(i, counter, i + 1);
-	}
-
-	this.vertices.push(0, 0, this.height);
-	this.normals.push(0, 0, 1);
-	this.texCoords.push(0.5, 0.5);
- 	
-	for(var i = 0; i < this.slices; i++){
-		this.indices.push(counter - 1 - this.slices + i, counter - this.slices + i, counter + 1);
-	}
-
-
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
  };
+
+ Cylinder.prototype.display = function() {
+    CGFobject.prototype.display.call(this);
+    this.scene.pushMatrix();
+    this.scene.rotate(Math.PI, 1, 0, 0)
+    this.bottomCircle.display();
+    this.scene.translate(0, 0, -this.height);
+    this.scene.rotate(Math.PI, 1, 0, 0)
+    this.scene.rotate(Math.PI, 0, 0, 1)
+    this.topCircle.display();
+    this.scene.popMatrix();
+};
