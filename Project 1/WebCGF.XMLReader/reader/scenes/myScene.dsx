@@ -162,8 +162,8 @@
             
         </primitive>
 
-        <primitive id="tr">
-            <triangle x1="0" y1="0" z1="-1" x2="0" y2="3" z2="0" x3="0" y3="0" z3="1" />
+        <primitive id="pyramidWall">
+            <triangle x1="-10" y1="0" z1="-10" x2="-10" y2="0" z2="10" x3="0" y3="15" z3="0" />
         </primitive>
 
         <primitive id="cyl">
@@ -187,51 +187,28 @@
         
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-            
-                <!-- deve conter uma referencia a uma das "transformation" -->
-                <!-- declaradas anteriormente -->
-                
-                <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
-                <!-- usando zero ou mais das instrucoes seguintes, sem -->
-                <!-- limite nem ordem -->
-                <!-- ex: bloco transformation pode ficar sem conteudo -->
-                
             </transformation>
        
-            <!-- declaracao obrigatoria de pelo menos um material; -->
-            <!-- o material id="inherit", mantem (herda) material do "pai" -->
-            <!-- se varios materiais declarados, o default e' o -->
-            <!-- primeiro material; de cada vez que se pressione a tecla m/M, -->
-            <!-- o material muda para o proximo material da lista; do --> 
-            <!-- ultimo material da lista volta ao primeiro -->
             <materials>
                 <material id="s1" />
             </materials>
                          
-            <!-- declaracao obrigatoria de texture -->
-            <!-- id="inherit" mantem (herda) a textura do objecto "pai" -->
-            <!-- id="none" remove a textura recebida do pai -->
-            <!-- a textura declarada sobrepoe a textura recebida do -->
-            <!-- objecto "pai" -->
             <texture id="brick" />
             
-            <!-- bloco "children" obrigatorio num "component" -->
             <children>
-            
-                <!-- deve existir uma ou mais tags "componentref" e/ou -->
-                <!-- "primitiveref", identificando outros -->
-                <!-- componentes ou primitivas -->
                 <componentref id="ground" />
+                <componentref id="pyramid" />
                 <componentref id="body" />
             </children>
         </component>
-
 
 
         <component id="ground">
         
             <transformation>
                 <rotate axis="x" angle="90" />
+                <scale x="3" y="2" z="2" />
+                <translate x="-15" y="0" z="0" />
             </transformation>
        
             <materials>
@@ -245,6 +222,92 @@
             </children>
         </component>
 
+
+        <component id="pyramid">
+            <transformation>
+            	<translate x="-20" y="0" z="0" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="brick" />
+            
+            <children>
+                <componentref id="pyramidWall1" />
+                <componentref id="pyramidWall2" />
+                <componentref id="pyramidWall3" />
+                <componentref id="pyramidWall4" />
+            </children>
+        </component>
+
+
+        <component id="pyramidWall1">
+            <transformation>
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="brick" />
+            
+            <children>
+                <primitiveref id="pyramidWall" />
+            </children>
+        </component>
+
+
+        <component id="pyramidWall2">
+            <transformation>
+            	<rotate axis="y" angle="90" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="brick" />
+            
+            <children>
+                <primitiveref id="pyramidWall" />
+            </children>
+        </component>
+
+
+        <component id="pyramidWall3">
+            <transformation>
+            	<rotate axis="y" angle="180" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="brick" />
+            
+            <children>
+                <primitiveref id="pyramidWall" />
+            </children>
+        </component>
+
+
+        <component id="pyramidWall4">
+            <transformation>
+            	<rotate axis="y" angle="270" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="brick" />
+            
+            <children>
+                <primitiveref id="pyramidWall" />
+            </children>
+        </component>
 
 
         <component id="body">
@@ -269,7 +332,6 @@
         </component>
 
 
-
         <component id="halo">
             <transformation>
                 <rotate axis="x" angle="90" />
@@ -287,7 +349,6 @@
                 <primitiveref id="tor" />
             </children>
         </component>
-
 
 
         <component id="head">
@@ -310,7 +371,6 @@
         </component>
 
 
-
         <component id="neck">
             <transformation>
                 <scale x="0.5" y="0.5" z="1" />
@@ -328,7 +388,6 @@
                 <primitiveref id="cyl" />
             </children>
         </component>
-
 
 
         <component id="torso">
@@ -350,7 +409,6 @@
         </component>
 
 
-
         <component id="leftArm">
             <transformation>
                 <rotate axis="x" angle="15" />
@@ -369,7 +427,6 @@
                 <componentref id="armJoint" />
             </children>
         </component>
-
 
 
         <component id="rightArm">
@@ -394,7 +451,6 @@
         </component>
 
 
-
         <component id="upperArm">
             <transformation>
                 <translate x="0" y="0" z="-.5" />
@@ -412,7 +468,6 @@
                 <primitiveref id="cyl" />
             </children>
         </component>
-
 
 
         <component id="lowerArm">
@@ -435,7 +490,6 @@
         </component>
 
 
-
         <component id="armJoint">
             <transformation>
                 <translate x="0" y="0.62" z="-.63" />
@@ -451,7 +505,6 @@
                 <primitiveref id="sper" />
             </children>
         </component>
-
 
 
         <component id="leftLeg">
@@ -473,7 +526,6 @@
         </component>
 
 
-
         <component id="rightLeg">
             <transformation>
                 <scale x="0.5" y="0.5" z="3" />
@@ -491,8 +543,6 @@
                 <primitiveref id="cyl" />
             </children>
         </component>
-
-
 
 
     </components>
