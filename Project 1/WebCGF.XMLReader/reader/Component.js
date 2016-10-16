@@ -151,8 +151,6 @@ Component.prototype.display= function(fatherTex, fatherMat){
 	}
 	
 	appearance["appear"].apply();
-	
-
 
 	for(var i = 0; i < this.children["primitives"].length; i++){
 		var prim = this.children["primitives"][i];
