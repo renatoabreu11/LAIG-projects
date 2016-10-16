@@ -437,6 +437,7 @@
 
             <materials>
                 <material id="s1" />
+                <material id="yellow" />
             </materials>
 
             <texture id="grass" />
