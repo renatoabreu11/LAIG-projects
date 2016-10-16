@@ -26,7 +26,7 @@ Cylinder.prototype.constructor = Cylinder;
 	this.indices = [];
 	this.texCoords = [];
  	var ang = Math.PI*2/this.slices;
- 	var radiusInc = (this.top - this.base)/this.height;
+ 	var radiusInc = (this.top - this.base)/this.stacks;
  	var x, y;
  	var counter = 0;
 
