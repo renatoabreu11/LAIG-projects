@@ -48,6 +48,7 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.camera = this.graph.getDefaultView();
     this.interface.setActiveCamera(this.camera);
     this.initLights();
+    this.materialDefault = new CGFappearance(this);
 };
 
 XMLscene.prototype.initCameras = function () {
@@ -133,7 +134,8 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk){
 		//this.updateLights();
-		this.graph.getRootComponent().display();
+		this.materialDefault.apply();
+		this.graph.getRootComponent().display(null);
 	}
 };
 

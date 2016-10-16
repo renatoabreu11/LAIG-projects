@@ -122,16 +122,32 @@ Component.prototype.checkIfExists =function(array, id){
 	return -1;
 };
 
-Component.prototype.display= function(){
+Component.prototype.display= function(fatherTex){
 	this.scene.pushMatrix();
 	this.scene.multMatrix(this.transformation);
+
+	var compTex = this.texture;
+
+	if(this.texture["id"] == 'inherit'){
+		if(fatherTex["id"] == 'none')
+			this.scene.materialDefault.apply();
+		else fatherTex["appear"].apply();
+		compTex = fatherTex;
+	}else if(this.texture["id"] == 'none'){
+		this.scene.materialDefault.apply();
+	}else if(this.texture != null){
+		this.texture["appear"].apply();
+	}
+
 	for(var i = 0; i < this.children["primitives"].length; i++){
 		var prim = this.children["primitives"][i];
 		prim.display();
 	}
+
+
 	for(var i = 0; i < this.children["components"].length; i++){
 		var comp = this.children["components"][i];
-		comp.display();
+		comp.display(compTex);
 	}
 	this.scene.popMatrix();
 }
