@@ -107,6 +107,8 @@
         <texture id="troll" file="../res/troll.jpg" length_s="1" length_t="1" />
         <texture id="solrock" file="../res/solrock.jpg" length_s="1" length_t="1" />
         <texture id="eye" file="../res/eye.png" length_s="1" length_t="1" />
+        <texture id="onix" file="../res/onix.jpg" length_s="1" length_t="1" />
+        <texture id="white" file="../res/white.jpg" length_s="1" length_t="1" />
         
     </textures>
 
@@ -171,7 +173,14 @@
             <!-- <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" /> -->
             <!-- <sphere radius="ff" slices="ii" stacks="ii" /> -->
             <!-- <torus inner="ff" outer="ff" slices="ii" loops="ii" /> -->
-            
+        </primitive>
+
+        <primitive id="onixHorn">
+        	<triangle x1="-1" y1="0" z1="0" x2="0" y2="3" z2="0" x3="1" y3="0" z3="0" />
+        </primitive>
+
+        <primitive id="onixEye">
+        	<rectangle x1="0" y1="0" x2="1" y2=".5" />
         </primitive>
 
         <primitive id="pyramidWall">
@@ -224,7 +233,7 @@
                 <componentref id="ground" />
                 <componentref id="pyramids" />
                 <componentref id="body" />
-                <componentref id="onyx" />
+                <componentref id="onix" />
                 <componentref id="solrock" />
             </children>
         </component>
@@ -651,7 +660,7 @@
         </component>
 
 
-        <component id="onyx">
+        <component id="onix">
             <transformation>
             	<translate x="0" y="0" z="15" />
             </transformation>
@@ -660,26 +669,30 @@
                 <material id="s1" />
             </materials>
                          
-            <texture id="inherit" />
+            <texture id="onix" />
             
             <children>
-                <componentref id="onyxBoulder1" />
-                <componentref id="onyxBoulder2" />
-                <componentref id="onyxBoulder3" />
-                <componentref id="onyxBoulder4" />
-                <componentref id="onyxBoulder5" />
-                <componentref id="onyxBoulder6" />
-                <componentref id="onyxBoulder7" />
-                <componentref id="onyxBoulder8" />
-                <componentref id="onyxBoulder9" />
-                <componentref id="onyxBoulder10" />
-                <componentref id="onyxBoulder11" />
-                <componentref id="onyxBoulder12" />
+                <componentref id="onixBoulder1" />
+                <componentref id="onixBoulder2" />
+                <componentref id="onixBoulder3" />
+                <componentref id="onixBoulder4" />
+                <componentref id="onixBoulder5" />
+                <componentref id="onixBoulder6" />
+                <componentref id="onixBoulder7" />
+                <componentref id="onixBoulder8" />
+                <componentref id="onixBoulder9" />
+                <componentref id="onixBoulder10" />
+                <componentref id="onixBoulder11" />
+                <componentref id="onixBoulder12" />
+                <componentref id="onixHead" />
+                <componentref id="onixHorn" />
+                <componentref id="onixLeftEye" />
+                <componentref id="onixRightEye" />
             </children>
         </component>
 
 
-        <component id="onyxBoulder1">
+        <component id="onixBoulder1">
             <transformation>
             </transformation>
        
@@ -695,7 +708,7 @@
         </component>
 
 
-        <component id="onyxBoulder2">
+        <component id="onixBoulder2">
             <transformation>
             	<scale x="1.2" y="1.2" z="1.2" />
             	<translate x="-1" y="1" z="-1" />
@@ -713,7 +726,7 @@
         </component>
 
 
-        <component id="onyxBoulder3">
+        <component id="onixBoulder3">
             <transformation>
             	<scale x="1.5" y="1.5" z="1.5" />
             	<translate x="-2" y="2.2" z="-2" />
@@ -731,7 +744,7 @@
         </component>
 
 
-        <component id="onyxBoulder4">
+        <component id="onixBoulder4">
             <transformation>
             	<scale x="1" y="1" z="1" />
             	<translate x="-2.7" y="3.5" z="-2.7" />
@@ -749,7 +762,7 @@
         </component>
 
 
-        <component id="onyxBoulder5">
+        <component id="onixBoulder5">
             <transformation>
             	<scale x="1.3" y="1.3" z="1.3" />
             	<translate x="-2.7" y="4.5" z="-4" />
@@ -767,7 +780,7 @@
         </component>
 
 
-        <component id="onyxBoulder6">
+        <component id="onixBoulder6">
             <transformation>
             	<scale x="1.6" y="1.6" z="1.6" />
             	<translate x="-2.4" y="5.6" z="-5.4" />
@@ -785,7 +798,7 @@
         </component>
 
 
-        <component id="onyxBoulder7">
+        <component id="onixBoulder7">
             <transformation>
             	<scale x="1.7" y="1.7" z="1.7" />
             	<translate x="-1.5" y="7" z="-5.6" />
@@ -803,7 +816,7 @@
         </component>
 
 
-        <component id="onyxBoulder8">
+        <component id="onixBoulder8">
             <transformation>
             	<scale x="1.9" y="1.9" z="1.9" />
             	<translate x="0" y="8" z="-5.3" />
@@ -817,6 +830,149 @@
             
             <children>
                 <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onixBoulder9">
+            <transformation>
+            	<scale x="2" y="2" z="2" />
+            	<translate x="1" y="10" z="-3.5" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onixBoulder10">
+            <transformation>
+            	<scale x="1.75" y="1.75" z="1.75" />
+            	<translate x="2" y="10.7" z="-1" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onixBoulder11">
+            <transformation>
+            	<scale x="2" y="2" z="2" />
+            	<translate x="3.5" y="10.7" z="1.4" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onixBoulder12">
+            <transformation>
+            	<scale x="2.1" y="2.1" z="2.1" />
+            	<translate x="6.2" y="9.5" z="2.7" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onixHead">
+            <transformation>
+            	<scale x="2.1" y="2.1" z="2.1" />
+            	<translate x="9" y="8" z="2.4" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="boulder" />
+            </children>
+        </component>
+
+
+        <component id="onixLeftEye">
+            <transformation>
+            	<rotate axis="y" angle="-65" />
+            	<translate x="10.5" y="8.5" z="1.1" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="white" />
+            
+            <children>
+                <primitiveref id="onixEye" />
+            </children>
+        </component>
+
+
+        <component id="onixRightEye">
+            <transformation>
+            	<rotate axis="y" angle="65" />
+            	<translate x="10.4" y="8.5" z="3.8" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="white" />
+            
+            <children>
+                <primitiveref id="onixEye" />
+            </children>
+        </component>
+
+
+        <component id="onixHorn">
+            <transformation>
+            	<translate x="9" y="9.8" z="2" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="onixHorn" />
             </children>
         </component>
 
