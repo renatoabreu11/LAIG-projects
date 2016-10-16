@@ -140,6 +140,14 @@
             <specular r="0.1" g="0.1" b="0.4" a="1" />
             <shininess value="1" />
         </material>
+
+        <material id="shirt" >
+           <emission r="0.1" g="0.4" b="0.5" a="1" />
+           <ambient r="0.117647" g="0.564706" b="1" a="1" />
+           <diffuse r="0.1" g="0.1" b="0" a="1" />
+           <specular r="0.1" g="0.1" b="0.1" a="1" />
+           <shininess value="1" />
+       </material>
         
     </materials>
     
@@ -478,7 +486,7 @@
                 <material id="s1" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="skin" />
 
             <children>
                 <primitiveref id="cyl" />
@@ -494,10 +502,10 @@
             </transformation>
 
             <materials>
-                <material id="s1" />
+                <material id="shirt" />
             </materials>
 
-            <texture id="brick" />
+            <texture id="none" />
 
             <children>
                 <primitiveref id="cyl" />
@@ -611,10 +619,10 @@
             </transformation>
 
             <materials>
-                <material id="s1" />
+                <material id="shirt" />
             </materials>
 
-            <texture id="brick" />
+            <texture id="none" />
 
             <children>
                 <primitiveref id="cyl" />
@@ -630,10 +638,10 @@
             </transformation>
 
             <materials>
-                <material id="s1" />
+                <material id="shirt" />
             </materials>
 
-            <texture id="brick" />
+            <texture id="none" />
 
             <children>
                 <primitiveref id="cyl" />
