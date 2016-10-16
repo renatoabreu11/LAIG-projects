@@ -178,6 +178,10 @@
         <primitive id="tor">
             <torus inner="1" outer="4" slices="12" loops="12" />
         </primitive>
+
+        <primitive id="micPart">
+            <cylinder base=".25" top=".25" height="2" slices="8" stacks="8" />
+        </primitive>
         
     </primitives>
     
@@ -200,6 +204,7 @@
                 <componentref id="ground" />
                 <componentref id="pyramid" />
                 <componentref id="body" />
+                <componentref id="mic" />
             </children>
         </component>
 
@@ -344,7 +349,7 @@
                 <material id="s1" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="grass" />
 
             <children>
                 <primitiveref id="tor" />
@@ -434,7 +439,7 @@
             <transformation>
                 <rotate axis="y" angle="180" />
                 <translate x="0" y=".5" z=".5" />
-                <rotate axis="z" angle="-45" />1.75
+                <rotate axis="z" angle="-60" />1.75
                 <translate x="0" y="5.5" z="1.75" />
             </transformation>
 
@@ -542,6 +547,26 @@
 
             <children>
                 <primitiveref id="cyl" />
+            </children>
+        </component>
+
+
+        <component id="mic">
+        
+            <transformation>
+                <rotate axis="y" angle="45" />
+                <translate x="1.25" y="6.5" z=".5" />
+            </transformation>
+       
+            <materials>
+                <material id="s1" />
+            </materials>
+                         
+            <texture id="inherit" />
+            
+            <children>
+                <primitiveref id="sper" />
+                <primitiveref id="micPart" />
             </children>
         </component>
 
