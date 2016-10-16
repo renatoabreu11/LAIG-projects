@@ -104,6 +104,9 @@ XMLscene.prototype.updateLights = function () {
 	}
 }
 
+XMLscene.prototype.updateMaterials = function () {
+}
+
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
 	

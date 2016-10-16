@@ -46,8 +46,7 @@ MySceneGraph.prototype.onXMLReady=function() {
 	var rootElement = this.reader.xmlDoc.documentElement;
 	
 	// Call to the function that receives the root element and the list of blocks. This function calls the respective function to each block.
-	var blocks = ['scene', 'views', 'illumination', 'lights', 'textures', 'materials', 'transformations', 'primitives', 'components'];
-	this.parseBlocks(rootElement, blocks);
+	this.parseBlocks(rootElement);
 
 	for(var i = 0; i < this.blockWarnings.length; i++){
 		this.onXMLWarning(this.blockWarnings[i]);
@@ -70,65 +69,73 @@ MySceneGraph.prototype.onXMLReady=function() {
  * Method that search for each block in the blocksTag list and than calls the function to parse its elements
  */
 MySceneGraph.prototype.parseBlocks= function(rootElement, blocksTag) {
-	var skipBlock = 0;
+	var nBlocks = rootElement.children.length;
 
-	//não esquecer de verificar as ordens da tag!!
-	for(var i = 0; i < blocksTag.length; i++){
-		var elements =  rootElement.getElementsByTagName(blocksTag[i]);
-		if (elements == null) {
-			this.elementsErrors.push(blocksTag[i] + " element is missing.");
-			skipBlock = 1;
-		}
-		//do not forget to remove the last condition!!!!!!!!!!!!!!!
-		if (elements.length != 1 && skipBlock == 0 && blocksTag[i] != "materials") {
-			this.elementsErrors.push("either zero or more than one " + blocksTag[i] + " element found.");
-			skipBlock = 1;
-		}
+	var validBlocks = this.checkBlockOrder(rootElement,nBlocks);
+	if(!validBlocks)
+		return;
 
-		if(skipBlock == 0){
-			switch(i){
-				case 0:{
-					this.parseGlobals(rootElement, elements); break;
-				}
-				case 1:{
-					this.parseViews(rootElement, elements); break;
-				} 
-				case 2:{
-					this.parseIllumination(rootElement, elements); break;
-				}
-				case 3:{
-					this.parseLights(rootElement, elements);  break;
-				}
-				case 4:{
-					this.parseTextures(rootElement, elements); break;
-				} 
-				case 5:{
-					this.parseMaterials(rootElement, elements); break;
-				}
-				case 6:{
-					this.parseTransformations(rootElement, elements); break;
-				} 
-				case 7:{
-					 this.parsePrimitives(rootElement, elements); break;
-				}
-				case 8:{
-					this.parseComponents(rootElement, elements); 
-					this.checkChildrenID();
-					break;
-				}
-				default:{
-					break;
-				} 
+	for(var i=0; i < nBlocks; i++){
+		var block = rootElement.children[i];
+		switch(block.tagName){
+			case 'scene':{
+				this.parseGlobals(rootElement, block); break;
 			}
-		} else skipBlock = 0;
+			case 'views':{
+				this.parseViews(rootElement, block); break;
+			} 
+			case 'illumination':{
+				this.parseIllumination(rootElement, block); break;
+			}
+			case 'lights':{
+				this.parseLights(rootElement, block);  break;
+			}
+			case 'textures':{
+				this.parseTextures(rootElement, block); break;
+			} 
+			case 'materials':{
+				this.parseMaterials(rootElement, block); break;
+			}
+			case 'transformations':{
+				this.parseTransformations(rootElement, block); break;
+			} 
+			case 'primitives':{
+				this.parsePrimitives(rootElement, block); break;
+			}
+			case 'components':{
+				this.parseComponents(rootElement, block); 
+				this.checkChildrenID();
+				break;
+			}
+		}
 	}
 };
 
 /*
+ * Checks if the tags are ordered and if the number of tags is correct
+ */
+MySceneGraph.prototype.checkBlockOrder= function(blocks, nBlocks) {
+	var tags = ['scene', 'views', 'illumination', 'lights', 'textures', 'materials', 'transformations', 'primitives', 'components'];
+
+	if(nBlocks != 9){
+		this.elementsErrors.push("The number of blocks must be 9: scene, views, illumination, lights, textures, materials, transformations, primitives, components");
+		return false;
+	}
+
+	for(var i=0; i < nBlocks; i++){
+		var block = blocks.children[i];
+		if(block.tagName != tags[i]){
+			this.elementsErrors.push("Wrong dsx block order");
+			return false;
+		}
+	}
+	return true;
+}
+
+/*
  * Method that parses the global values, root name and axis length
  */
-MySceneGraph.prototype.parseGlobals= function(rootElement, blockInfo) {
-	var scene = blockInfo[0];
+MySceneGraph.prototype.parseGlobals= function(rootElement, scene) {
 	this.root = this.reader.getString(scene, 'root');
 	if(this.root == null){
 		this.elementsErrors.push("Root object is missing");
@@ -141,9 +148,7 @@ MySceneGraph.prototype.parseGlobals= function(rootElement, blockInfo) {
 /*
  * This method parses all the declared views and all of its elements
  */ 
-MySceneGraph.prototype.parseViews= function(rootElement, blockInfo) {
-	var viewsBlock = blockInfo[0];
-
+MySceneGraph.prototype.parseViews= function(rootElement, viewsBlock) {
 	//VIEWS->PERSPECTIVE
 	var perspBlock = this.getElements('perspective', viewsBlock, 1);
 	if(perspBlock == null)
@@ -219,9 +224,7 @@ MySceneGraph.prototype.parseViews= function(rootElement, blockInfo) {
 /*
  * Parses the illumination values
  */
-MySceneGraph.prototype.parseIllumination= function(rootElement, blockInfo) {
-	var illuminationBlock = blockInfo[0];
-
+MySceneGraph.prototype.parseIllumination= function(rootElement, illuminationBlock) {
 	this.illumination["doublesided"] = this.reader.getBoolean(illuminationBlock, "doublesided");
 	this.illumination["local"] = this.reader.getBoolean(illuminationBlock, "local");
 
@@ -243,9 +246,8 @@ MySceneGraph.prototype.parseIllumination= function(rootElement, blockInfo) {
  * Method that verifies the light block and calls the respective function to par
  * parse the light, accordingly to its type
  */
-MySceneGraph.prototype.parseLights= function(rootElement, blockInfo) {
+MySceneGraph.prototype.parseLights= function(rootElement, lightsBlock) {
 	//LIGHTS
-	var lightsBlock = blockInfo[0];
 	var nLights = lightsBlock.children.length;
 
 	if(nLights == 0){
@@ -387,9 +389,7 @@ MySceneGraph.prototype.parseSpotLight= function(spot) {
 /*
  * Textures tag parser
  */
-MySceneGraph.prototype.parseTextures= function(rootElement, blockInfo) {
-	var texturesBlock = blockInfo[0];
-
+MySceneGraph.prototype.parseTextures= function(rootElement, texturesBlock) {
 	//Textures->Texture
 	var texBlock = this.getElements('texture', texturesBlock, 1);
 	if(texBlock == null)
@@ -416,6 +416,9 @@ MySceneGraph.prototype.parseTextures= function(rootElement, blockInfo) {
 			this.checkFloatValue(tex["length_s"], 'Length_s');
 			tex["length_t"] = this.reader.getFloat(texture, 'length_t');
 			this.checkFloatValue(tex["length_t"], 'Length_t');
+			var appear = new CGFappearance(this.scene);
+			appear.loadTexture(tex["file"]);
+			tex["appear"] = appear;
 			this.textures.push(tex);
 		}
 	}
@@ -424,12 +427,10 @@ MySceneGraph.prototype.parseTextures= function(rootElement, blockInfo) {
 /*
  * This function parses material block 
  */
-MySceneGraph.prototype.parseMaterials= function(rootElement, blockInfo) {
-	var materialsBlock =  blockInfo[0];
-
+MySceneGraph.prototype.parseMaterials= function(rootElement, materialsBlock) {
 	//Materials->Material
 	var matBlock = this.getElements('material', materialsBlock, 1);
-	if(matBlock == null)
+	if(matBlock == null) 
 		return;
 
 	for(var i=0; i < matBlock.length; i++)
@@ -499,9 +500,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement, blockInfo) {
  * Parses the transformation info (scale, rotation, translate) applying
  * the transormation to a indentity matrix. Then saves the matrix in the array
  */
-MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
-	var transformationsBlock = blockInfo[0];
-
+MySceneGraph.prototype.parseTransformations= function(rootElement, transformationsBlock) {
 	//Transformations->transformation
 	var transBlock = this.getElements('transformation', transformationsBlock, 1);
 	if(transBlock == null)
@@ -545,9 +544,7 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, blockInfo) {
 /*
  * Parses primitive of each type (rectangle, triangle, cylinder, sphere and torus)
  */ 
-MySceneGraph.prototype.parsePrimitives= function(rootElement, blockInfo) {
-	var primitivesBlock = blockInfo[0];
-
+MySceneGraph.prototype.parsePrimitives= function(rootElement, primitivesBlock) {
 	//Primitives->primitive
 	var primBlock = this.getElements('primitive', primitivesBlock, 1);
 	if(primBlock == null)
@@ -614,11 +611,8 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement, blockInfo) {
 	}
 };
 
-MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
-
+MySceneGraph.prototype.parseComponents= function(rootElement, componentsBlock) {
 	//COMPONENTS
-	var componentsBlock = blockInfo[0];
-
 	var componentBlock = this.getElements('component', componentsBlock, 1);
 	if(componentBlock==null)
 		return;
@@ -661,10 +655,16 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 					var material = materialsBlock[0].children[j];
 					var id = this.reader.getString(material, 'id');
 					var index = this.checkIfExists(this.materials, id);
-					if(index == -1){
-						this.blockWarnings.push("Material with id: " + id + " referenced in component doesn't exist");
+					if(id == 'inherit'){
+						var mat = [];
+						mat["id"] = id;
+						comp.addMaterial(mat);
 					} else{
-						comp.addMaterial(this.materials[index]);
+						if(index == -1){
+							this.blockWarnings.push("Material with id: " + id + " referenced in component doesn't exist");
+						} else{
+							comp.addMaterial(this.materials[index]);
+						}
 					}
 				}
 			}
@@ -676,10 +676,16 @@ MySceneGraph.prototype.parseComponents= function(rootElement, blockInfo) {
 
 			var id = this.reader.getString(textureBlock[0],'id');
 			var index = this.checkIfExists(this.textures, id);
-			if(index == -1){
-				this.blockWarnings.push("Texture with id: " + id + " referenced in component doesn't exist");
+			if(id == 'none' || id == 'inherit'){
+				var texture = [];
+				texture["id"] = id;
+				comp.setTexture(texture);
 			} else{
-				comp.setTexture(this.textures[index]);
+				if(index == -1){
+					this.blockWarnings.push("Texture with id: " + id + " referenced in component doesn't exist");
+				} else{
+					comp.setTexture(this.textures[index]);
+				}
 			}
 
 			//COMPONENTS->COMPONENT->CHILDREN

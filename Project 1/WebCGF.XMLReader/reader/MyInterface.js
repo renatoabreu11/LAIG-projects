@@ -66,6 +66,11 @@ MyInterface.prototype.processKeyboard = function(event) {
 			this.scene.updateCamera();
 			this.setActiveCamera(this.scene.camera);
 			break;
+		case(77):
+		case(7+32):
+			this.scene.updateMaterials();
+			break;
+
 	};
 };
 

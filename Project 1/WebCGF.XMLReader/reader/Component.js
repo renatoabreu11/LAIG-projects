@@ -7,8 +7,6 @@ function Component(scene, id) {
  	this.scene = scene;
  	this.id = id;
 
- 	this.isChecked=false;
- 	
  	this.transformation = null;
  	this.materials = [];
  	this.materialIndex = 0;
