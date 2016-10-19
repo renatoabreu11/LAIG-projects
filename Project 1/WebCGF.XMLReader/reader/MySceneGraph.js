@@ -362,6 +362,7 @@ MySceneGraph.prototype.parseSpotLight= function(spot) {
 		if(locationBlock == null)
 			return;		
 		light["location"] = this.readValues(['x', 'y', 'z'], locationBlock[0]);
+		light["location"]["w"] = 1;
 
 		//LIGHTS->SPOT->AMBIENT
 		var ambientBlock = this.getElements('ambient', spot, 0);
