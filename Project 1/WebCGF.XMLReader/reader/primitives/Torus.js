@@ -21,6 +21,8 @@ Torus.prototype.initBuffers = function() {
     this.normals = [];
     this.texCoords = [];
     this.indices = [];
+    this.R = (this.outerRadius + this.innerRadius)/2;
+    this.r = (this.outerRadius - this.innerRadius)/2;
 
     for (var latNumber = 0; latNumber <= this.loops; latNumber++){ 
         var theta = latNumber * 2 * Math.PI / this.loops
@@ -33,9 +35,9 @@ Torus.prototype.initBuffers = function() {
             var cosPhi = Math.cos(phi);
 
             //Equation used for torus
-            var x = (this.outerRadius + this.innerRadius*cosTheta)*cosPhi;
-            var y = (this.outerRadius + this.innerRadius*cosTheta)*sinPhi;
-            var z = this.innerRadius * sinTheta;
+            var x = (this.R + this.r*cosTheta)*cosPhi;
+            var y = (this.R + this.r*cosTheta)*sinPhi;
+            var z = this.r * sinTheta;
 
             var u = 1 - (longNumber / this.slices);
             var v = 1 - (latNumber / this.loops);
