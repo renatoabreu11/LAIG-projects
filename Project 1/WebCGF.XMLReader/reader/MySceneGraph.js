@@ -832,7 +832,7 @@ MySceneGraph.prototype.checkIfExists =function(array, id){
 
 MySceneGraph.prototype.getRootComponent =function(){
 	for(var i = 0; i < this.components.length; i++){
-		if(this.components[i].getID() == "root"){
+		if(this.components[i].getID() == this.root){
 			return this.components[i];
 		}
 	}

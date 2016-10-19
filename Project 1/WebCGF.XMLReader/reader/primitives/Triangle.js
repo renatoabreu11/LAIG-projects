@@ -60,6 +60,7 @@ Triangle.prototype.initBuffers = function () {
 
 	this.primitiveType=this.scene.gl.TRIANGLES;		//só se desenha triangulos
 
+	//corrigir isto!
 	this.normals =[
 		0, 1, 0,
 		0, 1, 0,
