@@ -62,9 +62,10 @@ Triangle.prototype.initBuffers = function () {
 
 	var vecA=[this.x2-this.x1,this.y2-this.y1,this.z2-this.z1];
 	var vecB=[this.x3-this.x1,this.y3-this.y1,this.z3-this.z1];
-	var vecProd=[vecA[1]*vecB[2]-vecA[2]-vecB[1],
+	var vecProd=[vecA[1]*vecB[2]-vecA[2]*vecB[1],
 				vecA[2]*vecB[0]-vecA[0]*vecB[2],
 				vecA[0]*vecB[1]-vecA[1]*vecB[0]];
+
 	this.normals =[
 		vecProd[0], vecProd[1], vecProd[2],
 		vecProd[0], vecProd[1], vecProd[2],
