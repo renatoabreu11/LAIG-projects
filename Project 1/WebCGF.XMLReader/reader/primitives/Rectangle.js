@@ -37,10 +37,10 @@ Rectangle.prototype.initBuffers = function () {
 
 	this.normals =
 	[
+		0, 0, -1,
 		0, 0, 1,
 		0, 0, 1,
-		0, 0, 1,
-		0, 0, 1
+		0, 0, -1
 	];
 
 	/*function MyQuad(scene, minS=0, maxS=1, minT=0, maxT=1) {

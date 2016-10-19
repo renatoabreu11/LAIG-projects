@@ -53,14 +53,14 @@
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="light1" enabled="1" >
-            <location x="-17.75" y="12.2" z="8.85" w="1" />
+            <location x="-17.75" y="12.2" z="9" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="0" g="0" b="0" a="1" />
         </omni>
 
        <omni id="light2" enabled="1" >
-            <location x="12" y="15" z="-17.85" w="1" />
+            <location x="12" y="16" z="-17.85" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="0" g="0" b="0" a="1" />
@@ -77,8 +77,8 @@
 
         <spot id="light4" enabled="0" angle="60" exponent="1">
             <!-- atencao, "target" e' diferente de "direction" -->
-            <target x="0" y="0" z="0" />
-            <location x="15" y="15" z="15"/>
+            <target x="15" y="0" z="15" />
+            <location x="15" y="25" z="15"/>
              <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="0" g="0" b="0" a="1" />
@@ -104,6 +104,7 @@
         <texture id="grass" file="../res/grass.jpg" length_s="2" length_t="1" />
         <texture id="skin" file="../res/skin.jpg" length_s="1" length_t="1" />
         <texture id="sand" file="../res/sand.jpg" length_s="1" length_t="1" />
+        <texture id="sand2" file="../res/sand2.jpg" length_s="1" length_t="1" />
         <texture id="troll" file="../res/troll.jpg" length_s="1" length_t="1" />
         <texture id="solrock" file="../res/solrock.jpg" length_s="1" length_t="1" />
         <texture id="eye" file="../res/eye.png" length_s="1" length_t="1" />
@@ -146,6 +147,14 @@
            <ambient r="0.117647" g="0.564706" b="1" a="1" />
            <diffuse r="0.1" g="0.1" b="0" a="1" />
            <specular r="0.1" g="0.1" b="0.1" a="1" />
+           <shininess value="1" />
+       </material>
+
+       <material id="bright" >
+           <emission r=".5" g=".5" b="0" a="1" />
+           <ambient r="0.1" g="0.5" b="0.5" a="1" />
+           <diffuse r="0.1" g="0.4" b="0.4" a="1" />
+           <specular r="0.1" g="0.2" b="0.2" a="1" />
            <shininess value="1" />
        </material>
         
@@ -255,10 +264,10 @@
             </transformation>
        
             <materials>
-                <material id="s1" />
+                <material id="bright" />
             </materials>
                          
-            <texture id="sand" />
+            <texture id="sand2" />
             
             <children>
                 <primitiveref id="rect" />
@@ -271,7 +280,7 @@
             </transformation>
        
             <materials>
-                <material id="s1" />
+                <material id="inherit" />
             </materials>
                          
             <texture id="sand" />

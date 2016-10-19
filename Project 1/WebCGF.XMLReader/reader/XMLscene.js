@@ -56,7 +56,6 @@ XMLscene.prototype.initCameras = function () {
 };
 
 XMLscene.prototype.updateCamera = function () {
-	console.log("hello")
 	this.graph.setNextView();
 	this.camera = this.graph.getDefaultView();
 }
@@ -77,7 +76,6 @@ XMLscene.prototype.initLights = function () {
 			target["y"] = light["target"]["y"] - light["location"]["y"];
 			target["z"] = light["target"]["z"] - light["location"]["z"];
 			this.lights[i].setSpotDirection(target["x"], target["y"], target["z"]);
-			console.log(this.lights[i]);
 		}
 
 		if(light["enabled"]){
@@ -89,7 +87,7 @@ XMLscene.prototype.initLights = function () {
 			this.lightStatus[i] = false;
 		}
 		this.lights[i].update();
-		this.interface.addLight(i, light["id"])
+		this.interface.addLight(i, light["id"]);
 		i++;
 	}
 };
