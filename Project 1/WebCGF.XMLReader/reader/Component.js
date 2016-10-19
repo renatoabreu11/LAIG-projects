@@ -74,7 +74,7 @@ Component.prototype.initPrimitive =function(primitive){
 	switch(primitive['tag']){
 		case 'rectangle':
 			var values = primitive['rectangle'];
-			this.children["primitives"].push(new Rectangle(this.scene,values['x1'],values['y1'],values['x2'],values['y2']));
+			this.children["primitives"].push(new Rectangle(this.scene,values['x1'],values['y1'],values['x2'],values['y2'],this.texture["length_s"],this.texture["length_t"]));
 			break;
 		case 'triangle':
 			var values = primitive['triangle'];

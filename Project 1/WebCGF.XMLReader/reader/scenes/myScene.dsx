@@ -104,7 +104,7 @@
         <texture id="grass" file="../res/grass.jpg" length_s="2" length_t="1" />
         <texture id="skin" file="../res/skin.jpg" length_s="1" length_t="1" />
         <texture id="sand" file="../res/sand.jpg" length_s="1" length_t="1" />
-        <texture id="sand2" file="../res/sand2.jpg" length_s="1" length_t="1" />
+        <texture id="sand2" file="../res/sand2.jpg" length_s="20" length_t="20" />
         <texture id="troll" file="../res/troll.jpg" length_s="1" length_t="1" />
         <texture id="solrock" file="../res/solrock.jpg" length_s="1" length_t="1" />
         <texture id="eye" file="../res/eye.png" length_s="1" length_t="1" />

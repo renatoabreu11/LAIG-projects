@@ -3,13 +3,15 @@
  * @param gl {WebGLRenderingContext}
  * @constructor
  */
-function Rectangle(scene, x1, y1, x2, y2) {
+function Rectangle(scene, x1, y1, x2, y2, length_s, length_t) {
 	CGFobject.call(this,scene);
 
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
+    this.length_s=length_s;
+    this.length_t=length_t;
 
 	this.initBuffers();
 }
@@ -43,18 +45,12 @@ Rectangle.prototype.initBuffers = function () {
 		0, 0, -1
 	];
 
-	/*function MyQuad(scene, minS=0, maxS=1, minT=0, maxT=1) {
-    this.minS = minS;
-    this.maxS = maxS;
-    this.minT = minT;
-    this.maxT = maxT;
-	}*/
-
+	var xTex=(this.x2-this.x1)/this.length_s,yTex=(this.y2-this.y1)/this.length_t;
     this.texCoords = [
-        0,1,
-        1,1,
+        0,yTex,
+        xTex,yTex,
         0,0,
-        1,0
+        xTex,0
     ];
 
 	this.initGLBuffers();		//desenha no ecrã este objecto, a informação é passada para o WebGL.
