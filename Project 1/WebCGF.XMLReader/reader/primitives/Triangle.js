@@ -60,11 +60,15 @@ Triangle.prototype.initBuffers = function () {
 
 	this.primitiveType=this.scene.gl.TRIANGLES;		//só se desenha triangulos
 
+	var vecA=[this.x2-this.x1,this.y2-this.y1,this.z2-this.z1];
+	var vecB=[this.x3-this.x1,this.y3-this.y1,this.z3-this.z1];
+	var vecProd=[vecA[1]*vecB[2]-vecA[2]-vecB[1],
+				vecA[2]*vecB[0]-vecA[0]*vecB[2],
+				vecA[0]*vecB[1]-vecA[1]*vecB[0]];
 	this.normals =[
-		0, 1, 0,
-		0, 1, 0,
-		0, 1, 0
-	];
+		vecProd[0], vecProd[1], vecProd[2],
+		vecProd[0], vecProd[1], vecProd[2],
+		vecProd[0], vecProd[1], vecProd[2]];
 
 	this.texCoords = [
         (this.c - this.a * Math.cos(this.b)), this.a * Math.sin(this.b),
