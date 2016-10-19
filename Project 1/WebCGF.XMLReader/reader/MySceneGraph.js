@@ -529,7 +529,7 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, transformatio
 			if(nTransforms == 0){
 				this.blockWarnings.push("At least one transformation must be present on block with id: " + i);
 			} else{
-				for(var j = nTransforms - 1; j >= 0; j--){
+				for(var j = 0; j < nTransforms; j++){
 					var tagName = transformation.children[j].tagName;
 					matrix = this.computeTransformation(tagName, matrix, transformation.children[j]);
 				}
@@ -707,7 +707,7 @@ MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
 	if(nTransforms == 0){
 		return matrix;
 	} else{
-		for(var j = nTransforms - 1; j >= 0; j--){
+		for(var j = 0; j < nTransforms; j++){
 			var transf = transformation.children[j];
 
 			//checks if only exists the transformationref

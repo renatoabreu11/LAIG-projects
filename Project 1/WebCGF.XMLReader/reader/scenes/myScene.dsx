@@ -75,13 +75,13 @@
             <specular r="0" g="0" b="0" a="1" />
         </spot>
 
-        <spot id="light4" enabled="0" angle="60" exponent="0.1">
+        <spot id="light4" enabled="0" angle="60" exponent="1">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="7.5" y="0" z="7.5" />
             <location x="15" y="15" z="15" />
-            <ambient r="0" g="0" b="0" a="1" />
+             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="1" g="1" b="0" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
         </spot>
     </lights>
     
@@ -250,8 +250,8 @@
         <component id="ground">
         
             <transformation>
-                <rotate axis="x" angle="90" />
                 <scale x="3" y="3" z="3" />
+                <rotate axis="x" angle="90" />
             </transformation>
        
             <materials>
@@ -305,8 +305,8 @@
 
          <component id="pyramid2">
             <transformation>
-                <translate x="-3" y="0" z="25" />
                 <scale x="0.95" y="0.8" z="0.95" />
+                <translate x="-3" y="0" z="25" />
             </transformation>
        
             <materials>
@@ -325,8 +325,8 @@
 
         <component id="pyramid3">
             <transformation>
-            	<translate x="4" y="0" z="2" />
                 <scale x="1" y="1.2" z="1" />
+            	<translate x="4" y="0" z="2" />
             </transformation>
        
             <materials>
@@ -413,8 +413,8 @@
 
         <component id="body">
         	<transformation>
+                <rotate axis="y" angle="-45" />
         		<scale x=".5" y=".5" z=".5" />
-        		<rotate axis="y" angle="-45" />
         	</transformation>
 
         	<materials>
@@ -438,9 +438,9 @@
 
         <component id="halo">
             <transformation>
-                <rotate axis="x" angle="90" />
-                <translate x="0" y="117" z="0" />
                 <scale x="0.2" y="0.075" z="0.2" />
+                 <translate x="0" y="117" z="0" />
+                <rotate axis="x" angle="90" />
             </transformation>
 
             <materials>
@@ -458,8 +458,8 @@
 
         <component id="head">
             <transformation>
-                <translate x="0" y="7.5" z="-0.5" />
                 <rotate axis="y" angle="90" />
+                <translate x="0" y="7.5" z="-0.5" />
             </transformation>
 
             <materials>
@@ -477,9 +477,9 @@
 
         <component id="neck">
             <transformation>
-                <scale x="0.5" y="0.5" z="1" />
-                <translate x="0" y="0.5" z="0.5" />
                 <rotate axis="x" angle="90" />
+                <translate x="0" y="0.5" z="0.5" />
+                <scale x="0.5" y="0.5" z="1" />
             </transformation>
 
             <materials>
@@ -496,9 +496,9 @@
 
         <component id="torso">
             <transformation>
-                <scale x="1" y="2" z="3" />
+                 <rotate axis="x" angle="-90" />
                 <translate x="0" y="0" z="3" />
-                <rotate axis="x" angle="-90" />
+                <scale x="1" y="2" z="3" />
             </transformation>
 
             <materials>
@@ -515,8 +515,8 @@
 
         <component id="leftArm">
             <transformation>
-                <rotate axis="x" angle="15" />
                 <translate x="0" y="3.8" z="-2.75" />
+                <rotate axis="x" angle="15" />
             </transformation>
 
             <materials>
@@ -535,10 +535,10 @@
 
         <component id="rightArm">
             <transformation>
-                <rotate axis="y" angle="180" />
-                <translate x="0" y=".5" z=".5" />
-                <rotate axis="z" angle="-60" />1.75
                 <translate x="0" y="5.5" z="1.75" />
+                <rotate axis="z" angle="-60" />1.75
+                <translate x="0" y=".5" z=".5" />
+                <rotate axis="y" angle="180" />
             </transformation>
 
             <materials>
@@ -557,9 +557,9 @@
 
         <component id="upperArm">
             <transformation>
-                <translate x="0" y="0" z="-.5" />
-                <scale x=".5" y=".5" z="2" />
                 <rotate axis="x" angle="45" />
+                <scale x=".5" y=".5" z="2" />
+                <translate x="0" y="0" z="-.5" />
             </transformation>
 
             <materials>
@@ -576,10 +576,10 @@
 
         <component id="lowerArm">
             <transformation>
+                            <translate x="0" y="1.25" z="0" />
+            <rotate axis="x" angle="-45" />
+            <scale x=".5" y=".5" z="2" />
                 <translate x="0" y="0" z="-.5" />
-                <scale x=".5" y=".5" z="2" />
-                <rotate axis="x" angle="-45" />
-                <translate x="0" y="1.25" z="0" />
             </transformation>
 
             <materials>
@@ -613,9 +613,9 @@
 
         <component id="leftLeg">
             <transformation>
+             <rotate axis="x" angle="-90" />
+             <translate x="0" y="1" z="0" />
                 <scale x="0.5" y="0.5" z="3" />
-                <translate x="0" y="1" z="0" />
-                <rotate axis="x" angle="-90" />
             </transformation>
 
             <materials>
@@ -632,9 +632,9 @@
 
         <component id="rightLeg">
             <transformation>
+            <rotate axis="x" angle="-90" />
+            <translate x="0" y="-1" z="0" />
                 <scale x="0.5" y="0.5" z="3" />
-                <translate x="0" y="-1" z="0" />
-                <rotate axis="x" angle="-90" />
             </transformation>
 
             <materials>
@@ -652,8 +652,8 @@
         <component id="mic">
         
             <transformation>
+             <translate x="1.25" y="6.5" z=".5" />
                 <rotate axis="y" angle="45" />
-                <translate x="1.25" y="6.5" z=".5" />
             </transformation>
        
             <materials>
@@ -671,8 +671,8 @@
 
         <component id="onix">
             <transformation>
+                        <translate x="5" y="0" z="23" />
             	<rotate axis="y" angle="50" />
-            	<translate x="5" y="0" z="23" />
             </transformation>
        
             <materials>
@@ -720,8 +720,8 @@
 
         <component id="onixBoulder2">
             <transformation>
+            <translate x="-1" y="1" z="-1" />
             	<scale x="1.2" y="1.2" z="1.2" />
-            	<translate x="-1" y="1" z="-1" />
             </transformation>
        
             <materials>
@@ -738,8 +738,8 @@
 
         <component id="onixBoulder3">
             <transformation>
+            <translate x="-2" y="2.2" z="-2" />
             	<scale x="1.5" y="1.5" z="1.5" />
-            	<translate x="-2" y="2.2" z="-2" />
             </transformation>
        
             <materials>
@@ -756,8 +756,9 @@
 
         <component id="onixBoulder4">
             <transformation>
+            <translate x="-2.7" y="3.5" z="-2.7" />
             	<scale x="1" y="1" z="1" />
-            	<translate x="-2.7" y="3.5" z="-2.7" />
+            	
             </transformation>
        
             <materials>
@@ -774,8 +775,9 @@
 
         <component id="onixBoulder5">
             <transformation>
+            <translate x="-2.7" y="4.5" z="-4" />
             	<scale x="1.3" y="1.3" z="1.3" />
-            	<translate x="-2.7" y="4.5" z="-4" />
+            	
             </transformation>
        
             <materials>
@@ -792,8 +794,9 @@
 
         <component id="onixBoulder6">
             <transformation>
+            <translate x="-2.4" y="5.6" z="-5.4" />
             	<scale x="1.6" y="1.6" z="1.6" />
-            	<translate x="-2.4" y="5.6" z="-5.4" />
+            	
             </transformation>
        
             <materials>
@@ -810,8 +813,9 @@
 
         <component id="onixBoulder7">
             <transformation>
+                <translate x="-1.5" y="7" z="-5.6" />
             	<scale x="1.7" y="1.7" z="1.7" />
-            	<translate x="-1.5" y="7" z="-5.6" />
+            	
             </transformation>
        
             <materials>
@@ -828,8 +832,8 @@
 
         <component id="onixBoulder8">
             <transformation>
+                <translate x="0" y="8" z="-5.3" />  
             	<scale x="1.9" y="1.9" z="1.9" />
-            	<translate x="0" y="8" z="-5.3" />
             </transformation>
        
             <materials>
@@ -846,8 +850,9 @@
 
         <component id="onixBoulder9">
             <transformation>
+
+                <translate x="1" y="10" z="-3.5" />
             	<scale x="2" y="2" z="2" />
-            	<translate x="1" y="10" z="-3.5" />
             </transformation>
        
             <materials>
@@ -864,8 +869,8 @@
 
         <component id="onixBoulder10">
             <transformation>
+                <translate x="2" y="10.7" z="-1" />
             	<scale x="1.75" y="1.75" z="1.75" />
-            	<translate x="2" y="10.7" z="-1" />
             </transformation>
        
             <materials>
@@ -882,8 +887,8 @@
 
         <component id="onixBoulder11">
             <transformation>
+                <translate x="3.5" y="10.7" z="1.4" />
             	<scale x="2" y="2" z="2" />
-            	<translate x="3.5" y="10.7" z="1.4" />
             </transformation>
        
             <materials>
@@ -900,8 +905,8 @@
 
         <component id="onixBoulder12">
             <transformation>
+                <translate x="6.2" y="9.5" z="2.7" />
             	<scale x="2.1" y="2.1" z="2.1" />
-            	<translate x="6.2" y="9.5" z="2.7" />
             </transformation>
        
             <materials>
@@ -918,8 +923,8 @@
 
         <component id="onixHead">
             <transformation>
+                <translate x="9" y="8" z="2.4" />
             	<scale x="2.1" y="2.1" z="2.1" />
-            	<translate x="9" y="8" z="2.4" />
             </transformation>
        
             <materials>
@@ -936,8 +941,8 @@
 
         <component id="onixLeftEye">
             <transformation>
+                <translate x="10.5" y="8.5" z="1.1" />
             	<rotate axis="y" angle="-65" />
-            	<translate x="10.5" y="8.5" z="1.1" />
             </transformation>
        
             <materials>
@@ -954,8 +959,8 @@
 
         <component id="onixRightEye">
             <transformation>
+                <translate x="10.4" y="8.5" z="3.8" />
             	<rotate axis="y" angle="65" />
-            	<translate x="10.4" y="8.5" z="3.8" />
             </transformation>
        
             <materials>
@@ -990,8 +995,8 @@
 
         <component id="solrock">
             <transformation>
-                <rotate axis="y" angle="-45" />
                 <translate x="20" y="0" z="8" />
+                <rotate axis="y" angle="-45" />
             </transformation>
        
             <materials>
@@ -1009,8 +1014,8 @@
 
         <component id="cabeca">
             <transformation>
-                <scale x="3" y="3" z="2" />
                 <translate x="0" y="5" z="0" />
+                <scale x="3" y="3" z="2" />
             </transformation>
        
             <materials>
@@ -1026,8 +1031,8 @@
 
         <component id="raios">
             <transformation>
+                 <translate  x="0" y="6.5" z="0"/>
                 <rotate axis="x" angle="-90" />
-                <translate  x="0" y="6.5" z="0"/>
             </transformation>
        
             <materials>
@@ -1051,8 +1056,8 @@
 
         <component id="north">
             <transformation>
-                <scale x="1.0" y="1" z="1.3" />
                 <translate x="0" y="0" z="-0.20" />
+                <scale x="1.0" y="1" z="1.3" />
             </transformation>
        
             <materials>
@@ -1068,8 +1073,8 @@
 
         <component id="northWest">
             <transformation>
+                 <translate x="-1" y="0" z="-0.65" />
                 <rotate axis="y" angle="-45" />
-                <translate x="-1" y="0" z="-0.65" />
             </transformation>
        
             <materials>
@@ -1085,8 +1090,8 @@
 
         <component id="northEast">
             <transformation>
+                 <translate x="1" y="0" z="-0.65" />
                <rotate axis="y" angle="45" />
-                <translate x="1" y="0" z="-0.65" />
             </transformation>
        
             <materials>
@@ -1102,8 +1107,8 @@
 
         <component id="southWest">
             <transformation>
-                <rotate axis="y" angle="-135" />
                 <translate x="-1" y="0" z="-2.15" />
+                <rotate axis="y" angle="-135" />
             </transformation>
        
             <materials>
@@ -1119,8 +1124,8 @@
 
         <component id="southEast">
             <transformation>
-               <rotate axis="y" angle="135" />
                 <translate x="1" y="0" z="-2.15" />
+               <rotate axis="y" angle="135" />
             </transformation>
        
             <materials>
@@ -1136,9 +1141,9 @@
 
         <component id="east">
             <transformation>
+             <translate x="1.35" y="0" z="-1.5" />
+              <scale x="1.25" y="1" z="0.86" />
                 <rotate axis="y" angle="90" />
-                 <scale x="1.25" y="1" z="0.86" />
-                <translate x="1.35" y="0" z="-1.5" />
             </transformation>
        
             <materials>
@@ -1154,9 +1159,9 @@
 
         <component id="west">
             <transformation>
-               <rotate axis="y" angle="-90" />
+             <translate x="-1.35" y="0" z="-1.5" />
                 <scale x="1.25" y="1" z="0.86" />
-                <translate x="-1.35" y="0" z="-1.5" />
+               <rotate axis="y" angle="-90" />
             </transformation>
        
             <materials>
@@ -1172,10 +1177,9 @@
 
          <component id="south">
             <transformation>
-            <translate x="0" y="0" z="2" />
-                <rotate axis="x" angle="-180" />
-                 <scale x="1.0" y="1" z="1.3" />
-                <translate x="0" y="0" z="-0.20" />
+                <translate x="0" y="0" z="-2.70" />
+                <scale x="1.0" y="1" z="1.3" />
+                <rotate axis="y" angle="-180" />
             </transformation>
        
             <materials>
@@ -1191,8 +1195,8 @@
 
         <component id="olhos">
             <transformation>
+                <translate  x="1.5" y="5" z="0"/>
                 <scale  x="0.25" y="0.25" z="0.25"/>
-                 <translate  x="1.5" y="5" z="0"/>
             </transformation>
        
             <materials>
@@ -1209,8 +1213,8 @@
 
          <component id="olho1">
             <transformation>
+                 <translate  x="-8" y="0" z="2.6"/>
                 <rotate axis="y" angle="-10" />
-                <translate  x="-8" y="0" z="2.6"/>
             </transformation>
        
             <materials>
@@ -1226,8 +1230,8 @@
 
         <component id="olho2">
             <transformation>
+              <translate  x="-3" y="0" z="2.4"/>
              <rotate axis="y" angle="10" />
-                 <translate  x="-3" y="0" z="2.4"/>
             </transformation>
        
             <materials>

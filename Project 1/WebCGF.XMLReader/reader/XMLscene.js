@@ -47,6 +47,7 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.axis = new CGFaxis(this, this.graph.axisLength, 0.05);
     this.camera = this.graph.getDefaultView();
     this.interface.setActiveCamera(this.camera);
+    console.log(this.graph.lights)
     this.initLights();
     this.materialDefault = new CGFappearance(this);
 };
@@ -72,7 +73,11 @@ XMLscene.prototype.initLights = function () {
 		if(light["type"] == "spot"){
 			this.lights[i].setSpotCutOff(light["angle"]);
 			this.lights[i].setSpotExponent(light["exponent"]);
-			this.lights[i].setSpotDirection(light["target"]["x"], light["target"]["y"], light["target"]["z"]);
+			var target = [];
+			target["x"] = light["target"]["x"] - light["location"]["x"];
+			target["y"] = light["target"]["y"] - light["location"]["y"];
+			target["z"] = light["target"]["z"] - light["location"]["z"];
+			this.lights[i].setSpotDirection(target["x"], target["y"], target["z"]);
 		}
 
 		if(light["enabled"]){
