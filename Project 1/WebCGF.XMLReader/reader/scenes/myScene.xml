@@ -185,9 +185,14 @@
         <!-- <torus inner="ff" outer="ff" slices="ii" loops="ii" /> -->
     </primitive>
 
-    <primitive id="onixHorn">
+    <primitive id="onixHorn1">
        <triangle x1="-1" y1="0" z1="0" x2="0" y2="3" z2="0" x3="1" y3="0" z3="0" />
    </primitive>
+
+   <primitive id="onixHorn2">
+       <triangle x1="1" y1="0" z1="0" x2="0" y2="3" z2="0" x3="-1" y3="0" z3="0" />
+   </primitive>
+
 
    <primitive id="onixEye">
        <rectangle x1="0" y1="0" x2="1" y2=".5" />
@@ -943,7 +948,7 @@
 
 <component id="onixLeftEye">
     <transformation>
-        <translate x="10.5" y="8.5" z="1.1" />
+        <translate x="10.5" y="8.5" z=".9" />
         <rotate axis="y" angle="-65" />
     </transformation>
 
@@ -961,8 +966,8 @@
 
 <component id="onixRightEye">
     <transformation>
-        <translate x="10.4" y="8.5" z="3.8" />
-        <rotate axis="y" angle="65" />
+        <translate x="11.1" y="8.5" z="2.7" />
+        <rotate axis="y" angle="245" />
     </transformation>
 
     <materials>
@@ -990,7 +995,8 @@
 <texture id="inherit" />
 
 <children>
-    <primitiveref id="onixHorn" />
+    <primitiveref id="onixHorn1" />
+    <primitiveref id="onixHorn2" />
 </children>
 </component>
 
