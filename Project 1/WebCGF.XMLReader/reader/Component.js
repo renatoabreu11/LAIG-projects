@@ -24,8 +24,8 @@
  Component.prototype.constructor = Component;
 
 /**
- * [getID description]
- * @return {[type]} [description]
+ * Returns the component ID
+ * @return {[int]} id
  */
  Component.prototype.getID= function() {
  	return this.id;
@@ -40,65 +40,64 @@
  }
 
 /**
- * [setTransformation description]
- * @param {[type]} transformation [description]
+ * Sets the transformation matrix
+ * @param {[mat4 matrix]} new matrix
  */
  Component.prototype.setTransformation= function(transformation) {
  	this.transformation = transformation;
  }
 
 /**
- * [addMaterial description]
- * @param {[type]} material [description]
+ * Adds a material to the list of materials
+ * @param {[array]} material object
  */
  Component.prototype.addMaterial= function(material) {
  	this.materials.push(material);
  }
 
 /**
- * [addChildComponent description]
- * @param {[type]} child [description]
+ * Adds a valid child component
+ * @param {[Component]} child component
  */
  Component.prototype.addChildComponent= function(child) {
  	this.children["components"].push(child);
  }
 
 /**
- * [addChildPrimitive description]
- * @param {[type]} child [description]
+ * Adds a valid child primitive
+ * @param {[Primitive]} child primitive
  */
  Component.prototype.addChildPrimitive= function(child) {
  	this.children["primitives"].push(child);
  }
 
 /**
- * [setTexture description]
- * @param {[type]} texture [description]
+ * Sets component actual texture
+ * @param {[Texture]} new texture
  */
  Component.prototype.setTexture= function(texture) {
  	this.texture = texture;
  }
 
 /**
- * [addComponentID description]
- * @param {[type]} id [description]
+ * Adds a new component ID, valid or not.
+ * @param {[int]} component id
  */
  Component.prototype.addComponentID= function(id) {
  	this.componentsID.push(id);
  }
 
 /**
- * [addPrimitiveID description]
- * @param {[type]} id [description]
+ * Adds a new primitve ID, valid or not.
+ * @param {[int]} primitve id
  */
  Component.prototype.addPrimitiveID= function(id) {
  	this.primitivesID.push(id);
  }
 
 /**
- * [checkPrimitives description]
- * @param  {[type]} primitives [description]
- * @return {[type]}            [description]
+ * Checks the primitvesID and verifies if the elements are valid, if so, then the primitive is initialized
+ * @param  {[array]} array with all the primitives
  */
  Component.prototype.checkPrimitives= function(primitives){
  	for(var i = 0; i < this.primitivesID.length; i++){
@@ -112,9 +111,8 @@
  }
 
 /**
- * [initPrimitive description]
- * @param  {[type]} primitive [description]
- * @return {[type]}           [description]
+ * Initializes primitive accordingly to its paramaters, then it's added to children array
+ * @param  {[type]} primitive info
  */
  Component.prototype.initPrimitive =function(primitive){
  	switch(primitive['tag']){
@@ -142,9 +140,8 @@
  };
 
 /**
- * [checkComponents description]
- * @param  {[type]} components [description]
- * @return {[type]}            [description]
+ * Checks the componentsID array and verifies if the elements are valid, if so, then the component is added
+ * @param  {[array]} array with all the components
  */
  Component.prototype.checkComponents= function(components){
  	for(var i = 0; i < this.componentsID.length; i++){
@@ -163,8 +160,7 @@
  }
 
 /**
- * [nextMaterial description]
- * @return {[type]} [description]
+ * Changes current material to the next on the materials list
  */
  Component.prototype.nextMaterial= function(){
  	this.materialIndex++;
@@ -174,10 +170,10 @@
  }
 
 /**
- * [checkIfExists description]
- * @param  {[type]} array [description]
- * @param  {[type]} id    [description]
- * @return {[type]}       [description]
+ * Check if id exists in array
+ * @param  {[array]} array with elements
+ * @param  {[string]} value to search
+ * @return {[int]} id index on array
  */
  Component.prototype.checkIfExists =function(array, id){
  	for(var j = 0; j < array.length; j++){
@@ -188,10 +184,14 @@
  };
 
 /**
- * [display description]
- * @param  {[type]} fatherTex [description]
- * @param  {[type]} fatherMat [description]
- * @return {[type]}           [description]
+ * This function applies the transformation the respective component and all of its children.
+ * Then inherit the father material and/or texture if that's the case. 
+ * After this the appearance with the right texutre and material is applied.
+ * Then, each child primitve is displayed as well each child component.
+ * By iterating each children components and starting with the root component, this function goes through 
+ * the scene graph and displays each object. 
+ * @param  {[Texture]} component father texture
+ * @param  {[Material]} component father material
  */
  Component.prototype.display= function(fatherTex, fatherMat){
  	this.scene.pushMatrix();
