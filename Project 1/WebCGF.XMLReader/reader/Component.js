@@ -74,11 +74,11 @@ Component.prototype.initPrimitive =function(primitive){
 	switch(primitive['tag']){
 		case 'rectangle':
 			var values = primitive['rectangle'];
-			this.children["primitives"].push(new Rectangle(this.scene,values['x1'],values['y1'],values['x2'],values['y2'],this.texture["length_s"],this.texture["length_t"]));
+			this.children["primitives"].push(new Rectangle(this.scene,values['x1'],values['y1'],values['x2'],values['y2']));
 			break;
 		case 'triangle':
 			var values = primitive['triangle'];
-			this.children["primitives"].push(new Triangle(this.scene,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3'],this.texture["length_s"],this.texture["length_t"]));
+			this.children["primitives"].push(new Triangle(this.scene,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']));
 			break;
 		case 'cylinder':
 			var values = primitive['cylinder'];
@@ -136,8 +136,6 @@ Component.prototype.display= function(fatherTex, fatherMat){
 	var compTexture = this.texture;
 	var compMaterial = this.materials[this.materialIndex];
 
-	if(this.id=='pyramids' || this.id=='pyramid1' || this.id=='pyramidWall1') console.log(this.id+': '+this.texture['id']+'; father: '+fatherTex['id']);
-
 	if(compMaterial["id"] == 'inherit'){
 		compMaterial = fatherMat;
 	}
@@ -152,13 +150,16 @@ Component.prototype.display= function(fatherTex, fatherMat){
 		appearance["appear"].setTexture(this.texture["info"]);
 	}
 	
-if(this.texture["id"] == 'none')
+	if(this.texture["id"] == 'none')
         appearance["appear"].setTexture(null);
 	
 	appearance["appear"].apply();
 
 	for(var i = 0; i < this.children["primitives"].length; i++){
 		var prim = this.children["primitives"][i];
+		if(compTexture != 'none'){
+			prim.updateTexCoords(compTexture["length_s"], compTexture["length_t"]);
+		}
 		prim.display();
 	}
 

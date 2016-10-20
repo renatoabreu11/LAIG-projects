@@ -3,7 +3,7 @@
  * @param gl {WebGLRenderingContext}
  * @constructor
  */
-function Triangle(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3, length_s, length_t) {
+function Triangle(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3) {
 	CGFobject.call(this,scene);
 
 	this.x1=x1;
@@ -15,8 +15,6 @@ function Triangle(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3, length_s, length_t)
 	this.x3=x3;
 	this.y3=y3;
 	this.z3=z3;
-	this.length_s=length_s;
-    this.length_t=length_t;
 
 	this.b = Math.sqrt( Math.pow((this.x2 - this.x1), 2) +
 						Math.pow((this.y2 - this.y1), 2) +
@@ -57,10 +55,9 @@ Triangle.prototype.initBuffers = function () {
 
 	this.indices = [
 		0, 1, 2,
-		0, 2, 1,
     ];
 
-	this.primitiveType=this.scene.gl.TRIANGLES;		//só se desenha triangulos
+	this.primitiveType=this.scene.gl.TRIANGLES;	
 
 	var vecA=[this.x2-this.x1,this.y2-this.y1,this.z2-this.z1];
 	var vecB=[this.x3-this.x1,this.y3-this.y1,this.z3-this.z1];
@@ -74,10 +71,20 @@ Triangle.prototype.initBuffers = function () {
 		vecProd[0], vecProd[1], vecProd[2]];
 
 	this.texCoords = [
-        (this.c - this.a * Math.cos(this.b))/this.length_s, this.a * Math.sin(this.b)/this.length_t,
+        (this.c - this.a * Math.cos(this.b)), this.a * Math.sin(this.b),
         0, 0,
-        this.c/this.length_s, 0
+        this.c, 0
     ];
 
 	this.initGLBuffers();		//desenha no ecrã este objecto, a informação é passada para o WebGL.
 };
+
+Triangle.prototype.updateTexCoords = function (length_s, length_t){
+	this.texCoords = [
+        (this.c - this.a * Math.cos(this.b))/length_s, this.a * Math.sin(this.b)/length_t,
+        0, 0,
+        this.c/length_s, 0
+    ];
+
+    this.updateTexCoordsGLBuffers();
+}

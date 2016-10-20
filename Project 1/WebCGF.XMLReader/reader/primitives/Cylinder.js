@@ -69,3 +69,5 @@ Cylinder.prototype.constructor = Cylinder;
     this.topCircle.display();
     this.scene.popMatrix();
 };
+
+Cylinder.prototype.updateTexCoords = function (length_s, length_t){}
