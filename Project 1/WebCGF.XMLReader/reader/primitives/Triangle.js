@@ -3,7 +3,7 @@
  * @param gl {WebGLRenderingContext}
  * @constructor
  */
-function Triangle(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3) {
+function Triangle(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3, length_s, length_t) {
 	CGFobject.call(this,scene);
 
 	this.x1=x1;
@@ -15,6 +15,8 @@ function Triangle(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3) {
 	this.x3=x3;
 	this.y3=y3;
 	this.z3=z3;
+	this.length_s=length_s;
+    this.length_t=length_t;
 
 	this.b = Math.sqrt( Math.pow((this.x2 - this.x1), 2) +
 						Math.pow((this.y2 - this.y1), 2) +
@@ -72,9 +74,9 @@ Triangle.prototype.initBuffers = function () {
 		vecProd[0], vecProd[1], vecProd[2]];
 
 	this.texCoords = [
-        (this.c - this.a * Math.cos(this.b)), this.a * Math.sin(this.b),
+        (this.c - this.a * Math.cos(this.b))/this.length_s, this.a * Math.sin(this.b)/this.length_t,
         0, 0,
-        this.c, 0
+        this.c/this.length_s, 0
     ];
 
 	this.initGLBuffers();		//desenha no ecrã este objecto, a informação é passada para o WebGL.

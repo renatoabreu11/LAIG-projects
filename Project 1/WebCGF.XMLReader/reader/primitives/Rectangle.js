@@ -47,10 +47,10 @@ Rectangle.prototype.initBuffers = function () {
 
 	var xTex=(this.x2-this.x1)/this.length_s,yTex=(this.y2-this.y1)/this.length_t;
     this.texCoords = [
-        0,yTex,
-        xTex,yTex,
         0,0,
-        xTex,0
+        xTex,0,
+        0,yTex,
+        xTex,yTex
     ];
 
 	this.initGLBuffers();		//desenha no ecrã este objecto, a informação é passada para o WebGL.

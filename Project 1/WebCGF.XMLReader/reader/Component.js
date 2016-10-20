@@ -78,7 +78,7 @@ Component.prototype.initPrimitive =function(primitive){
 			break;
 		case 'triangle':
 			var values = primitive['triangle'];
-			this.children["primitives"].push(new Triangle(this.scene,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']));
+			this.children["primitives"].push(new Triangle(this.scene,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3'],this.texture["length_s"],this.texture["length_t"]));
 			break;
 		case 'cylinder':
 			var values = primitive['cylinder'];
@@ -135,6 +135,8 @@ Component.prototype.display= function(fatherTex, fatherMat){
 
 	var compTexture = this.texture;
 	var compMaterial = this.materials[this.materialIndex];
+
+	if(this.id=='pyramids' || this.id=='pyramid1' || this.id=='pyramidWall1') console.log(this.id+': '+this.texture['id']+'; father: '+fatherTex['id']);
 
 	if(compMaterial["id"] == 'inherit'){
 		compMaterial = fatherMat;
