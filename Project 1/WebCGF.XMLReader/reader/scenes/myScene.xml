@@ -202,7 +202,7 @@
                 <material id="bright" />
             </materials>
 
-            <texture id="sand2" />
+            <texture id="sand" />
 
             <children>
                 <primitiveref id="rect" />
@@ -218,7 +218,7 @@
                 <material id="inherit" />
             </materials>
 
-            <texture id="sand" />
+            <texture id="sand2" />
 
             <children>
                 <componentref id="pyramid1" />
@@ -326,7 +326,7 @@
                 <material id="s1" />
             </materials>
 
-            <texture id="sand" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="pyramidWall" />
