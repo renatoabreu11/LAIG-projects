@@ -30,7 +30,7 @@ MyInterface.prototype.init = function(application) {
 };
 
 /**
- * [addLight to folder lightGroup]
+ * AddLight to folder lightGroup
  * @param {[int]} i  [light number]
  * @param {[string]} id [light id]
  */

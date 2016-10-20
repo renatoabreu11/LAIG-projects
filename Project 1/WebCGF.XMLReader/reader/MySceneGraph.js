@@ -526,10 +526,9 @@ MySceneGraph.prototype.parseMaterials= function(rootElement, materialsBlock) {
 };
 
 /**
- * [parseTransformations description]
- * @param  {[type]} rootElement          [description]
- * @param  {[type]} transformationsBlock [description]
- * @return {[type]}                      [description]
+ * Reads transformation blocks and computes the respective matrix
+ * @param  {[type]} rootElement 
+ * @param  {[type]} transformationsBlock
  */
 MySceneGraph.prototype.parseTransformations= function(rootElement, transformationsBlock) {
 	//Transformations->transformation
@@ -573,10 +572,9 @@ MySceneGraph.prototype.parseTransformations= function(rootElement, transformatio
 };
 
 /**
- * [parsePrimitives description]
- * @param  {[type]} rootElement     [description]
- * @param  {[type]} primitivesBlock [description]
- * @return {[type]}                 [description]
+ * Reads each primitive and stores its values
+ * @param  {[type]} rootElement
+ * @param  {[type]} primitivesBlock
  */
 MySceneGraph.prototype.parsePrimitives= function(rootElement, primitivesBlock) {
 	//Primitives->primitive
@@ -646,10 +644,9 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement, primitivesBlock) {
 };
 
 /**
- * [parseComponents description]
- * @param  {[type]} rootElement     [description]
- * @param  {[type]} componentsBlock [description]
- * @return {[type]}                 [description]
+ * Reads all the values from each component tag and stores the information
+ * @param  {[type]} rootElement
+ * @param  {[type]} block with components info
  */
 MySceneGraph.prototype.parseComponents= function(rootElement, componentsBlock) {
 	//COMPONENTS
@@ -739,9 +736,9 @@ MySceneGraph.prototype.parseComponents= function(rootElement, componentsBlock) {
 };
 
 /**
- * [parseTransfInComponent description]
- * @param  {[type]} transformation [description]
- * @return {[type]}                [description]
+ * Computes the final transformation matrix accordingly to the transformation block 
+ * @param  {[type]} transformation block
+ * @return {[type]} final transformation matrix
  */
 MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
 	var matrix = mat4.create();
@@ -776,10 +773,9 @@ MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
 };
 
 /**
- * [parseChildsInComponent description]
- * @param  {[type]} block [description]
- * @param  {[type]} comp  [description]
- * @return {[type]}       [description]
+ * For each child in component, adds  the respective id to components children id's
+ * @param  {[type]} block with children info
+ * @param  {[type]} component to add id
  */
 MySceneGraph.prototype.parseChildsInComponent=function(block, comp) {
 	var nChilds = block.children.length;
@@ -809,8 +805,7 @@ MySceneGraph.prototype.parseChildsInComponent=function(block, comp) {
 };
 
 /**
- * [checkChildrenID description]
- * @return {[type]} [description]
+ * Check if the components children id's are valid
  */
 MySceneGraph.prototype.checkChildrenID= function() {
 	for(var i = 0; i < this.components.length; i++){
@@ -830,11 +825,11 @@ MySceneGraph.prototype.checkChildrenID= function() {
 }
 
 /**
- * [computeTransformation description]
- * @param  {[type]} type   [description]
- * @param  {[type]} matrix [description]
- * @param  {[type]} block  [description]
- * @return {[type]}        [description]
+ * Given a type of transformation and a matrix, computes the respective transformation matrix
+ * @param  {[type]} type of transformation
+ * @param  {[type]} matrix
+ * @param  {[type]} block with transformation values
+ * @return {[type]} transformation matrix
  */
 MySceneGraph.prototype.computeTransformation=  function(type, matrix, block){
 	var args = [];
@@ -872,10 +867,10 @@ MySceneGraph.prototype.computeTransformation=  function(type, matrix, block){
 }
 
 /**
- * [checkIfExists check if id exists in array]
- * @param  {[array]} array [array with elements]
- * @param  {[string]} id    [value to search]
- * @return {[int]}       [id index on array]
+ * Check if id exists in array
+ * @param  {[array]} array with elements
+ * @param  {[string]} value to search
+ * @return {[int]} id index on array
  */
 MySceneGraph.prototype.checkIfExists =function(array, id){
 	for(var j = 0; j < array.length; j++){
@@ -886,8 +881,8 @@ MySceneGraph.prototype.checkIfExists =function(array, id){
 };
 
 /**
- * [getRootComponent returns the root component]
- * @return {[Component]} [main component]
+ * Returns the root component]
+ * @return {[Component]} main component
  */
 MySceneGraph.prototype.getRootComponent =function(){
 	for(var i = 0; i < this.components.length; i++){
@@ -899,8 +894,8 @@ MySceneGraph.prototype.getRootComponent =function(){
 
 
 /**
- * [getDefaultView returns the default view]
- * @return {[CGFcamera]} [new default camera]
+ * Returns the default view
+ * @return {[CGFcamera]} new default camera
  */
 MySceneGraph.prototype.getDefaultView=function() {
 	for(view of this.views){
@@ -917,7 +912,7 @@ MySceneGraph.prototype.getDefaultView=function() {
 }
 
 /**
- * [setNextView changes the default view to the next one on the list]
+ * Changes the default view to the next one on the list
  */
 MySceneGraph.prototype.setNextView=function() {
 	for(var k = 0; k < this.views.length; k++){
@@ -931,11 +926,11 @@ MySceneGraph.prototype.setNextView=function() {
 }
 
 /**
- * [getElements returns elements with name equal to tag]
- * @param  {[string]}  tag    [tag name]
- * @param  {[type]}  block  [information to read]
+ * Returns elements with name equal to tag
+ * @param  {[string]} tag name
+ * @param  {[type]}  block  with information to read
  * @param  {Boolean} isList [if true, more than one element can be found, otherwise, only one must be present]
- * @return {[string]}         [block of information with name tag]
+ * @return {[string]} block of information with name tag
  */
 MySceneGraph.prototype.getElements= function(tag, block, isList){
 	tagBlock = block.getElementsByTagName(tag);
@@ -960,8 +955,8 @@ MySceneGraph.prototype.getElements= function(tag, block, isList){
 }
 
 /**
- * [onXMLError sends a error message and finalizes the parser]
- * @param  {[string]} message [error message]
+ * Sends a error message and finalizes the parser
+ * @param  {[string]} message specification
  */
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: "+ message);
@@ -969,18 +964,18 @@ MySceneGraph.prototype.onXMLError=function (message) {
 };
 
 /**
- * [onXMLWarning sends a warning message]
- * @param  {[string]} message [message specification]
+ * Sends a warning message
+ * @param  {[string]} message specification
  */
 MySceneGraph.prototype.onXMLWarning=function (message) {
 	console.warn("XML Loading warning: "+ message);
 };
 
 /**
- * [readValues reads, from block, a list of values with description equal to list elements]
- * @param  {[array]} list  [values description]
- * @param  {[type]} block [block to read]
- * @return {[array]}       [value of each element]
+ * Reads, from block, a list of values with description equal to list elements
+ * @param  {[array]} values description
+ * @param  {[type]} block to read
+ * @return {[array]} value of each element
  */
 MySceneGraph.prototype.readValues= function(list, block){
 	var values = [];
@@ -992,9 +987,9 @@ MySceneGraph.prototype.readValues= function(list, block){
 }
 
 /**
- * [checkFloatValue verifies if the value is valid]
- * @param  {[type]} value [value to check]
- * @param  {[type]} name  [description of value]
+ * CheckFloatValue verifies if the value is valid
+ * @param  {[type]} value to check
+ * @param  {[type]} value's name
  */
 MySceneGraph.prototype.checkFloatValue= function(value, name){
 	if(value == null){
@@ -1005,9 +1000,9 @@ MySceneGraph.prototype.checkFloatValue= function(value, name){
 }
 
 /**
- * [toRadians transforms a degree angle to a radian one]
- * @param  {[float]} degrees [value in degrees]
- * @return {[float]}         [value in radians]
+ * Transforms a degree angle to a radian one
+ * @param  {[float]} Value in degrees
+ * @return {[float]} Value in radians
  */
 MySceneGraph.prototype.toRadians=function(degrees){
 	return degrees*Math.PI/180;
