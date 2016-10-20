@@ -30,9 +30,9 @@ MyInterface.prototype.init = function(application) {
 };
 
 /**
- * [addLight description]
- * @param {[type]} i  [description]
- * @param {[type]} id [description]
+ * [addLight to folder lightGroup]
+ * @param {[int]} i  [light number]
+ * @param {[string]} id [light id]
  */
 MyInterface.prototype.addLight = function(i, id){
 	this.lightGroup.add(this.scene.lightStatus, i, this.scene.lightStatus[i]).name(id);

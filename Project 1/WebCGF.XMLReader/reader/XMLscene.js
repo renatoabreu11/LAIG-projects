@@ -1,5 +1,5 @@
 /**
- * [XMLscene description]
+ * [XMLscene constructor]
  */
 function XMLscene() {
     CGFscene.call(this);
@@ -9,9 +9,8 @@ XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
 /**
- * [init description]
- * @param  {[type]} application [description]
- * @return {[type]}             [description]
+ * [init Xml scene variables]
+ * @param  {[CGFapplication]} application [scene application]
  */
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
@@ -31,7 +30,7 @@ XMLscene.prototype.init = function (application) {
 };
 
 /**
- * [setDefaultAppearance description]
+ * [setDefaultAppearance: sets scene appearance to default]
  */
 XMLscene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -41,8 +40,8 @@ XMLscene.prototype.setDefaultAppearance = function () {
 };
 
 /**
- * [setInterface description]
- * @param {[type]} myInterface [description]
+ * [setInterface: sets scene interface]
+ * @param {[MyInterface]} myInterface [interface]
  */
 XMLscene.prototype.setInterface = function(myInterface){
 	this.interface = myInterface;
@@ -51,7 +50,6 @@ XMLscene.prototype.setInterface = function(myInterface){
 /**
  * [onGraphLoaded: Handler called when the graph is finally loaded. 
  * As loading is asynchronous, this may be called already after the application has started the run loop]
- * @return {[type]} [description]
  */
 XMLscene.prototype.onGraphLoaded = function () 
 {
@@ -69,16 +67,14 @@ XMLscene.prototype.onGraphLoaded = function ()
 };
 
 /**
- * [initCameras description]
- * @return {[type]} [description]
+ * [initCameras: initializes default camera]
  */
 XMLscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
 /**
- * [updateCamera description]
- * @return {[type]} [description]
+ * [updateCamera: sets camera to the next view]
  */
 XMLscene.prototype.updateCamera = function () {
 	this.graph.setNextView();
@@ -86,8 +82,7 @@ XMLscene.prototype.updateCamera = function () {
 }
 
 /**
- * [initLights description]
- * @return {[type]} [description]
+ * [initLights initializes lights]
  */
 XMLscene.prototype.initLights = function () {
 	var i = 0;
@@ -122,7 +117,7 @@ XMLscene.prototype.initLights = function () {
 };
 
 /**
- * [updateLights description]
+ * [updateLights: updates lights accordingly to the user input on the interface]
  * @return {[type]} [description]
  */
 XMLscene.prototype.updateLights = function () {
@@ -143,8 +138,7 @@ XMLscene.prototype.updateLights = function () {
 }
 
 /**
- * [updateMaterials description]
- * @return {[type]} [description]
+ * [updateMaterials: changes all the components default material]
  */
 XMLscene.prototype.updateMaterials = function () {
 	for(var component of this.graph.components){
@@ -153,8 +147,7 @@ XMLscene.prototype.updateMaterials = function () {
 }
 
 /**
- * [display description]
- * @return {[type]} [description]
+ * [display: loop which display the objects that belong to the scene]
  */
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup

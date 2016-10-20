@@ -875,10 +875,10 @@ MySceneGraph.prototype.computeTransformation=  function(type, matrix, block){
 }
 
 /**
- * [checkIfExists description]
- * @param  {[type]} array [description]
- * @param  {[type]} id    [description]
- * @return {[type]}       [description]
+ * [checkIfExists check if id exists in array]
+ * @param  {[array]} array [array with elements]
+ * @param  {[string]} id    [value to search]
+ * @return {[int]}       [id index on array]
  */
 MySceneGraph.prototype.checkIfExists =function(array, id){
 	for(var j = 0; j < array.length; j++){
@@ -889,8 +889,8 @@ MySceneGraph.prototype.checkIfExists =function(array, id){
 };
 
 /**
- * [getRootComponent description]
- * @return {[type]} [description]
+ * [getRootComponent returns the root component]
+ * @return {[Component]} [main component]
  */
 MySceneGraph.prototype.getRootComponent =function(){
 	for(var i = 0; i < this.components.length; i++){
@@ -902,8 +902,8 @@ MySceneGraph.prototype.getRootComponent =function(){
 
 
 /**
- * [getDefaultView description]
- * @return {[type]} [description]
+ * [getDefaultView returns the default view]
+ * @return {[CGFcamera]} [new default camera]
  */
 MySceneGraph.prototype.getDefaultView=function() {
 	for(view of this.views){
@@ -920,7 +920,7 @@ MySceneGraph.prototype.getDefaultView=function() {
 }
 
 /**
- * [setNextView description]
+ * [setNextView changes the default view to the next one on the list]
  */
 MySceneGraph.prototype.setNextView=function() {
 	for(var k = 0; k < this.views.length; k++){
@@ -934,11 +934,11 @@ MySceneGraph.prototype.setNextView=function() {
 }
 
 /**
- * [getElements description]
- * @param  {[type]}  tag    [description]
- * @param  {[type]}  block  [description]
- * @param  {Boolean} isList [description]
- * @return {[type]}         [description]
+ * [getElements returns elements with name equal to tag]
+ * @param  {[string]}  tag    [tag name]
+ * @param  {[type]}  block  [information to read]
+ * @param  {Boolean} isList [if true, more than one element can be found, otherwise, only one must be present]
+ * @return {[string]}         [block of information with name tag]
  */
 MySceneGraph.prototype.getElements= function(tag, block, isList){
 	tagBlock = block.getElementsByTagName(tag);
@@ -963,9 +963,8 @@ MySceneGraph.prototype.getElements= function(tag, block, isList){
 }
 
 /**
- * [onXMLError description]
- * @param  {[type]} message [description]
- * @return {[type]}         [description]
+ * [onXMLError sends a error message and finalizes the parser]
+ * @param  {[string]} message [error message]
  */
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: "+ message);
@@ -973,19 +972,18 @@ MySceneGraph.prototype.onXMLError=function (message) {
 };
 
 /**
- * [onXMLWarning description]
- * @param  {[type]} message [description]
- * @return {[type]}         [description]
+ * [onXMLWarning sends a warning message]
+ * @param  {[string]} message [message specification]
  */
 MySceneGraph.prototype.onXMLWarning=function (message) {
 	console.warn("XML Loading warning: "+ message);
 };
 
 /**
- * [readValues description]
- * @param  {[type]} list  [description]
- * @param  {[type]} block [description]
- * @return {[type]}       [description]
+ * [readValues reads, from block, a list of values with description equal to list elements]
+ * @param  {[array]} list  [values description]
+ * @param  {[type]} block [block to read]
+ * @return {[array]}       [value of each element]
  */
 MySceneGraph.prototype.readValues= function(list, block){
 	var values = [];
@@ -997,10 +995,9 @@ MySceneGraph.prototype.readValues= function(list, block){
 }
 
 /**
- * [checkFloatValue description]
- * @param  {[type]} value [description]
- * @param  {[type]} name  [description]
- * @return {[type]}       [description]
+ * [checkFloatValue verifies if the value is valid]
+ * @param  {[type]} value [value to check]
+ * @param  {[type]} name  [description of value]
  */
 MySceneGraph.prototype.checkFloatValue= function(value, name){
 	if(value == null){
@@ -1011,9 +1008,9 @@ MySceneGraph.prototype.checkFloatValue= function(value, name){
 }
 
 /**
- * [toRadians description]
- * @param  {[type]} degrees [description]
- * @return {[type]}         [description]
+ * [toRadians transforms a degree angle to a radian one]
+ * @param  {[float]} degrees [value in degrees]
+ * @return {[float]}         [value in radians]
  */
 MySceneGraph.prototype.toRadians=function(degrees){
 	return degrees*Math.PI/180;
