@@ -84,22 +84,22 @@ MySceneGraph.prototype.parseBlocks= function(rootElement) {
 		var block = rootElement.children[i];
 		switch(block.tagName){
 			case 'scene':{
-				this.parseGlobals(rootElement, block); break;
+				this.parseGlobals(block); break;
 			}
 			case 'views':{
-				this.parseViews(rootElement, block); break;
+				this.parseViews(block); break;
 			} 
 			case 'illumination':{
-				this.parseIllumination(rootElement, block); break;
+				this.parseIllumination(block); break;
 			}
 			case 'lights':{
-				this.parseLights(rootElement, block);  break;
+				this.parseLights(block);  break;
 			}
 			case 'textures':{
-				this.parseTextures(rootElement, block); break;
+				this.parseTextures(block); break;
 			} 
 			case 'materials':{
-				this.parseMaterials(rootElement, block); break;
+				this.parseMaterials(block); break;
 			}
 			case 'transformations':{
 				this.parseTransformations(rootElement, block); break;
@@ -117,10 +117,10 @@ MySceneGraph.prototype.parseBlocks= function(rootElement) {
 };
 
 /**
- * [checkBlockOrder description]
- * @param  {[type]} blocks  [description]
- * @param  {[type]} nBlocks [description]
- * @return {[type]}         [description]
+ * Checks if all blocks are in the correct order and exist.
+ * @param  {Array} blocks  blocks for the different tags. 
+ * @param  {Number} nBlocks number of blocks found on file.
+ * @return {[bool}         True if no error was found, False otherwise.
  */
 MySceneGraph.prototype.checkBlockOrder= function(blocks, nBlocks) {
 	var tags = ['scene', 'views', 'illumination', 'lights', 'textures', 'materials', 'transformations', 'primitives', 'components'];
@@ -141,12 +141,10 @@ MySceneGraph.prototype.checkBlockOrder= function(blocks, nBlocks) {
 }
 
 /**
- * [parseGlobals description]
- * @param  {[type]} rootElement [description]
- * @param  {[type]} scene       [description]
- * @return {[type]}             [description]
+ * Parses the Globals block.
+ * @param  {CGFScene} scene      CGFScene to be used.
  */
-MySceneGraph.prototype.parseGlobals= function(rootElement, scene) {
+MySceneGraph.prototype.parseGlobals= function(scene) {
 	this.root = this.reader.getString(scene, 'root');
 	if(this.root == null){
 		this.elementsErrors.push("Root object is missing");
@@ -157,12 +155,10 @@ MySceneGraph.prototype.parseGlobals= function(rootElement, scene) {
 };
 
 /**
- * [parseViews description]
- * @param  {[type]} rootElement [description]
- * @param  {[type]} viewsBlock  [description]
- * @return {[type]}             [description]
+ * Parses the Views block.
+ * @param  {Block} viewsBlock  block identified by the tag 'views'.
  */
-MySceneGraph.prototype.parseViews= function(rootElement, viewsBlock) {
+MySceneGraph.prototype.parseViews= function(viewsBlock) {
 	//VIEWS->PERSPECTIVE
 	var perspBlock = this.getElements('perspective', viewsBlock, 1);
 	if(perspBlock == null)
@@ -236,12 +232,10 @@ MySceneGraph.prototype.parseViews= function(rootElement, viewsBlock) {
 };
 
 /**
- * [parseIllumination description]
- * @param  {[type]} rootElement       [description]
- * @param  {[type]} illuminationBlock [description]
- * @return {[type]}                   [description]
+ * Parses the Illumination block.
+ * @param  {Block} illuminationBlock  block identified by the tag 'illumination'.
  */
-MySceneGraph.prototype.parseIllumination= function(rootElement, illuminationBlock) {
+MySceneGraph.prototype.parseIllumination= function(illuminationBlock) {
 	this.illumination["doublesided"] = this.reader.getBoolean(illuminationBlock, "doublesided");
 	this.illumination["local"] = this.reader.getBoolean(illuminationBlock, "local");
 
@@ -260,12 +254,10 @@ MySceneGraph.prototype.parseIllumination= function(rootElement, illuminationBloc
 };
 
 /**
- * [parseLights description]
- * @param  {[type]} rootElement [description]
- * @param  {[type]} lightsBlock [description]
- * @return {[type]}             [description]
+ * Parses the Lights block.
+ * @param  {Block} lightsBlock  block identified by the tag 'lights'.
  */
-MySceneGraph.prototype.parseLights= function(rootElement, lightsBlock) {
+MySceneGraph.prototype.parseLights= function(lightsBlock) {
 	//LIGHTS
 	var nLights = lightsBlock.children.length;
 
@@ -290,9 +282,8 @@ MySceneGraph.prototype.parseLights= function(rootElement, lightsBlock) {
 };
 
 /**
- * [parseOmniLight description]
- * @param  {[type]} omni [description]
- * @return {[type]}      [description]
+ * Parses an Omni block inside the Lights block.
+ * @param  {Block} omni block containing information about an omni light.
  */
 MySceneGraph.prototype.parseOmniLight= function(omni) {
 	//LIGHTS->OMNI
@@ -343,9 +334,8 @@ MySceneGraph.prototype.parseOmniLight= function(omni) {
 }
 
 /**
- * [parseSpotLight description]
- * @param  {[type]} spot [description]
- * @return {[type]}      [description]
+ * Parses a Spot block inside the Lights block.
+ * @param  {Block} spot block containing information about a spot light.
  */
 MySceneGraph.prototype.parseSpotLight= function(spot) {
 	//LIGHTS->SPOT
@@ -411,12 +401,10 @@ MySceneGraph.prototype.parseSpotLight= function(spot) {
 }
 
 /**
- * [parseTextures description]
- * @param  {[type]} rootElement   [description]
- * @param  {[type]} texturesBlock [description]
- * @return {[type]}               [description]
+ * Parses the Textures block.
+ * @param  {Block} texturesBlock  block identified by the tag 'textures'.
  */
-MySceneGraph.prototype.parseTextures= function(rootElement, texturesBlock) {
+MySceneGraph.prototype.parseTextures= function(texturesBlock) {
 	//Textures->Texture
 	var texBlock = this.getElements('texture', texturesBlock, 1);
 	if(texBlock == null)
@@ -451,12 +439,10 @@ MySceneGraph.prototype.parseTextures= function(rootElement, texturesBlock) {
 };
 
 /**
- * [parseMaterials description]
- * @param  {[type]} rootElement    [description]
- * @param  {[type]} materialsBlock [description]
- * @return {[type]}                [description]
+ * Parses the Materials block.
+ * @param  {Block} materialsBlock  block identified by the tag 'materials'.
  */
-MySceneGraph.prototype.parseMaterials= function(rootElement, materialsBlock) {
+MySceneGraph.prototype.parseMaterials= function(materialsBlock) {
 	//Materials->Material
 	var matBlock = this.getElements('material', materialsBlock, 1);
 	if(matBlock == null) 
