@@ -1,7 +1,7 @@
 /**
- * [MySceneGraph description]
- * @param {[type]} filename [description]
- * @param {[type]} scene    [description]
+ * Constructor
+ * @param {String} filename scene's filename
+ * @param {CGFScene} scene CGFScene to be used
  */
 function MySceneGraph(filename, scene) {
 	this.loadedOk = null;
@@ -43,8 +43,7 @@ function MySceneGraph(filename, scene) {
 }
 
 /**
- * [onXMLReady description]
- * @return {[type]} [description]
+ * Called after the file is read. After that, it calls the parser and then displays the warnings and errors that ocurred.
  */
 MySceneGraph.prototype.onXMLReady=function() {
 	console.log("XML Loading finished.");
@@ -71,12 +70,10 @@ MySceneGraph.prototype.onXMLReady=function() {
 };
 
 /**
- * [parseBlocks description]
- * @param  {[type]} rootElement [description]
- * @param  {[type]} blocksTag   [description]
- * @return {[type]}             [description]
+ * Handles the general parsing. It calls each of the more specific parsers for every main element.
+ * @param  {Element} rootElement the root element of the scene graph.
  */
-MySceneGraph.prototype.parseBlocks= function(rootElement, blocksTag) {
+MySceneGraph.prototype.parseBlocks= function(rootElement) {
 	var nBlocks = rootElement.children.length;
 
 	var validBlocks = this.checkBlockOrder(rootElement,nBlocks);
