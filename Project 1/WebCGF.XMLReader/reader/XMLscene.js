@@ -1,4 +1,6 @@
-
+/**
+ * [XMLscene description]
+ */
 function XMLscene() {
     CGFscene.call(this);
 }
@@ -6,6 +8,11 @@ function XMLscene() {
 XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
+/**
+ * [init description]
+ * @param  {[type]} application [description]
+ * @return {[type]}             [description]
+ */
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
@@ -23,6 +30,9 @@ XMLscene.prototype.init = function (application) {
 	this.lightStatus = [];
 };
 
+/**
+ * [setDefaultAppearance description]
+ */
 XMLscene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -30,12 +40,19 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setShininess(10.0);	
 };
 
+/**
+ * [setInterface description]
+ * @param {[type]} myInterface [description]
+ */
 XMLscene.prototype.setInterface = function(myInterface){
 	this.interface = myInterface;
 }
 
-// Handler called when the graph is finally loaded. 
-// As loading is asynchronous, this may be called already after the application has started the run loop
+/**
+ * [onGraphLoaded: Handler called when the graph is finally loaded. 
+ * As loading is asynchronous, this may be called already after the application has started the run loop]
+ * @return {[type]} [description]
+ */
 XMLscene.prototype.onGraphLoaded = function () 
 {
 	this.gl.clearColor(this.graph.illumination["background"]["r"],this.graph.illumination["background"]["g"],
@@ -51,15 +68,27 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.materialDefault = new CGFappearance(this);
 };
 
+/**
+ * [initCameras description]
+ * @return {[type]} [description]
+ */
 XMLscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
+/**
+ * [updateCamera description]
+ * @return {[type]} [description]
+ */
 XMLscene.prototype.updateCamera = function () {
 	this.graph.setNextView();
 	this.camera = this.graph.getDefaultView();
 }
 
+/**
+ * [initLights description]
+ * @return {[type]} [description]
+ */
 XMLscene.prototype.initLights = function () {
 	var i = 0;
 	for(var light of this.graph.lights){
@@ -92,6 +121,10 @@ XMLscene.prototype.initLights = function () {
 	}
 };
 
+/**
+ * [updateLights description]
+ * @return {[type]} [description]
+ */
 XMLscene.prototype.updateLights = function () {
 	var i = 0;
 	for (i; i < this.lights.length; i++){
@@ -109,12 +142,20 @@ XMLscene.prototype.updateLights = function () {
 	}
 }
 
+/**
+ * [updateMaterials description]
+ * @return {[type]} [description]
+ */
 XMLscene.prototype.updateMaterials = function () {
 	for(var component of this.graph.components){
 		component.nextMaterial();
 	}
 }
 
+/**
+ * [display description]
+ * @return {[type]} [description]
+ */
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
 	

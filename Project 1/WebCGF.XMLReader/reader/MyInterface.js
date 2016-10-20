@@ -2,8 +2,6 @@
  * MyInterface
  * @constructor
  */
- 
- 
 function MyInterface() {
 	//call CGFinterface constructor 
 	CGFinterface.call(this);
@@ -31,6 +29,11 @@ MyInterface.prototype.init = function(application) {
 	return true;
 };
 
+/**
+ * [addLight description]
+ * @param {[type]} i  [description]
+ * @param {[type]} id [description]
+ */
 MyInterface.prototype.addLight = function(i, id){
 	this.lightGroup.add(this.scene.lightStatus, i, this.scene.lightStatus[i]).name(id);
 }
