@@ -133,7 +133,7 @@ MySceneGraph.prototype.checkBlockOrder= function(blocks, nBlocks) {
 	for(var i=0; i < nBlocks; i++){
 		var block = blocks.children[i];
 		if(block.tagName != tags[i]){
-			this.elementsErrors.push("Wrong dsx block order");
+			this.elementsErrors.push("Dsx: wrong block order");
 			return false;
 		}
 	}
@@ -151,7 +151,11 @@ MySceneGraph.prototype.parseGlobals= function(scene) {
 	}
 
 	this.axisLength = this.reader.getFloat(scene, 'axis_length');
-	this.checkFloatValue(this.axisLength, 'Axis length');
+	var check = this.checkFloatValue(this.axisLength, 'Axis length', scene.tagName);
+	if(!check){
+		this.axisLength = 15;
+		this.blockWarnings.push("Axis length value, on scene block, defined as 15");
+	}
 };
 
 /**
@@ -188,24 +192,36 @@ MySceneGraph.prototype.parseViews= function(viewsBlock) {
 			view["id"] = id;
 
 			view["near"] = this.reader.getFloat(perspective, 'near');
-			this.checkFloatValue(view["near"], 'Near');
+			var check = this.checkFloatValue(view["near"], 'Near', viewsBlock.tagName);
+			if(!check){
+				view["near"] = 0.1;
+				this.blockWarnings.push("Near value, on view block, defined as 0.1");
+			}
 			view["far"] = this.reader.getFloat(perspective, 'far');
-			this.checkFloatValue(view["far"], 'Far');
+			check = this.checkFloatValue(view["far"], 'Far', viewsBlock.tagName);
+			if(!check){
+				view["far"] = 500;
+				this.blockWarnings.push("Far value, on view block, defined as 500");
+			}
 			view["angle"] = this.reader.getFloat(perspective, 'angle');
-			this.checkFloatValue(view["angle"], 'Angle');
+			check = this.checkFloatValue(view["angle"], 'Angle', viewsBlock.tagName);
+			if(!check){
+				view["angle"] = 90;
+				this.blockWarnings.push("Angle value, on view block, defined as 90");
+			}
 			view["angle"] = this.toRadians(view["angle"]);
 
 			//VIEWS->PERSPECTIVE->FROM
 			var fromBlock = this.getElements('from', perspective, 0);
 			if(fromBlock == null)
 				return;
-			view["from"] = this.readValues(['x', 'y', 'z'], fromBlock[0]);
+			view["from"] = this.readCoordinates(0, fromBlock[0], viewsBlock.tagName);
 			
 			//VIEWS->PERSPECTIVE->TO
 			var toBlock = this.getElements('to', perspective, 0);
 			if(toBlock == null)
 				return;
-			view["to"] = this.readValues(['x', 'y', 'z'], toBlock[0]);
+			view["to"] = this.readCoordinates(0, toBlock[0], viewsBlock.tagName);
 
 			this.views.push(view);
 		}
@@ -214,6 +230,7 @@ MySceneGraph.prototype.parseViews= function(viewsBlock) {
 	this.defaultView = this.reader.getString(viewsBlock, 'default');
 	if(this.defaultView == null){
 		this.blockWarnings.push("Default View is missing");
+		this.defaultView = this.views[0]["id"];
 	} else{
 		var idFound = false;
 		for(var view of this.views){
@@ -249,8 +266,8 @@ MySceneGraph.prototype.parseIllumination= function(illuminationBlock) {
 	if(backgroundBlock == null)
 		return;
 
-	this.illumination["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
-	this.illumination["background"] = this.readValues(['r', 'g', 'b', 'a'], backgroundBlock[0]);
+	this.illumination["ambient"] = this.readColours(ambientBlock[0], illuminationBlock.tagName);
+	this.illumination["background"] = this.readColours(backgroundBlock[0], illuminationBlock.tagName);
 };
 
 /**
@@ -308,25 +325,25 @@ MySceneGraph.prototype.parseOmniLight= function(omni) {
 		var locationBlock = this.getElements('location', omni, 0);
 		if(locationBlock == null)
 			return;		
-		light["location"] = this.readValues(['x', 'y', 'z', 'w'], locationBlock[0]);
+		light["location"] = this.readCoordinates(1, locationBlock[0], omni.tagName);
 
 		//LIGHTS->OMNI->AMBIENT
 		var ambientBlock = this.getElements('ambient', omni, 0);
 		if(ambientBlock == null)
 			return;		
-		light["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
+		light["ambient"] = this.readColours(ambientBlock[0], omni.tagName);
 
 		//LIGHTS->OMNI->DIFFUSE
 		var diffuseBlock = this.getElements('diffuse', omni, 0);
 		if(diffuseBlock == null)
 			return;		
-		light["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
+		light["diffuse"] = this.readColours(diffuseBlock[0], omni.tagName);
 
 		//LIGHTS->OMNI->SPECULAR
 		var specularBlock = this.getElements('specular', omni, 0);
 		if(specularBlock == null)
 			return;		
-		light["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
+		light["specular"] = this.readColours(specularBlock[0], omni.tagName);
 
 		this.lights.push(light);
 		this.nLights++;
@@ -367,33 +384,33 @@ MySceneGraph.prototype.parseSpotLight= function(spot) {
 		var targetBlock = this.getElements('target', spot, 0);
 		if(targetBlock == null)
 			return;		
-		light["target"] = this.readValues(['x', 'y', 'z'], targetBlock[0]);
+		light["target"] = this.readCoordinates(0, targetBlock[0], spot.tagName);
 
 
 		//LIGHTS->SPOT->LOCATION
 		var locationBlock = this.getElements('location', spot, 0);
 		if(locationBlock == null)
 			return;		
-		light["location"] = this.readValues(['x', 'y', 'z'], locationBlock[0]);
+		light["location"] = this.readCoordinates(0, locationBlock[0], spot.tagName);
 		light["location"]["w"] = 1;
 
 		//LIGHTS->SPOT->AMBIENT
 		var ambientBlock = this.getElements('ambient', spot, 0);
 		if(ambientBlock == null)
 			return;		
-		light["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
+		light["ambient"] = this.readColours(ambientBlock[0], spot.tagName);
 
 		//LIGHTS->SPOT->DIFFUSE
 		var diffuseBlock = this.getElements('diffuse', spot, 0);
 		if(diffuseBlock == null)
 			return;		
-		light["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
+		light["diffuse"] = this.readColours(diffuseBlock[0], spot.tagName);
 
 		//LIGHTS->SPOT->SPECULAR
 		var specularBlock = this.getElements('specular', spot, 0);
 		if(specularBlock == null)
 			return;		
-		light["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
+		light["specular"] = this.readColours(specularBlock[0], spot.tagName);
 
 		this.lights.push(light)
 		this.nLights++;
@@ -428,9 +445,18 @@ MySceneGraph.prototype.parseTextures= function(texturesBlock) {
 			tex["id"] = id;
 			tex["file"] = this.reader.getString(texture, 'file');
 			tex["length_s"] = this.reader.getFloat(texture, 'length_s');
-			this.checkFloatValue(tex["length_s"], 'Length_s');
+			var check = this.checkFloatValue(tex["length_s"], 'Length_s', texturesBlock.tagName);
+			if(!check){
+				tex["length_s"] = 1;
+				this.blockWarnings.push("Length s value, on texture block, defined as 1");
+			}
+
 			tex["length_t"] = this.reader.getFloat(texture, 'length_t');
-			this.checkFloatValue(tex["length_t"], 'Length_t');
+			check = this.checkFloatValue(tex["length_t"], 'Length_t', texturesBlock.tagName);
+			if(!check){
+				tex["length_t"] = 1;
+				this.blockWarnings.push("Length t value, on texture block, defined as 1");
+			}
 			var info = new CGFtexture(this.scene, tex["file"]);
 			tex["info"] = info;
 			this.textures.push(tex);
@@ -468,25 +494,25 @@ MySceneGraph.prototype.parseMaterials= function(materialsBlock) {
 			var emissionBlock = this.getElements('emission', materialInfo, 0);
 			if(emissionBlock == null)
 				return;
-			material["emission"] = this.readValues(['r', 'g', 'b', 'a'], emissionBlock[0]);
+			material["emission"] = this.readColours(emissionBlock[0], materialsBlock.tagName);
 
 			//MATERIALS->MATERIAL->AMBIENT
 			var ambientBlock = this.getElements('ambient', materialInfo, 0);
 			if(ambientBlock == null)
 				return;
-			material["ambient"] = this.readValues(['r', 'g', 'b', 'a'], ambientBlock[0]);
+			material["ambient"] = this.readColours(ambientBlock[0], materialsBlock.tagName);
 
 			//MATERIALS->MATERIAL->DIFFUSE
 			var diffuseBlock = this.getElements('diffuse', materialInfo, 0);
 			if(diffuseBlock == null)
 				return;		
-			material["diffuse"] = this.readValues(['r', 'g', 'b', 'a'], diffuseBlock[0]);
+			material["diffuse"] = this.readColours(diffuseBlock[0], materialsBlock.tagName);
 
 			//MATERIALS->MATERIAL->SPECULAR
 			var specularBlock = this.getElements('specular', materialInfo, 0);
 			if(specularBlock == null)
 				return;		
-			material["specular"] = this.readValues(['r', 'g', 'b', 'a'], specularBlock[0]);
+			material["specular"] = this.readColours(specularBlock[0], materialsBlock.tagName);
 
 			//MATERIALS->MATERIAL->SHININESS
 			var shininessBlock = this.getElements('shininess', materialInfo, 0);
@@ -494,7 +520,11 @@ MySceneGraph.prototype.parseMaterials= function(materialsBlock) {
 				return;
 
 			material["shininess"] = this.reader.getFloat(shininessBlock[0], 'value');
-			this.checkFloatValue(material["shininess"], "Shininess");
+			var check = this.checkFloatValue(material["shininess"], "Shininess", materialsBlock.tagName);
+			if(!check){
+				material["shininess"] = 10;
+				this.blockWarnings.push("Shininess value, on material block, defined as 10");
+			}
 
 			var appearance = new CGFappearance(this.scene);
 			appearance.setSpecular(material["specular"]["r"], material["specular"]["g"], material["specular"]["b"], material["specular"]["a"]);
@@ -591,11 +621,11 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 				prim['tag']=tagName;
 				switch(tagName){
 					case 'rectangle':{
-						prim[tagName] = this.readValues(['x1', 'y1', 'x2', 'y2'], primitive.children[0])
+						prim[tagName] = this.readValues(['x1', 'y1', 'x2', 'y2'], primitive.children[0]);
 						break;
 					}
 					case 'triangle':{
-						prim[tagName] = this.readValues(['x1', 'y1', 'z1', 'x2', 'y2', 'z2','x3', 'y3', 'z3'], primitive.children[0])
+						prim[tagName] = this.readValues(['x1', 'y1', 'z1', 'x2', 'y2', 'z2','x3', 'y3', 'z3'], primitive.children[0]);
 						break;
 					}
 					case 'cylinder':{
@@ -624,6 +654,37 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 			}
 		}
 		this.primitives.push(prim);
+	}
+	this.initPrimitives();
+};
+
+/**
+ * Initializes each primitive object
+ */
+MySceneGraph.prototype.initPrimitives =function(){
+	for(var primitive of this.primitives){
+		switch(primitive['tag']){
+			case 'rectangle':
+			var values = primitive['rectangle'];
+			primitive["object"] = new Rectangle(this.scene,values['x1'],values['y1'],values['x2'],values['y2']);
+			break;
+			case 'triangle':
+			var values = primitive['triangle'];
+			primitive["object"] = new Triangle(this.scene,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']);
+			break;
+			case 'cylinder':
+			var values = primitive['cylinder'];
+			primitive["object"] = new Cylinder(this.scene,values['base'],values['top'], values['height'], values['slices'],values['stacks']);
+			break;
+			case 'sphere':
+			var values = primitive['sphere'];
+			primitive["object"] = new Sphere(this.scene, values['radius'], values['slices'],values['stacks']);
+			break;
+			case 'torus':
+			var values = primitive['torus'];
+			primitive["object"] = new Torus(this.scene, values['inner'], values['outer'], values['slices'],values['loops']);
+			break;
+		}
 	}
 };
 
@@ -818,7 +879,7 @@ MySceneGraph.prototype.computeTransformation=  function(type, matrix, block){
 	var args = [];
 	switch(type){
 		case 'translate':{
-			args = this.readValues(['x', 'y', 'z'], block)
+			args = this.readCoordinates(0, block, block.tagName);
 			var translation = vec3.create();
 			vec3.set (translation, args.x, args.y, args.z);
 			mat4.translate(matrix, matrix, translation);
@@ -836,7 +897,7 @@ MySceneGraph.prototype.computeTransformation=  function(type, matrix, block){
 			break;
 		}
 		case 'scale':{
-			args = this.readValues(['x', 'y', 'z'], block)
+			args = this.readCoordinates(0, block, block.tagName);
 			var scale = vec3.create();
 			vec3.set(scale, args.x, args.y, args.z);
 			mat4.scale(matrix, matrix, scale);
@@ -955,6 +1016,51 @@ MySceneGraph.prototype.onXMLWarning=function (message) {
 };
 
 /**
+ * Reads, from block, a list of coordinates
+ * @param  {int} type of coordinates -> 0 to space coordinates, 1 to homogenous
+ * @param  {Block} block to read
+ * @return {array} value of each element
+ */
+MySceneGraph.prototype.readCoordinates= function(coordsType, block, blockTag){
+	var list = null;
+	if(coordsType == 0){
+		list = ['x', 'y', 'z'];
+	}else list = ['x', 'y', 'z', 'w'];
+
+	var values = [];
+	for(var j = 0; j < list.length; j++){
+		values[list[j]] = this.reader.getFloat(block, list[j]);
+		var check = this.checkFloatValue(values[list[j]], list[j], blockTag);
+		if(!check){
+			values[list[j]] = 1;
+			this.blockWarnings.push(list[j] +" value, on " + blockTag +" block, defined as 1");
+		}
+	}
+	return values;
+}
+
+/**
+ * Reads, from block, a list of colours
+ * @param  {Block} block to read
+ * @return {BlockTag} block identification
+ */
+MySceneGraph.prototype.readColours= function(block, blockTag){
+	var list = ['r', 'g', 'b', 'a'];
+
+	var values = [];
+	for(var j = 0; j < list.length; j++){
+		values[list[j]] = this.reader.getFloat(block, list[j]);
+		var check = this.checkFloatValue(values[list[j]], list[j], blockTag);
+		if(!check){
+			values[list[j]] = 0;
+			this.blockWarnings.push(list[j] +" value, on " + blockTag +" block, defined as 0");
+		}
+	}
+	return values;
+}
+
+
+/**
  * Reads, from block, a list of values with description equal to list elements
  * @param  {array} list values description
  * @param  {Block} block block to read
@@ -973,13 +1079,16 @@ MySceneGraph.prototype.readValues= function(list, block){
  * CheckFloatValue verifies if the value is valid
  * @param  {number} value value to check
  * @param  {string} name value's name
+ * @param  {string} block name that contains value
  */
-MySceneGraph.prototype.checkFloatValue= function(value, name){
+MySceneGraph.prototype.checkFloatValue= function(value, name, blockTag){
 	if(value == null){
-		this.blockWarnings.push(name + " value is missing");
+		this.blockWarnings.push(name + " value is missing on " + blockTag + " block.");
+		return false;
 	} else if(isNaN(value)){
-		this.blockWarnings.push(name + " value isn't a float");
-	}
+		this.blockWarnings.push("On " + blockTag + " block, " + name + " value isn't a float");
+		return false;
+	}else return true;
 }
 
 /**

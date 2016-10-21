@@ -1,5 +1,4 @@
 <dsx>
-
     <scene root="root" axis_length="30.0" />
     
     <views default="front" >

@@ -103,41 +103,13 @@
  	for(var i = 0; i < this.primitivesID.length; i++){
  		var index = this.checkIfExists(primitives, this.primitivesID[i]);
  		if(index >= 0){
- 			this.initPrimitive(primitives[index]);
+ 			this.addChildPrimitive(primitives[index]["object"]);
  		}else{
  			console.warn("XML Loading warning: PrimitiveRef " + this.primitivesID[i] + " doesn't exist");
  		}
  	}
  }
 
-/**
- * Initializes primitive accordingly to its paramaters, then it's added to children array
- * @param  {[type]} primitive info
- */
- Component.prototype.initPrimitive =function(primitive){
- 	switch(primitive['tag']){
- 		case 'rectangle':
- 		var values = primitive['rectangle'];
- 		this.children["primitives"].push(new Rectangle(this.scene,values['x1'],values['y1'],values['x2'],values['y2']));
- 		break;
- 		case 'triangle':
- 		var values = primitive['triangle'];
- 		this.children["primitives"].push(new Triangle(this.scene,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']));
- 		break;
- 		case 'cylinder':
- 		var values = primitive['cylinder'];
- 		this.children["primitives"].push(new Cylinder(this.scene,values['base'],values['top'], values['height'], values['slices'],values['stacks']));
- 		break;
- 		case 'sphere':
- 		var values = primitive['sphere'];
- 		this.children["primitives"].push(new Sphere(this.scene, values['radius'], values['slices'],values['stacks']));
- 		break;
- 		case 'torus':
- 		var values = primitive['torus'];
- 		this.children["primitives"].push(new Torus(this.scene, values['inner'], values['outer'], values['slices'],values['loops']));
- 		break;
- 	}
- };
 
 /**
  * Checks the componentsID array and verifies if the elements are valid, if so, then the component is added
