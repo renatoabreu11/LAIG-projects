@@ -26,8 +26,8 @@ Rectangle.prototype.initBuffers = function () {
         ];
 
 	this.indices = [
-		0, 2, 1,
-		1, 2, 3,
+		0, 1, 2,
+		1, 3, 2,
         ];  //estes sao os vectices criados. Desenha se 2 triangulos, um com vertices 0, 1, 2 e mais um, fazendo um quadrado
 			//a ordem dos vertices indica para onde esta virada a face.
 

@@ -194,7 +194,7 @@
         <component id="ground">
             <transformation>
                 <scale x="3" y="3" z="3" />
-                <rotate axis="x" angle="90" />
+                <rotate axis="x" angle="-90" />
             </transformation>
 
             <materials>
@@ -852,7 +852,8 @@
         <component id="onixLeftEye">
         	<transformation>
         		<translate x="10.5" y="8.5" z=".9" />
-        		<rotate axis="y" angle="-65" />
+        		<rotate axis="y" angle="115" />
+                <translate x="-1" y="0" z="0" />
         	</transformation>
 
         	<materials>
@@ -869,7 +870,8 @@
         <component id="onixRightEye">
         	<transformation>
         		<translate x="11.1" y="8.5" z="2.7" />
-        		<rotate axis="y" angle="245" />
+        		<rotate axis="y" angle="65" />
+                <translate x="-1" y="0" z="0" />
         	</transformation>
 
         	<materials>
