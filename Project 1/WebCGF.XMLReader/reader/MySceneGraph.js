@@ -649,6 +649,21 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 						prim[tagName]["loops"] = this.reader.getInteger(primitive.children[0], 'loops');
 						break;
 					}
+					case 'plane':
+						prim[tagName] = [];
+						prim[tagName]["dimX"] = this.reader.getFloat(primitive.children[0], 'dimX');
+						prim[tagName]["dimY"] = this.reader.getFloat(primitive.children[0], 'dimY');
+						prim[tagName]["partsX"] = this.reader.getInteger(primitive.children[0], 'partsX');
+						prim[tagName]["partsY"] = this.reader.getInteger(primitive.children[0], 'partsY');
+						break;
+
+					case 'patch':
+						prim[tagName] = [];
+						prim[tagName]["orderU"] = this.reader.getInteger(primitive.children[0], 'orderU');
+						prim[tagName]["orderV"] = this.reader.getInteger(primitive.children[0], 'orderV');
+						prim[tagName]["partsU"] = this.reader.getInteger(primitive.children[0], 'partsU');
+						prim[tagName]["partsV"] = this.reader.getInteger(primitive.children[0], 'partsV');
+						break;
 					default: break;
 				}
 			}
@@ -683,6 +698,14 @@ MySceneGraph.prototype.initPrimitives =function(){
 			case 'torus':
 			var values = primitive['torus'];
 			primitive["object"] = new Torus(this.scene, values['inner'], values['outer'], values['slices'],values['loops']);
+			break;
+			case 'plane':
+			var values = primitive['plane'];
+			primitive["object"] = new Plane(this.scene, values['dimX'], values['dimY'], values['partsX'], values['partsY']);
+			break;
+			case 'patch':
+			var values = primitive['patch'];
+			primitive["object"] = new Plane(this.scene, values['orderU'], values['orderV'], values['partsU'], values['partsV']);
 			break;
 		}
 	}
