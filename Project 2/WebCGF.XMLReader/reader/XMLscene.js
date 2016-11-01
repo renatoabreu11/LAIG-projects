@@ -27,6 +27,7 @@ XMLscene.prototype.init = function (application) {
 
 	this.axis=new CGFaxis(this);
 	this.lightStatus = [];
+	this.plane = new Plane(this, 5, 5, 10, 10);
 };
 
 /**

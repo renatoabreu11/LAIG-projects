@@ -17,6 +17,7 @@ function MySceneGraph(filename, scene) {
 	this.textures = [];
 	this.materials = [];
 	this.transformations = [];
+    this.animations = [];
 	this.primitives = [];
 	this.components = [];
 
@@ -107,7 +108,13 @@ MySceneGraph.prototype.parseBlocks= function(rootElement) {
 			case 'primitives':{
 				this.parsePrimitives(block); break;
 			}
-			case 'components':{
+            case 'animations':{
+                this.parseAnimations(block);
+                console.log(this.animations);
+                console.log(this.animations[0].getID());
+                break;
+            }
+            case 'components':{
 				this.parseComponents(block); 
 				this.checkChildrenID();
 				break;
@@ -123,10 +130,10 @@ MySceneGraph.prototype.parseBlocks= function(rootElement) {
  * @return {bool}         True if no error was found, False otherwise.
  */
 MySceneGraph.prototype.checkBlockOrder= function(blocks, nBlocks) {
-	var tags = ['scene', 'views', 'illumination', 'lights', 'textures', 'materials', 'transformations', 'primitives', 'components'];
+	var tags = ['scene', 'views', 'illumination', 'lights', 'textures', 'materials', 'transformations', 'animations', 'primitives', 'components'];
 
-	if(nBlocks != 9){
-		this.elementsErrors.push("The number of blocks must be 9: scene, views, illumination, lights, textures, materials, transformations, primitives, components");
+	if(nBlocks != 10){
+		this.elementsErrors.push("The number of blocks must be 9: scene, views, illumination, lights, textures, materials, transformations, animations, primitives, components");
 		return false;
 	}
 
@@ -584,6 +591,82 @@ MySceneGraph.prototype.parseTransformations= function(transformationsBlock) {
 			this.transformations.push(transf);
 		}
 	}
+};
+
+/**
+ * Reads animations blocks and creates the animations instances
+ * @param  {Block} animationsBlock block identified by the tag 'animations'.
+ */
+MySceneGraph.prototype.parseAnimations= function(animationsBlock) {
+    //Animations->animation
+    var animsBlock = this.getElements('animation', animationsBlock, 1);
+    if(animsBlock == null)
+        return;
+
+    for(var i=0; i < animsBlock.length; i++)
+    {
+        var animation = animsBlock[i];
+        var id = this.reader.getString(animation, 'id');
+        var idExists = false;
+
+        for(var anim of this.animations){
+            if(anim.getID() == id){
+                this.blockWarnings.push("Animation with id: " + id + " already exists");
+                idExists = true;
+            }
+        }
+
+        if(!idExists){
+            var span = this.reader.getFloat(animation, 'span');
+            var check = this.checkFloatValue(span, 'Span', animationsBlock.tagName);
+            if(!check){
+                span = 10;
+                this.blockWarnings.push("Span value, on animations block, defined as 10");
+            }
+
+            var type = this.reader.getString(animation, 'type');
+            if(type == 'linear'){
+                var controlPointBlock = this.getElements('controlpoint', animation, 0);
+                if(controlPointBlock == null)
+                    return;
+                var controlPoint = this.readCoordinates(0, controlPointBlock[0], animationsBlock.tagName);
+                var linearAnimation = new LinearAnimation(id, span, controlPoint);
+                this.animations.push(linearAnimation);
+            }else if (type == 'circular'){
+                var radius = this.reader.getFloat(animation, 'radius');
+                check = this.checkFloatValue(span, 'Radius', animationsBlock.tagName);
+                if(!check){
+                    radius = 2;
+                    this.blockWarnings.push("Radius value, on animation block, defined as 2");
+                }
+
+                var startAngle = this.reader.getFloat(animation, 'startang');
+                check = this.checkFloatValue(span, 'Start Angle', animationsBlock.tagName);
+                if(!check){
+                    startAngle = 45;
+                    this.blockWarnings.push("Start Angle value, on animation block, defined as 45");
+                }
+                startAngle = this.toRadians(startAngle);
+
+                var rotAngle = this.reader.getFloat(animation, 'rotang');
+                check = this.checkFloatValue(span, 'Rotation Angle', animationsBlock.tagName);
+                if(!check){
+                    rotAngle = 5;
+                    this.blockWarnings.push("Rotation Angle value, on animation block, defined as 5");
+                }
+                rotAngle = this.toRadians(rotAngle);
+
+                var str = this.reader.getString(animation, 'center');
+                var center = str.split(" ")
+
+                var circularAnimation = new CircularAnimation(id, span, center, radius, startAngle, rotAngle);
+                this.animations.push(circularAnimation);
+            }else {
+                this.blockErrors.push("Invalid animation type!");
+                return;
+            }
+        }
+    }
 };
 
 /**
