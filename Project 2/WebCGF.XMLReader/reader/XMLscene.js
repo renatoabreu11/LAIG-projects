@@ -28,6 +28,13 @@ XMLscene.prototype.init = function (application) {
 	this.axis=new CGFaxis(this);
 	this.lightStatus = [];
 	this.plane = new Plane(this, 5, 5, 10, 10);
+    var args = [];
+    args['x'] = 1;
+    args['y'] = 2;
+    args['z'] = 3;
+    this.animation = new LinearAnimation('asfd', 10, args);
+    this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
+    this.setUpdatePeriod(this.updatePeriod);
 };
 
 /**
@@ -173,10 +180,10 @@ XMLscene.prototype.display = function () {
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
-	if (this.graph.loadedOk){
+    /*if (this.graph.loadedOk){
 		this.updateLights();
 		this.materialDefault.apply();
 		this.graph.getRootComponent().display(null, null);
-	}
+     }*/
 };
 

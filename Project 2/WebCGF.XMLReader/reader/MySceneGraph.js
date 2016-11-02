@@ -110,8 +110,6 @@ MySceneGraph.prototype.parseBlocks= function(rootElement) {
 			}
             case 'animations':{
                 this.parseAnimations(block);
-                console.log(this.animations);
-                console.log(this.animations[0].getID());
                 break;
             }
             case 'components':{
@@ -829,6 +827,13 @@ MySceneGraph.prototype.parseComponents= function(componentsBlock) {
 				return;
 			comp.setTransformation(this.parseTransfInComponent(transformationBlock[0]));
 
+            //COMPONENTS->COMPONENT->ANIMATION
+            var animationBlock = component.getElementsByTagName('animationref');
+            if (animationBlock.length != 0) {
+                console.log(animationBlock);
+                this.parseAnimInComponent(animationBlock, comp);
+            }
+
 			//COMPONENTS->COMPONENT->MATERIALS
 			var materialsBlock = this.getElements('materials', component, 0);
 			if(materialsBlock==null)
@@ -921,6 +926,27 @@ MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
 		return matrix;
 	}
 };
+
+/**
+ * For each animation ref in component, adds the respective animation to components animation array
+ * @param  {animationBlock} block with animation id's
+ * @param  {comp} component to add animations.
+ */
+MySceneGraph.prototype.parseAnimInComponent = function (animationBlock, comp) {
+    var length = animationBlock.length;
+
+    for (var j = 0; j < length; j++) {
+        var child = animationBlock[j];
+        var id = this.reader.getString(child, 'id');
+        var index = this.checkIfExists(this.animations, id);
+
+        if (index == -1) {
+            this.blockWarnings.push("Animation with id: " + id + " referenced in component doesn't exist");
+        } else {
+            comp.addAnimation(this.animations[index]);
+        }
+    }
+}
 
 /**
  * For each child in component, adds  the respective id to components children id's

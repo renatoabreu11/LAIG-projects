@@ -206,6 +206,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
 
+            <animationref id="sss" />
+            <animationref id="ss1412s" />
+
             <materials>
                 <material id="bright" />
             </materials>

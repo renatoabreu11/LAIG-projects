@@ -11,6 +11,8 @@
  	this.materials = [];
  	this.materialIndex = 0;
  	this.texture = null;
+    this.animations = [];
+    this.animationIndex = 0;
 
  	//this contains all the ids 
  	this.componentsID = [];
@@ -54,6 +56,25 @@
  Component.prototype.addMaterial= function(material) {
  	this.materials.push(material);
  }
+
+/**
+ * Adds an animation to the list of animations
+ * @param {[array]} animation object
+ */
+Component.prototype.addAnimation = function (animation) {
+    this.animations.push(animation);
+}
+
+/**
+ * Returns the current animation being executed
+ */
+Component.prototype.addAnimation = function () {
+    if (this.animationIndex == -1) {
+        return null;
+    } else {
+        return this.animations[this.animationIndex];
+    }
+}
 
 /**
  * Adds a valid child component

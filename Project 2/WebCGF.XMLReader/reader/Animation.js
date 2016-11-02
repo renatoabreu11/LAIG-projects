@@ -3,6 +3,9 @@
  * @constructor
  */
 function Animation(id, time) {
+    if (this.constructor === Animation) {
+        throw new Error("Can't instantiate abstract class!");
+    }
     this.id = id;
     this.span = time;
 }
