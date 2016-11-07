@@ -7,6 +7,7 @@ function LinearAnimation(id, span) {
     this.velocity = 0;
     this.distance = 0;
     this.controlPoints = [];
+    this.distanceBetweenPoints = [];
 }
 
 LinearAnimation.prototype = Object.create(Animation.prototype);
@@ -27,8 +28,9 @@ LinearAnimation.prototype.addControlPoint=function(x, y, z) {
     if(length >=  2){
         var point1 = this.controlPoints[length - 2];
         var point2 = this.controlPoints[length - 1];
-        var distanceBetweenPoints = vec3.distance(point2, point1);
-        this.distance += distanceBetweenPoints;
+        var dist = vec3.distance(point2, point1);
+        this.distanceBetweenPoints.push(dist);
+        this.distance += dist;
         this.velocity = this.distance/this.span;
     }
 };
@@ -40,18 +42,24 @@ LinearAnimation.prototype.addControlPoint=function(x, y, z) {
 LinearAnimation.prototype.getMatrix = function (time) {
     var matrix = mat4.create();
     matrix = mat4.identity(matrix);
+    var length = this.controlPoints.length;
 
-    var deltaAng = time * this.angularVelocity;
-    if (time >= this.span)
-        deltaAng = this.span * this.angularVelocity;
+    if (time >= this.span){
+        mat4.translate(matrix, matrix, this.controlPoints[length - 1])
+        return matrix;
+    }
 
-    deltaAng += this.startAngle;
+    var currentDist = this.velocity * time;
+    var totalDist = 0, index = 0;
+    for(var i = 0; i < this.distanceBetweenPoints.length; i++){
+        totalDist += this.distanceBetweenPoints[i];
+        if(totalDist > currentDist){
+            index = i;
+            break;
+        }
+    }
 
-    var translation = vec3.create();
-    vec3.set (translation, this.center[0], this.center[1], this.center[2]);
-    mat4.translate(matrix, matrix, translation);
-    mat4.rotateY(matrix, matrix, deltaAng);
-    vec3.set (translation, this.radius, 0, 0);
+    //O objecto está entre os pontos de controlo index - 1 e index.
     return matrix;
 };
 
