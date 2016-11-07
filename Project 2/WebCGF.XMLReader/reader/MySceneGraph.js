@@ -624,11 +624,17 @@ MySceneGraph.prototype.parseAnimations= function(animationsBlock) {
 
             var type = this.reader.getString(animation, 'type');
             if(type == 'linear'){
-                var controlPointBlock = this.getElements('controlpoint', animation, 0);
-                if(controlPointBlock == null)
+                var controlPointBlock = animation.getElementsByTagName('controlpoint');
+                if(controlPointBlock == null){
+                    this.blockWarnings.push('No Control point found at animation block with id ' + id);
                     return;
-                var controlPoint = this.readCoordinates(0, controlPointBlock[0], animationsBlock.tagName);
-                var linearAnimation = new LinearAnimation(id, span, controlPoint);
+                }
+                var nrChild = controlPointBlock.length;
+                var linearAnimation = new LinearAnimation(id, span);
+                for(controlPoint of controlPointBlock) {
+                    var point = this.readCoordinates(0, controlPoint, animationsBlock.tagName);
+                    linearAnimation.addControlPoint(point['x'], point['y'], point['z']);
+                }
                 this.animations.push(linearAnimation);
             }else if (type == 'circular'){
                 var radius = this.reader.getFloat(animation, 'radius');
@@ -830,7 +836,6 @@ MySceneGraph.prototype.parseComponents= function(componentsBlock) {
             //COMPONENTS->COMPONENT->ANIMATION
             var animationBlock = component.getElementsByTagName('animationref');
             if (animationBlock.length != 0) {
-                console.log(animationBlock);
                 this.parseAnimInComponent(animationBlock, comp);
             }
 
@@ -934,7 +939,6 @@ MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
  */
 MySceneGraph.prototype.parseAnimInComponent = function (animationBlock, comp) {
     var length = animationBlock.length;
-
     for (var j = 0; j < length; j++) {
         var child = animationBlock[j];
         var id = this.reader.getString(child, 'id');

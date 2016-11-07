@@ -8,6 +8,7 @@ function CircularAnimation(id, span, center, radius, startAngle, rotAngle) {
     this.radius = radius;
     this.startAngle = startAngle;
     this.rotAngle = rotAngle;
+    this.angularVelocity = this.rotAngle/this.span;
 }
 
 CircularAnimation.prototype = Object.create(Animation.prototype);
@@ -42,14 +43,29 @@ CircularAnimation.prototype.getRotAngle = function () {
 };
 
 /**
+ * Returns angular velocity
+ */
+CircularAnimation.prototype.getAngularVelocity = function () {
+    return this.angularVelocity;
+};
+
+/**
  * Returns transformation matrix
  */
 CircularAnimation.prototype.getMatrix = function (time) {
     var matrix = mat4.create();
     matrix = mat4.identity(matrix);
-    if (time > this.span)
-        return matrix;
-    else {
-        var translation = vec3.create();
-    }
+
+    var deltaAng = time * this.angularVelocity;
+    if (time >= this.span)
+        deltaAng = this.span * this.angularVelocity;
+
+    deltaAng += this.startAngle;
+
+    var translation = vec3.create();
+    vec3.set (translation, this.center[0], this.center[1], this.center[2]);
+    mat4.translate(matrix, matrix, translation);
+    mat4.rotateY(matrix, matrix, deltaAng);
+    vec3.set (translation, this.radius, 0, 0);
+    return matrix;
 };

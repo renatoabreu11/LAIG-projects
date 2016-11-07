@@ -33,8 +33,11 @@ XMLscene.prototype.init = function (application) {
     args['y'] = 2;
     args['z'] = 3;
     this.animation = new LinearAnimation('asfd', 10, args);
+	
     this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
     this.setUpdatePeriod(this.updatePeriod);
+    this.initialTime = 0;
+    this.elapsedTime = 0;
 };
 
 /**
@@ -153,6 +156,13 @@ XMLscene.prototype.updateMaterials = function () {
 	}
 }
 
+XMLscene.prototype.update = function(currTime){
+    if(this.initialTime == 0)
+        this.initialTime = currTime;
+
+    this.elapsedTime = (currTime - this.initialTime)/1000;
+}
+
 /**
  * Loop which display the objects that belong to the scene
  */
@@ -180,10 +190,11 @@ XMLscene.prototype.display = function () {
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
-    /*if (this.graph.loadedOk){
+    if (this.graph.loadedOk){
 		this.updateLights();
 		this.materialDefault.apply();
-		this.graph.getRootComponent().display(null, null);
-     }*/
+		this.graph.getRootComponent().display(null, null, this.elapsedTime);
+        this.graph.getRootComponent().updateAnimations(this.elapsedTime);
+     }
 };
 

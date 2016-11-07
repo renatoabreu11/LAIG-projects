@@ -12,7 +12,8 @@
  	this.materialIndex = 0;
  	this.texture = null;
     this.animations = [];
-    this.animationIndex = 0;
+    this.animationIndex = -1;
+    this.animationTimer = 0;
 
  	//this contains all the ids 
  	this.componentsID = [];
@@ -62,13 +63,14 @@
  * @param {[array]} animation object
  */
 Component.prototype.addAnimation = function (animation) {
+    this.animationIndex = 0;
     this.animations.push(animation);
 }
 
 /**
  * Returns the current animation being executed
  */
-Component.prototype.addAnimation = function () {
+Component.prototype.getAnimation = function () {
     if (this.animationIndex == -1) {
         return null;
     } else {
@@ -176,28 +178,64 @@ Component.prototype.addAnimation = function () {
  	return -1;
  };
 
+Component.prototype.updateAnimations= function(elapsedTime){
+    var initTime = 0;
+    var endTime = 0;
+    for(var i = 0; i < this.animations.length; i++){
+        endTime += this.animations[i].getSpan();
+
+        if(elapsedTime <= endTime && elapsedTime >= initTime){
+            this.animationIndex = i;
+            break;
+        }
+
+        initTime = endTime;
+    }
+
+    this.animationTimer = initTime;
+
+    if(elapsedTime > endTime)
+        this.animationIndex = -1;
+
+    for(var i = 0; i < this.children["components"].length; i++){
+        var comp = this.children["components"][i];
+        comp.updateAnimations(elapsedTime);
+    }
+}
+
 /**
  * This function applies the transformation the respective component and all of its children.
  * Then inherit the father material and/or texture if that's the case. 
  * After this the appearance with the right texutre and material is applied.
  * Then, each child primitve is displayed as well each child component.
  * By iterating each children components and starting with the root component, this function goes through 
- * the scene graph and displays each object. 
+ * the scene graph and displays each object.
  * @param  {[Texture]} component father texture
  * @param  {[Material]} component father material
  */
- Component.prototype.display= function(fatherTex, fatherMat){
- 	this.scene.pushMatrix();
- 	this.scene.multMatrix(this.transformation);
+Component.prototype.display= function(fatherTex, fatherMat, elapsedTime){
+    this.scene.pushMatrix();
+    this.scene.multMatrix(this.transformation);
 
- 	var compTexture = this.texture;
- 	var compMaterial = this.materials[this.materialIndex];
+    for(var i = 0; i < this.animations.length; i++){
+        if(i > this.animationIndex && this.animationIndex != -1)
+            break;
+        var time;
+        if(i != this.animationIndex)
+            time = this.animations[i].getSpan();
+        else time = elapsedTime - this.animationTimer;
+        var matrix = this.animations[i].getMatrix(time);
+        this.scene.multMatrix(matrix);
+    }
 
- 	if(compMaterial["id"] == 'inherit'){
- 		compMaterial = fatherMat;
- 	}
+    var compTexture = this.texture;
+    var compMaterial = this.materials[this.materialIndex];
 
- 	var appearance = compMaterial;
+    if(compMaterial["id"] == 'inherit'){
+        compMaterial = fatherMat;
+    }
+
+    var appearance = compMaterial;
  	if(this.texture["id"] == 'inherit'){
  		if(fatherTex["id"] != 'none'){
  			appearance["appear"].setTexture(fatherTex["info"]);
@@ -222,7 +260,7 @@ Component.prototype.addAnimation = function () {
 
  	for(var i = 0; i < this.children["components"].length; i++){
  		var comp = this.children["components"][i];
- 		comp.display(compTexture, compMaterial);
+ 		comp.display(compTexture, compMaterial, elapsedTime);
  	}
  	this.scene.popMatrix();
  }
