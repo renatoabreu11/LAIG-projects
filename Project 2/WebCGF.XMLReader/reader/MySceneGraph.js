@@ -848,13 +848,12 @@ MySceneGraph.prototype.parseComponents= function(componentsBlock) {
 			comp.setTransformation(this.parseTransfInComponent(transformationBlock[0]));
 
             //COMPONENTS->COMPONENT->ANIMATION
-            var animationBlock = this.getElements('animation', component, 0);
-            if (animationBlock != null) {
-                if (animationBlock.length > 1) {
-                    this.blockWarnings.push("More than one animation block found at " + id + " component.");
-                    return;
-                }
+            var animationBlock = component.getElementsByTagName('animation');
+            if (animationBlock.length == 1) {
                 this.parseAnimInComponent(animationBlock[0], comp);
+            } else if (animationBlock.length > 1) {
+                this.blockWarnings.push("More than one animation block found at " + id + " component.");
+                return;
             }
 
 			//COMPONENTS->COMPONENT->MATERIALS
