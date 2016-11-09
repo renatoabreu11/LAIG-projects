@@ -63,7 +63,7 @@ CircularAnimation.prototype.getMatrix = function (time) {
     deltaAng += this.startAngle;
 
     var translation = vec3.create();
-    vec3.set (translation, this.center[0], this.center[1], this.center[2]);
+    vec3.set(translation, this.center['x'], this.center['y'], this.center['z']);
     mat4.translate(matrix, matrix, translation);
     mat4.rotateY(matrix, matrix, deltaAng);
     vec3.set (translation, this.radius, 0, 0);

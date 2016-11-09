@@ -27,12 +27,6 @@ XMLscene.prototype.init = function (application) {
 
 	this.axis=new CGFaxis(this);
 	this.lightStatus = [];
-	this.plane = new Plane(this, 5, 5, 10, 10);
-    var args = [];
-    args['x'] = 1;
-    args['y'] = 2;
-    args['z'] = 3;
-    this.animation = new LinearAnimation('asfd', 10, args);
 	
     this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
     this.setUpdatePeriod(this.updatePeriod);

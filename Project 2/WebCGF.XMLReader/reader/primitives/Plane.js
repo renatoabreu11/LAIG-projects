@@ -19,38 +19,16 @@ Plane.prototype.initBuffers = function() {
 
     var yCoord = this.dimY / 2;
     var xCoord = this.dimX / 2;
-    var control1 = [[-xCoord, -Ycoord, 0, 1], [-xCoord, yCoord, 0, 1]];
-    var control2 = [[xCoord, -Ycoord, 0, 1], [xCoord, yCoord, 0, 1]];
-    this.controlVertex.push(control1);
-    this.controlVertex.push(control2);
-    this.makeSurface(1, 1, this.controlVertex);
+    var point1 = [-xCoord, -yCoord, 0, 1];
+    var point2 = [-xCoord, yCoord, 0, 1];
+    var point3 = [xCoord, -yCoord, 0, 1];
+    var point4 = [xCoord, yCoord, 0, 1];
+    this.controlVertex.push(point1);
+    this.controlVertex.push(point2);
+    this.controlVertex.push(point3);
+    this.controlVertex.push(point4);
+    this.plane = new Patch(this.scene, 1, 1, this.partsX, this.partsY, this.controlVertex);
 };
-
-Plane.prototype.getKnotsVector = function(degree) {
-
-    var v = new Array();
-    for (var i=0; i<=degree; i++) {
-        v.push(0);
-    }
-    for (var i=0; i<=degree; i++) {
-        v.push(1);
-    }
-    return v;
-}
-
-Plane.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
-
-    var knots1 = this.getKnotsVector(degree1);
-    var knots2 = this.getKnotsVector(degree2);
-
-
-    var nurbsSurface = new CGFnurbsSurface(degree1, degree2, knots1, knots2, controlvertexes);
-    getSurfacePoint = function(u, v) {
-        return nurbsSurface.getPoint(u, v);
-    };
-
-    this.plane = new CGFnurbsObject(this, getSurfacePoint, this.partsX, this.partsY);
-}
 
 Plane.prototype.display = function () {
     this.plane.display();

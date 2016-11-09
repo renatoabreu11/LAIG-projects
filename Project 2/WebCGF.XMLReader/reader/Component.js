@@ -249,8 +249,8 @@ Component.prototype.display= function(fatherTex, fatherMat, elapsedTime){
  		appearance["appear"].setTexture(null);
 
  	appearance["appear"].apply();
-
- 	for(var i = 0; i < this.children["primitives"].length; i++){
+    
+    for(var i = 0; i < this.children["primitives"].length; i++){
  		var prim = this.children["primitives"][i];
  		if(compTexture != 'none'){
  			prim.updateTexCoords(compTexture["length_s"], compTexture["length_t"]);

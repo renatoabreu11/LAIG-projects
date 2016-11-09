@@ -660,8 +660,10 @@ MySceneGraph.prototype.parseAnimations= function(animationsBlock) {
                 }
                 rotAngle = this.toRadians(rotAngle);
 
-                var str = this.reader.getString(animation, 'center');
-                var center = str.split(" ")
+                var center = [];
+                center['x'] = this.reader.getFloat(animation, 'centerx');
+                center['y'] = this.reader.getFloat(animation, 'centery');
+                center['z'] = this.reader.getFloat(animation, 'centerz');
 
                 var circularAnimation = new CircularAnimation(id, span, center, radius, startAngle, rotAngle);
                 this.animations.push(circularAnimation);
@@ -704,52 +706,64 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 			if(nPrimitives > 1){
 				this.blockWarnings.push("More than one type of primitive per block");
 			} else{
-				var tagName = primitive.children[0].tagName;
+                var elem = primitive.children[0];
+                var tagName = elem.tagName;
 				prim['tag']=tagName;
 				switch(tagName){
 					case 'rectangle':{
-						prim[tagName] = this.readValues(['x1', 'y1', 'x2', 'y2'], primitive.children[0]);
+                        prim[tagName] = this.readValues(['x1', 'y1', 'x2', 'y2'], elem);
 						break;
 					}
 					case 'triangle':{
-						prim[tagName] = this.readValues(['x1', 'y1', 'z1', 'x2', 'y2', 'z2','x3', 'y3', 'z3'], primitive.children[0]);
+                        prim[tagName] = this.readValues(['x1', 'y1', 'z1', 'x2', 'y2', 'z2', 'x3', 'y3', 'z3'], elem);
 						break;
 					}
 					case 'cylinder':{
-						prim[tagName] = this.readValues(['base', 'top', 'height'], primitive.children[0]);
-						prim[tagName]["slices"] = this.reader.getInteger(primitive.children[0], 'slices');
-						prim[tagName]["stacks"] = this.reader.getInteger(primitive.children[0], 'stacks');
+                        prim[tagName] = this.readValues(['base', 'top', 'height'], elem);
+                        prim[tagName]["slices"] = this.reader.getInteger(elem, 'slices');
+                        prim[tagName]["stacks"] = this.reader.getInteger(elem, 'stacks');
 						break;
 					}
 					case 'sphere':{
 						prim[tagName] = [];
-						prim[tagName]["radius"] = this.reader.getFloat(primitive.children[0], 'radius');
-						prim[tagName]["slices"] = this.reader.getInteger(primitive.children[0], 'slices');
-						prim[tagName]["stacks"] = this.reader.getInteger(primitive.children[0], 'stacks');
+                        prim[tagName]["radius"] = this.reader.getFloat(elem, 'radius');
+                        prim[tagName]["slices"] = this.reader.getInteger(elem, 'slices');
+                        prim[tagName]["stacks"] = this.reader.getInteger(elem, 'stacks');
 						break;
 					}
 					case 'torus':{
 						prim[tagName] = [];
-						prim[tagName]["inner"] = this.reader.getFloat(primitive.children[0], 'inner');
-						prim[tagName]["outer"] = this.reader.getFloat(primitive.children[0], 'outer');
-						prim[tagName]["slices"] = this.reader.getInteger(primitive.children[0], 'slices');
-						prim[tagName]["loops"] = this.reader.getInteger(primitive.children[0], 'loops');
+                        prim[tagName]["inner"] = this.reader.getFloat(elem, 'inner');
+                        prim[tagName]["outer"] = this.reader.getFloat(elem, 'outer');
+                        prim[tagName]["slices"] = this.reader.getInteger(elem, 'slices');
+                        prim[tagName]["loops"] = this.reader.getInteger(elem, 'loops');
 						break;
 					}
 					case 'plane':
 						prim[tagName] = [];
-						prim[tagName]["dimX"] = this.reader.getFloat(primitive.children[0], 'dimX');
-						prim[tagName]["dimY"] = this.reader.getFloat(primitive.children[0], 'dimY');
-						prim[tagName]["partsX"] = this.reader.getInteger(primitive.children[0], 'partsX');
-						prim[tagName]["partsY"] = this.reader.getInteger(primitive.children[0], 'partsY');
+                        prim[tagName]["dimX"] = this.reader.getFloat(elem, 'dimX');
+                        prim[tagName]["dimY"] = this.reader.getFloat(elem, 'dimY');
+                        prim[tagName]["partsX"] = this.reader.getInteger(elem, 'partsX');
+                        prim[tagName]["partsY"] = this.reader.getInteger(elem, 'partsY');
 						break;
 
 					case 'patch':
 						prim[tagName] = [];
-						prim[tagName]["orderU"] = this.reader.getInteger(primitive.children[0], 'orderU');
-						prim[tagName]["orderV"] = this.reader.getInteger(primitive.children[0], 'orderV');
-						prim[tagName]["partsU"] = this.reader.getInteger(primitive.children[0], 'partsU');
-						prim[tagName]["partsV"] = this.reader.getInteger(primitive.children[0], 'partsV');
+                        prim[tagName]["orderU"] = this.reader.getInteger(elem, 'orderU');
+                        prim[tagName]["orderV"] = this.reader.getInteger(elem, 'orderV');
+                        prim[tagName]["partsU"] = this.reader.getInteger(elem, 'partsU');
+                        prim[tagName]["partsV"] = this.reader.getInteger(elem, 'partsV');
+                        var controlPointBlock = elem.getElementsByTagName('controlpoint');
+                        if (controlPointBlock == null) {
+                            this.blockWarnings.push('No Control point found at primitive patch with id ' + id);
+                            break;
+                        }
+                        var nrChild = controlPointBlock.length;
+                        prim[tagName]["controlPoints"] = [];
+                        for (controlPoint of controlPointBlock) {
+                            var point = this.readCoordinates(0, controlPoint, controlPointBlock.tagName);
+                            prim[tagName]["controlPoints"].push([point['x'], point['y'], point['z'], 1]);
+                        }
 						break;
 					default: break;
 				}
@@ -792,7 +806,7 @@ MySceneGraph.prototype.initPrimitives =function(){
 			break;
 			case 'patch':
 			var values = primitive['patch'];
-			primitive["object"] = new Plane(this.scene, values['orderU'], values['orderV'], values['partsU'], values['partsV']);
+                primitive["object"] = new Patch(this.scene, values['orderU'], values['orderV'], values['partsU'], values['partsV'], values['controlPoints']);
 			break;
 		}
 	}
@@ -834,9 +848,13 @@ MySceneGraph.prototype.parseComponents= function(componentsBlock) {
 			comp.setTransformation(this.parseTransfInComponent(transformationBlock[0]));
 
             //COMPONENTS->COMPONENT->ANIMATION
-            var animationBlock = component.getElementsByTagName('animationref');
-            if (animationBlock.length != 0) {
-                this.parseAnimInComponent(animationBlock, comp);
+            var animationBlock = this.getElements('animation', component, 0);
+            if (animationBlock != null) {
+                if (animationBlock.length > 1) {
+                    this.blockWarnings.push("More than one animation block found at " + id + " component.");
+                    return;
+                }
+                this.parseAnimInComponent(animationBlock[0], comp);
             }
 
 			//COMPONENTS->COMPONENT->MATERIALS
@@ -938,12 +956,11 @@ MySceneGraph.prototype.parseTransfInComponent=function(transformation) {
  * @param  {comp} component to add animations.
  */
 MySceneGraph.prototype.parseAnimInComponent = function (animationBlock, comp) {
-    var length = animationBlock.length;
+    var length = animationBlock.children.length;
     for (var j = 0; j < length; j++) {
-        var child = animationBlock[j];
+        var child = animationBlock.children[j];
         var id = this.reader.getString(child, 'id');
         var index = this.checkIfExists(this.animations, id);
-
         if (index == -1) {
             this.blockWarnings.push("Animation with id: " + id + " referenced in component doesn't exist");
         } else {

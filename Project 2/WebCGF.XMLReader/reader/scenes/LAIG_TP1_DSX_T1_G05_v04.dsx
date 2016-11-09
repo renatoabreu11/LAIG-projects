@@ -132,7 +132,7 @@
             <controlpoint x="3" y="3" z="3" />
         </animation>
 
-        <animation id="anim2" span="5" type="circular" center="2 5 3"
+        <animation id="anim2" span="5" type="circular" centerx="2" centery="3" centerz="5"
             radius="3" startang="0" rotang="60"/>
    </animations>
 
@@ -180,6 +180,32 @@
         <primitive id="rai">
             <cylinder base=".2" top="0.03" height="1" slices="8" stacks="8" />
         </primitive>
+
+        <primitive id="plane">
+         <patch orderU="1" orderV="1" partsU="8" partsV="8" >
+            <controlpoint x="-2" y="-2" z="0"/>
+            <controlpoint x="-2" y="2" z="0"/>
+            <controlpoint x="2" y="-2" z="0"/>
+            <controlpoint x="2" y="2" z="0"/>
+         </patch>
+        </primitive>
+
+         <primitive id="patch">
+            <patch orderU="2" orderV="3" partsU="8" partsV="8" >
+                        <controlpoint x="-1.5" y="-1.5" z="0"/>
+                        <controlpoint x="-2" y="-2" z="2"/>
+                        <controlpoint x="-2" y="-2" z="2"/>
+                        <controlpoint x="-1.5" y="1.5" z="0"/>
+                        <controlpoint x="0" y="0" z="3"/>
+                        <controlpoint x="0" y="-2" z="3"/>
+                        <controlpoint x="0" y="2" z="3"/>
+                        <controlpoint x="0" y="0" z="3"/>
+                        <controlpoint x="1.5" y="-1.5" z="0"/>
+                        <controlpoint x="2" y="-2" z="2"/>
+                        <controlpoint x="2" y="2" z="2"/>
+                        <controlpoint x="1.5" y="1.5" z="0"/>
+                    </patch>
+         </primitive>
     </primitives>
 
     <components>
@@ -195,12 +221,30 @@
             <texture id="none" />
 
             <children>
+                <componentref id="nurbs" />
                 <componentref id="ground" />
                 <componentref id="pyramids" />
                 <componentref id="body" />
                 <componentref id="onix" />
                 <componentref id="solrock" />
             </children>
+        </component>
+
+        <component id="nurbs">
+            <transformation>
+                <translate x="0" y="10" z="0" />
+            </transformation>
+
+            <materials>
+                    <material id="bright" />
+            </materials>
+
+            <texture id="brick" />
+
+            <children>
+                <primitiveref id="patch" />
+                <primitiveref id="plane" />
+             </children>
         </component>
 
         <component id="ground">
@@ -922,8 +966,10 @@
         		<rotate axis="y" angle="-45" />
         	</transformation>
 
-        	<animationref id="anim2" />
-        	<animationref id="anim2" />
+            <animation>
+        	    <animationref id="anim2" />
+        	    <animationref id="anim2" />
+        	</animation>
 
         	<materials>
         		<material id="s1" />
