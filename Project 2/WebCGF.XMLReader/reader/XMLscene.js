@@ -188,7 +188,6 @@ XMLscene.prototype.display = function () {
 		this.updateLights();
 		this.materialDefault.apply();
 		this.graph.getRootComponent().display(null, null, this.elapsedTime);
-        this.graph.getRootComponent().updateAnimations(this.elapsedTime);
      }
 };
 

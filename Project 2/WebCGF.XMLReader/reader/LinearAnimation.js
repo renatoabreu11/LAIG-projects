@@ -20,6 +20,28 @@ LinearAnimation.prototype.getControlPoints=function() {
     return this.controlPoints;
 };
 
+/**
+ * Returns distance between points
+ */
+LinearAnimation.prototype.getDistanceBetweenPoints=function() {
+    return this.distanceBetweenPoints;
+};
+
+/**
+ * Returns velocity
+ */
+LinearAnimation.prototype.getVelocity=function() {
+    return this.velocity;
+};
+
+/**
+ * Returns total distance
+ */
+LinearAnimation.prototype.getDistance=function() {
+    return this.velocity;
+};
+
+
 LinearAnimation.prototype.addControlPoint=function(x, y, z) {
     var point = vec3.create();
     vec3.set (point, x, y, z);
@@ -45,21 +67,40 @@ LinearAnimation.prototype.getMatrix = function (time) {
     var length = this.controlPoints.length;
 
     if (time >= this.span){
-        mat4.translate(matrix, matrix, this.controlPoints[length - 1])
-        return matrix;
+        time == this.span;
     }
 
     var currentDist = this.velocity * time;
     var totalDist = 0, index = 0;
     for(var i = 0; i < this.distanceBetweenPoints.length; i++){
         totalDist += this.distanceBetweenPoints[i];
-        if(totalDist > currentDist){
+        if(totalDist >= currentDist){
             index = i;
             break;
         }
     }
+    totalDist -= this.distanceBetweenPoints[index];
 
-    //O objecto está entre os pontos de controlo index - 1 e index.
+    var segmentDist  = currentDist - totalDist;
+    var t = segmentDist / this.distanceBetweenPoints[index];
+    var interpolation = this.lerp(this.controlPoints[index], this.controlPoints[index+1], t);
+    var angle = this.getAngle(this.controlPoints[index], this.controlPoints[index+1]);
+    mat4.translate(matrix, matrix, interpolation);
+    mat4.rotateY(matrix, matrix, angle);
     return matrix;
 };
+
+LinearAnimation.prototype.lerp = function (point1, point2, t) {
+    var interpolation = vec3.create();
+    for(var i = 0; i < point1.length; i++){
+        interpolation[i] = point1[i]*(1-t) + t * point2[i];
+    }
+    return interpolation;
+}
+
+LinearAnimation.prototype.getAngle = function (point1, point2) {
+    var deltaX = point2[0] - point1[0];
+    var deltaZ = point2[2]- point1[2];
+    return Math.atan2(deltaZ, deltaX);
+}
 

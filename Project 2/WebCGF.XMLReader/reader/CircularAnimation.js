@@ -67,5 +67,7 @@ CircularAnimation.prototype.getMatrix = function (time) {
     mat4.translate(matrix, matrix, translation);
     mat4.rotateY(matrix, matrix, deltaAng);
     vec3.set (translation, this.radius, 0, 0);
+    if(this.rotang > 0)
+         mat4.rotateY(matrix, matrix, Math.PI);
     return matrix;
 };

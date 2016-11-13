@@ -196,11 +196,6 @@ Component.prototype.updateAnimations= function(elapsedTime){
 
     if(elapsedTime > endTime)
         this.animationIndex = -1;
-
-    for(var i = 0; i < this.children["components"].length; i++){
-        var comp = this.children["components"][i];
-        comp.updateAnimations(elapsedTime);
-    }
 }
 
 /**
@@ -217,6 +212,7 @@ Component.prototype.display= function(fatherTex, fatherMat, elapsedTime){
     this.scene.pushMatrix();
     this.scene.multMatrix(this.transformation);
 
+    this.updateAnimations(elapsedTime);
     for(var i = 0; i < this.animations.length; i++){
         if(i > this.animationIndex && this.animationIndex != -1)
             break;

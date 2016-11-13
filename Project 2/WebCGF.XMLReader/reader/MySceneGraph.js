@@ -636,6 +636,7 @@ MySceneGraph.prototype.parseAnimations= function(animationsBlock) {
                     linearAnimation.addControlPoint(point['x'], point['y'], point['z']);
                 }
                 this.animations.push(linearAnimation);
+                console.log(linearAnimation);
             }else if (type == 'circular'){
                 var radius = this.reader.getFloat(animation, 'radius');
                 check = this.checkFloatValue(span, 'Radius', animationsBlock.tagName);
