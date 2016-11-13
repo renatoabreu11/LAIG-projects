@@ -636,7 +636,6 @@ MySceneGraph.prototype.parseAnimations= function(animationsBlock) {
                     linearAnimation.addControlPoint(point['x'], point['y'], point['z']);
                 }
                 this.animations.push(linearAnimation);
-                console.log(linearAnimation);
             }else if (type == 'circular'){
                 var radius = this.reader.getFloat(animation, 'radius');
                 check = this.checkFloatValue(span, 'Radius', animationsBlock.tagName);
@@ -766,6 +765,13 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
                             prim[tagName]["controlPoints"].push([point['x'], point['y'], point['z'], 1]);
                         }
 						break;
+
+					case 'chessboard':
+						var aux = this.parseChessboard(tagName, elem);
+						if(aux == -1)
+							break;
+						else prim[tagName] = aux;
+						break;
 					default: break;
 				}
 			}
@@ -774,6 +780,38 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 	}
 	this.initPrimitives();
 };
+
+MySceneGraph.prototype.parseChessboard =function(tagName, block){
+	var chessboard = [];
+	chessboard[tagName] = [];
+
+	chessboard[tagName]["du"] = this.reader.getInteger(block, 'du');
+	chessboard[tagName]["dv"] = this.reader.getInteger(block, 'dv');
+	chessboard[tagName]["su"] = this.reader.getInteger(block, 'su');
+	chessboard[tagName]["sv"] = this.reader.getInteger(block, 'sv');
+
+	var id = this.reader.getString(block, 'textureref');
+	var index = this.checkIfExists(this.textures, id);
+	if(index == -1){
+		this.blockWarnings.push("Texture with id: " + id + " referenced in chessboard primitive doesn't exist");
+		return -1;
+	}
+	chessboard[tagName]["textureref"] = id;
+
+	var c1Block = block.getElementsByTagName('c1');
+	var c2Block = block.getElementsByTagName('c2');
+	var csBlock = block.getElementsByTagName('cs');
+	if (c1Block == null || c2Block == null || csBlock == null) {
+		this.blockWarnings.push('Chess board primitive with invalid colour blocks' );
+		return -1;
+	}
+
+	chessboard[tagName]["c1"] = this.readColours(c1Block[0], 'c1');
+	chessboard[tagName]["c2"] = this.readColours(c2Block[0], 'c2');
+	chessboard[tagName]["cs"] = this.readColours(csBlock[0], 'cs');
+	return chessboard[tagName];
+}
+
 
 /**
  * Initializes each primitive object
@@ -808,6 +846,10 @@ MySceneGraph.prototype.initPrimitives =function(){
 			case 'patch':
 			var values = primitive['patch'];
                 primitive["object"] = new Patch(this.scene, values['orderU'], values['orderV'], values['partsU'], values['partsV'], values['controlPoints']);
+			break;
+			case 'chessboard':
+			var values = primitive['chessboard'];
+            primitive["object"] = new Chessboard(this.scene, values['du'], values['dv'], values['textureref'], values['su'], values['sv'], values['c1'], values['c2'], values['cs']);
 			break;
 		}
 	}
