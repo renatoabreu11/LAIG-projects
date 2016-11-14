@@ -767,7 +767,7 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 						break;
 
 					case 'chessboard':
-						var aux = this.parseChessboard(tagName, elem);
+						var aux = this.parseChessboard(prim,tagName, elem);
 						if(aux == -1)
 							break;
 						else prim = aux;
@@ -777,15 +777,15 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 				}
 			}
 		}
+		console.log(prim);
 		this.primitives.push(prim);
 	}
 	this.initPrimitives();
 };
 
-MySceneGraph.prototype.parseChessboard =function(tagName, block){
-	var chessboard = [];
-	chessboard[tagName] = [];
+MySceneGraph.prototype.parseChessboard =function(chessboard,tagName, block){
 
+	chessboard[tagName]=[];
 	chessboard[tagName]["du"] = this.reader.getInteger(block, 'du');
 	chessboard[tagName]["dv"] = this.reader.getInteger(block, 'dv');
 	chessboard[tagName]["su"] = this.reader.getInteger(block, 'su');

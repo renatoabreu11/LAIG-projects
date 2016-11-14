@@ -8,8 +8,6 @@ function Chessboard(scene, du, dv, textureref, su, sv, c1, c2, cs) {
 
     this.du = du;
     this.dv = dv;
-    //orderU, orderV, partsU, partsV, controlPoints
-    this.board = new Plane(scene,1, 1, this.du, this.dv);
 
     this.su = su;
     this.sv = sv;
@@ -17,6 +15,8 @@ function Chessboard(scene, du, dv, textureref, su, sv, c1, c2, cs) {
     this.c1 = c1;
     this.c2 = c2;
     this.cs = cs;
+    console.log(this);
+    this.board = new Plane(this.scene, this.du, this.dv, 8, 8);
     //this.shader = new CGFshader(scene.gl,"shaders/chessboard.vert", "shaders/chessboard.frag");
 
 	this.initBuffers();
@@ -25,11 +25,15 @@ function Chessboard(scene, du, dv, textureref, su, sv, c1, c2, cs) {
 Chessboard.prototype = Object.create(CGFobject.prototype);
 Chessboard.prototype.constructor=Chessboard;
 
+Chessboard.prototype.display = function () {
+    this.board.display();
+}
+
 Chessboard.prototype.initBuffers =function (){
     //this.shader.setUniformsValues(WTF
-	this.initGLBuffers();
+	//this.initGLBuffers();
 };
 
 Chessboard.prototype.updateTexCoords = function (length_s, length_t){
-    this.updateTexCoordsGLBuffers();
+    //this.updateTexCoordsGLBuffers();
 }

@@ -20,11 +20,9 @@ Plane.prototype.initBuffers = function() {
 
     for(u=0; u<=this.dimX; u++){
         
-        var x = u/this.dimX;
         for(v=0; v<=this.dimY; v++){
             
-            var y = v/this.dimY;
-            this.controlVertexes.push([x,y,0,1]);
+            this.controlVertexes.push([u,v,0,1]);
         }
     }
 

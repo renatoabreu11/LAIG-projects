@@ -186,11 +186,11 @@
          </plane>
         </primitive>
 
-        <primitive id="board">
-        <chessboard du="1" dv="1" textureref="brick" su="1" sv="1">
+        <primitive id="chessboard">
+        <chessboard du="10" dv="10" textureref="brick" su="1" sv="1">
                    <c1 r="1" g="1" b="1" a="1" />
-                   <c2 r="1" g="1" b="1" a="1" />
-                   <cs r="1" g="1" b="1" a="1" />
+                   <c2 r=".2" g=".2" b=".2" a=".2" />
+                   <cs r="1" g="0" b="0" a="1" />
         </chessboard>
         </primitive>
 
@@ -246,8 +246,7 @@
             <texture id="brick" />
 
             <children>
-                <primitiveref id="patch" />
-                <primitiveref id="plane" />
+                <primitiveref id="chessboard" />
              </children>
         </component>
 
