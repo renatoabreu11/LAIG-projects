@@ -182,12 +182,8 @@
         </primitive>
 
         <primitive id="plane">
-         <patch orderU="1" orderV="1" partsU="8" partsV="8" >
-            <controlpoint x="-2" y="-2" z="0"/>
-            <controlpoint x="-2" y="2" z="0"/>
-            <controlpoint x="2" y="-2" z="0"/>
-            <controlpoint x="2" y="2" z="0"/>
-         </patch>
+         <plane dimX="3" dimY="3" partsX="8" partsY="8" >
+         </plane>
         </primitive>
 
         <primitive id="board">
@@ -200,19 +196,19 @@
 
          <primitive id="patch">
             <patch orderU="2" orderV="3" partsU="8" partsV="8" >
-                        <controlpoint x="-1.5" y="-1.5" z="0"/>
-                        <controlpoint x="-2" y="-2" z="2"/>
-                        <controlpoint x="-2" y="-2" z="2"/>
-                        <controlpoint x="-1.5" y="1.5" z="0"/>
-                        <controlpoint x="0" y="0" z="3"/>
-                        <controlpoint x="0" y="-2" z="3"/>
-                        <controlpoint x="0" y="2" z="3"/>
-                        <controlpoint x="0" y="0" z="3"/>
-                        <controlpoint x="1.5" y="-1.5" z="0"/>
-                        <controlpoint x="2" y="-2" z="2"/>
-                        <controlpoint x="2" y="2" z="2"/>
-                        <controlpoint x="1.5" y="1.5" z="0"/>
-                    </patch>
+                <controlpoint x="-1.5" y="-1.5" z="0"/>
+                <controlpoint x="-2" y="-2" z="2"/>
+                <controlpoint x="-2" y="-2" z="2"/>
+                <controlpoint x="-1.5" y="1.5" z="0"/>
+                <controlpoint x="0" y="0" z="3"/>
+                <controlpoint x="0" y="-2" z="3"/>
+                <controlpoint x="0" y="2" z="3"/>
+                <controlpoint x="0" y="0" z="3"/>
+                <controlpoint x="1.5" y="-1.5" z="0"/>
+                <controlpoint x="2" y="-2" z="2"/>
+                <controlpoint x="2" y="2" z="2"/>
+                <controlpoint x="1.5" y="1.5" z="0"/>
+            </patch>
          </primitive>
     </primitives>
 

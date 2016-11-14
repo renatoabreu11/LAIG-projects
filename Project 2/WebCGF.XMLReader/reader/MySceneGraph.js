@@ -741,8 +741,8 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 					}
 					case 'plane':
 						prim[tagName] = [];
-                        prim[tagName]["dimX"] = this.reader.getFloat(elem, 'dimX');
-                        prim[tagName]["dimY"] = this.reader.getFloat(elem, 'dimY');
+                        prim[tagName]["dimX"] = this.reader.getInteger(elem, 'dimX');
+                        prim[tagName]["dimY"] = this.reader.getInteger(elem, 'dimY');
                         prim[tagName]["partsX"] = this.reader.getInteger(elem, 'partsX');
                         prim[tagName]["partsY"] = this.reader.getInteger(elem, 'partsY');
 						break;
@@ -770,8 +770,9 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 						var aux = this.parseChessboard(tagName, elem);
 						if(aux == -1)
 							break;
-						else prim[tagName] = aux;
+						else prim = aux;
 						break;
+					
 					default: break;
 				}
 			}
@@ -809,7 +810,7 @@ MySceneGraph.prototype.parseChessboard =function(tagName, block){
 	chessboard[tagName]["c1"] = this.readColours(c1Block[0], 'c1');
 	chessboard[tagName]["c2"] = this.readColours(c2Block[0], 'c2');
 	chessboard[tagName]["cs"] = this.readColours(csBlock[0], 'cs');
-	return chessboard[tagName];
+	return chessboard;
 }
 
 
