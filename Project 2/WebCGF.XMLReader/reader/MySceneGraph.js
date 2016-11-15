@@ -772,6 +772,9 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 							break;
 						else prim = aux;
 						break;
+
+					case 'vehicle':
+						break;
 					
 					default: break;
 				}
@@ -850,6 +853,9 @@ MySceneGraph.prototype.initPrimitives =function(){
 			case 'chessboard':
 			var values = primitive['chessboard'];
             primitive["object"] = new Chessboard(this.scene, values['du'], values['dv'], values['textureref'], values['su'], values['sv'], values['c1'], values['c2'], values['cs']);
+			break;
+			case 'vehicle':
+			primitive["object"] = new Vehicle(this.scene);
 			break;
 		}
 	}

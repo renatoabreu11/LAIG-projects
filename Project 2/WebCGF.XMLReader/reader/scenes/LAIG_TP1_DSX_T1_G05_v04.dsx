@@ -210,6 +210,11 @@
                 <controlpoint x="1.5" y="1.5" z="0"/>
             </patch>
          </primitive>
+
+         <primitive id="vehicle">
+            <vehicle />
+         </primitive>
+
     </primitives>
 
     <components>
@@ -243,10 +248,10 @@
                     <material id="bright" />
             </materials>
 
-            <texture id="brick" />
+            <texture id="none" />
 
             <children>
-                <primitiveref id="chessboard" />
+                <primitiveref id="vehicle" />
              </children>
         </component>
 
