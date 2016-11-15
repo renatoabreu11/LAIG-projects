@@ -13,6 +13,8 @@ function Vehicle(scene) {
     this.createLowerSpaceShip();
     this.dome = new HalfSphere(scene,7,6);
 
+    this.domeAppearance = new CGFappearance(this.scene);
+    this.domeAppearance.loadTexture("../res/white.jpg");
 }
 
 Vehicle.prototype = Object.create(CGFobject.prototype);
@@ -25,6 +27,7 @@ Vehicle.prototype.display = function () {
     
     this.scene.translate(1,2.5,0);
     this.scene.scale(4.1,4.6,3.8);
+    this.domeAppearance.apply();
     this.dome.display();
 
     this.scene.popMatrix();
