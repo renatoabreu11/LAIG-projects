@@ -189,8 +189,8 @@
 
         <primitive id="chessboard">
         <chessboard du="8" dv="8" textureref="wood" su="1" sv="1">
-                   <c1 r="0.2" g="0.3" b="1" a="1" />
-                   <c2 r=".2" g=".2" b=".2" a=".2" />
+                   <c1 r="0.2" g="0.3" b="0.4" a="1" />
+                   <c2 r=".8" g=".5" b=".2" a=".2" />
                    <cs r="1" g="0" b="0" a="1" />
         </chessboard>
         </primitive>
