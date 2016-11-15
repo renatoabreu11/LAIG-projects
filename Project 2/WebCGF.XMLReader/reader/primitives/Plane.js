@@ -15,18 +15,19 @@ Plane.prototype.constructor = Plane;
 
 Plane.prototype.initBuffers = function() {
 
-
     this.controlVertexes = [];
 
-    for(u=0; u<=this.dimX; u++){
-        
-        for(v=0; v<=this.dimY; v++){
-            
-            this.controlVertexes.push([u,v,0,1]);
-        }
-    }
-
-    this.plane = new Patch(this.scene, this.dimX, this.dimY, this.partsX, this.partsY, this.controlVertexes);
+    var yCoord = this.dimY / 2;
+    var xCoord = this.dimX / 2;
+    var point1 = [-xCoord, -yCoord, 0, 1];
+    var point2 = [-xCoord, yCoord, 0, 1];
+    var point3 = [xCoord, -yCoord, 0, 1];
+    var point4 = [xCoord, yCoord, 0, 1];
+    this.controlVertexes.push(point1);
+    this.controlVertexes.push(point2);
+    this.controlVertexes.push(point3);
+    this.controlVertexes.push(point4);
+    this.plane = new Patch(this.scene, 1, 1, this.partsX, this.partsY, this.controlVertexes);
 };
 
 Plane.prototype.display = function () {

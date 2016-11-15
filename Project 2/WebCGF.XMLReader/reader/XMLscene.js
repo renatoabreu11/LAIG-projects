@@ -32,9 +32,6 @@ XMLscene.prototype.init = function (application) {
     this.setUpdatePeriod(this.updatePeriod);
     this.initialTime = 0;
     this.elapsedTime = 0;
-
-    this.boardShader = new CGFshader(this.gl, "shaders/chessboard.vert", "shaders/chessboard.frag");
-    this.boardShader.setUniformsValues();
 };
 
 /**
@@ -183,7 +180,6 @@ XMLscene.prototype.display = function () {
 	this.setDefaultAppearance();
 	
 	// ---- END Background, camera and axis setup
-
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it

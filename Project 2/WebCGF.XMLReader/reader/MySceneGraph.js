@@ -799,7 +799,7 @@ MySceneGraph.prototype.parseChessboard =function(chessboard,tagName, block){
 		this.blockWarnings.push("Texture with id: " + id + " referenced in chessboard primitive doesn't exist");
 		return -1;
 	}
-	chessboard[tagName]["textureref"] = id;
+	chessboard[tagName]["textureref"] = this.textures[index];
 
 	var c1Block = block.getElementsByTagName('c1');
 	var c2Block = block.getElementsByTagName('c2');
@@ -812,9 +812,9 @@ MySceneGraph.prototype.parseChessboard =function(chessboard,tagName, block){
 	chessboard[tagName]["c1"] = this.readColours(c1Block[0], 'c1');
 	chessboard[tagName]["c2"] = this.readColours(c2Block[0], 'c2');
 	chessboard[tagName]["cs"] = this.readColours(csBlock[0], 'cs');
+	console.log(chessboard)
 	return chessboard;
 }
-
 
 /**
  * Initializes each primitive object
