@@ -777,7 +777,6 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 				}
 			}
 		}
-		console.log(prim);
 		this.primitives.push(prim);
 	}
 	this.initPrimitives();
