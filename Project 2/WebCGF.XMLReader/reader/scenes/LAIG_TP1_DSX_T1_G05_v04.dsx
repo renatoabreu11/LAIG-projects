@@ -251,7 +251,7 @@
             <texture id="none" />
 
             <children>
-                <primitiveref id="chessboard" />
+                <primitiveref id="vehicle" />
              </children>
         </component>
 
