@@ -812,7 +812,6 @@ MySceneGraph.prototype.parseChessboard =function(chessboard,tagName, block){
 	chessboard[tagName]["c1"] = this.readColours(c1Block[0], 'c1');
 	chessboard[tagName]["c2"] = this.readColours(c2Block[0], 'c2');
 	chessboard[tagName]["cs"] = this.readColours(csBlock[0], 'cs');
-	console.log(chessboard)
 	return chessboard;
 }
 
