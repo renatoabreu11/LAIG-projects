@@ -24,7 +24,6 @@ Vehicle.prototype.display = function () {
     this.scene.pushMatrix();
 
     this.hull.display();
-    this.hullBottom.display();
     
     this.scene.translate(1,4,0);
     this.scene.scale(4.1,4.6,3.8);
@@ -41,7 +40,6 @@ Vehicle.prototype.createHull = function(){
 
 	var radiusDiff=this.outerRadius-this.innerRadius;
 	var controlPoints=[];
-	var bottomPoints=[];
 	for(u=0; u<=orderU; u++){
 		var uProp = u/orderU;
 		var h=this.height*uProp;
@@ -58,8 +56,6 @@ Vehicle.prototype.createHull = function(){
 	}
 
 	this.hull = new Patch(this.scene,orderU,orderV,4,9,controlPoints);
-	console.log(bottomPoints);
-	this.hullBottom = new Polygon(this.scene,bottomPoints);
 }
 
 
