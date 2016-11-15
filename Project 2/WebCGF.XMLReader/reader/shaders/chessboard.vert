@@ -1,15 +1,13 @@
-#version 330
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
+attribute vec2 aTextureCoord;
 
-layout (std140) uniform Matrices {
-	mat4 pvm;
-} ;
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+uniform mat4 uNMatrix;
 
-in vec4 position;
 
-out vec4 color;
+void main() {
+	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+}
 
-void main()
-{
-	color = position;
-	gl_Position = pvm * position ;
-} 

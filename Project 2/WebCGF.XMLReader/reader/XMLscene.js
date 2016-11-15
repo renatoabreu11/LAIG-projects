@@ -32,6 +32,9 @@ XMLscene.prototype.init = function (application) {
     this.setUpdatePeriod(this.updatePeriod);
     this.initialTime = 0;
     this.elapsedTime = 0;
+
+    this.boardShader = new CGFshader(this.gl, "shaders/chessboard.vert", "shaders/chessboard.frag");
+    this.boardShader.setUniformsValues();
 };
 
 /**
