@@ -6,6 +6,7 @@ function Portal(scene) {
     this.portalShader = new CGFshader(this.scene.gl, "shaders/portal.vert", "shaders/portal.frag");
     this.portalShader.setUniformsValues({
         uSampler2: 1,
+        time: 0
     });
 
     this.controlVertexes = [
@@ -41,15 +42,21 @@ Portal.prototype.constructor = Portal;
 Portal.prototype.display = function () {
     this.scene.pushMatrix();
     this.appearance.apply();
+    this.scene.setActiveShader(this.portalShader);
     this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);
     this.scene.scale(10, 10, 1);
     this.scene.rotate(90 * Math.PI / 180, 0, 0, 1);
-    this.scene.setActiveShader(this.portalShader);
     this.portal.display();
     this.scene.setActiveShader(this.scene.defaultShader)
     this.scene.popMatrix();
 }
 
 Portal.prototype.updateTexCoords = function (length_s, length_t) {
+}
+
+Portal.prototype.updateTime = function (elapsedTime) {
+    this.portalShader.setUniformsValues({
+        time: elapsedTime,
+    });
 }
 

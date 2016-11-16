@@ -251,6 +251,9 @@ Component.prototype.display= function(fatherTex, fatherMat, elapsedTime){
  		if(compTexture != 'none'){
  			prim.updateTexCoords(compTexture["length_s"], compTexture["length_t"]);
  		}
+        if (prim instanceof Portal) {
+            prim.updateTime(elapsedTime);
+        }
  		prim.display();
  	}
 
