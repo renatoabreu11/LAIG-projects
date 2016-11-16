@@ -11,6 +11,7 @@ uniform mat4 uPMatrix;
 uniform mat4 uNMatrix;
 
 varying vec2 vTextureCoord;
+varying vec2 coords;
 varying float isSelected;
 uniform sampler2D uSampler2;
 uniform vec4 c1;
@@ -26,9 +27,9 @@ uniform float normScale;
 void main() {
     vec3 offset = vec3(0.0, 0.0, 0.0);
     vTextureCoord = aTextureCoord;
-    float x = floor(aTextureCoord.x*du);
-    float y = floor(aTextureCoord.y*dv);
-	if((x >= su && y >= sv) && (x <= (su + 1.0) && y <= (sv + 1.0))){
+    coords = vec2(aTextureCoord.x*du, aTextureCoord.y*dv);
+    vec2 indexCoords = floor(coords);
+	if((indexCoords.x >= su && indexCoords.y >= sv) && (indexCoords.x <= (su + 1.0) && indexCoords.y <= (sv + 1.0))){
 	    isSelected = 0.0;
 	}
     else isSelected = 1.0;
