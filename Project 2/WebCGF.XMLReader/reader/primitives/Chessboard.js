@@ -17,7 +17,7 @@ function Chessboard(scene, du, dv, textureref, su, sv, c1, c2, cs) {
     vec4.set(this.colour2, c2.r, c2.g, c2.b, c2.a);
     this.colourS = vec4.create();
     vec4.set(this.colourS, cs.r, cs.g, cs.b, cs.a);
-    this.board = new Plane(this.scene, this.du, this.dv, this.du, this.dv);
+    this.board = new Plane(this.scene, this.du, this.dv, 5*this.du, 5*this.dv);
 
     this.appearance = new CGFappearance(this.scene);
     this.appearance.setTexture(this.textureref['info']);
