@@ -35,7 +35,6 @@ void main() {
    else{
         vec4 aux =  mix(c2, c1, blendX);
         resultantColour = mix(aux, c1, blendY);
-
    }
 
 	vec4 color = texture2D(uSampler, vTextureCoord);
