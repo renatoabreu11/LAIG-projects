@@ -175,8 +175,6 @@
 
         <animation id="rotate45" span="3" type="circular" centerx="0" centery="0" centerz="0"
             radius="3" startang="0" rotang="60"/>
-
-
    </animations>
 
     <primitives>
@@ -258,9 +256,9 @@
             <vehicle />
          </primitive>
 
-         <primitive id="portal">
-            <torus inner="8" outer="10" slices="12" loops="12" />
-        </primitive>
+          <primitive id="portal">
+                <portal />
+          </primitive>
 
     </primitives>
 
@@ -284,8 +282,8 @@
                 <componentref id="body" />
                 <componentref id="onix" />
                 <componentref id="solrock" />
-                <componentref id="portal1" />
-                <componentref id="portal2" />
+                <componentref id="bottomPortal" />
+                <componentref id="topPortal" />
             </children>
         </component>
 
@@ -321,6 +319,39 @@
             <children>
                 <primitiveref id="portal" />
             </children>
+        </component>
+
+        <component id="bottomPortal">
+            <transformation>
+                <translate x="25" y="-98" z="25" />
+            </transformation>
+
+            <materials>
+                    <material id="superbright" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="portal" />
+             </children>
+        </component>
+
+            <component id="topPortal">
+            <transformation>
+                <translate x="50" y="98" z="0" />
+                <rotate axis="x" angle="180" />
+            </transformation>
+
+            <materials>
+                    <material id="superbright" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="portal" />
+             </children>
         </component>
 
         <component id="skybox">

@@ -21,7 +21,12 @@ XMLscene.prototype.init = function (application) {
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
-    this.gl.depthFunc(this.gl.LEQUAL);
+	this.gl.depthFunc(this.gl.LEQUAL);
+	this.gl.enable(this.gl.BLEND);
+	this.gl.blendEquation(this.gl.FUNC_ADD);
+	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+	this.gl.depthFunc(this.gl.LEQUAL);
+	this.gl.depthMask(true);
 
     this.enableTextures(true);
 

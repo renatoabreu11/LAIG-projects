@@ -775,6 +775,9 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 
 					case 'vehicle':
 						break;
+
+                    case 'portal':
+                        break;
 					
 					default: break;
 				}
@@ -819,45 +822,46 @@ MySceneGraph.prototype.parseChessboard =function(chessboard,tagName, block){
  * Initializes each primitive object
  */
 MySceneGraph.prototype.initPrimitives =function(){
-	for(var primitive of this.primitives){
-		switch(primitive['tag']){
-			case 'rectangle':
-			var values = primitive['rectangle'];
-			primitive["object"] = new Rectangle(this.scene,values['x1'],values['y1'],values['x2'],values['y2']);
-			break;
-			case 'triangle':
-			var values = primitive['triangle'];
-			primitive["object"] = new Triangle(this.scene,values['x1'],values['y1'],values['z1'],values['x2'],values['y2'],values['z2'],values['x3'],values['y3'],values['z3']);
-			break;
-			case 'cylinder':
-			var values = primitive['cylinder'];
-			primitive["object"] = new Cylinder(this.scene,values['base'],values['top'], values['height'], values['slices'],values['stacks']);
-			break;
-			case 'sphere':
-			var values = primitive['sphere'];
-			primitive["object"] = new Sphere(this.scene, values['radius'], values['slices'],values['stacks']);
-			break;
-			case 'torus':
-			var values = primitive['torus'];
-			primitive["object"] = new Torus(this.scene, values['inner'], values['outer'], values['slices'],values['loops']);
-			break;
-			case 'plane':
-			var values = primitive['plane'];
-			primitive["object"] = new Plane(this.scene, values['dimX'], values['dimY'], values['partsX'], values['partsY']);
-			break;
-			case 'patch':
-			var values = primitive['patch'];
-                primitive["object"] = new Patch(this.scene, values['orderU'], values['orderV'], values['partsU'], values['partsV'], values['controlPoints']);
-			break;
-			case 'chessboard':
-			var values = primitive['chessboard'];
+    for (var primitive of this.primitives)switch (primitive['tag']) {
+        case 'rectangle':
+            var values = primitive['rectangle'];
+            primitive["object"] = new Rectangle(this.scene, values['x1'], values['y1'], values['x2'], values['y2']);
+            break;
+        case 'triangle':
+            var values = primitive['triangle'];
+            primitive["object"] = new Triangle(this.scene, values['x1'], values['y1'], values['z1'], values['x2'], values['y2'], values['z2'], values['x3'], values['y3'], values['z3']);
+            break;
+        case 'cylinder':
+            var values = primitive['cylinder'];
+            primitive["object"] = new Cylinder(this.scene, values['base'], values['top'], values['height'], values['slices'], values['stacks']);
+            break;
+        case 'sphere':
+            var values = primitive['sphere'];
+            primitive["object"] = new Sphere(this.scene, values['radius'], values['slices'], values['stacks']);
+            break;
+        case 'torus':
+            var values = primitive['torus'];
+            primitive["object"] = new Torus(this.scene, values['inner'], values['outer'], values['slices'], values['loops']);
+            break;
+        case 'plane':
+            var values = primitive['plane'];
+            primitive["object"] = new Plane(this.scene, values['dimX'], values['dimY'], values['partsX'], values['partsY']);
+            break;
+        case 'patch':
+            var values = primitive['patch'];
+            primitive["object"] = new Patch(this.scene, values['orderU'], values['orderV'], values['partsU'], values['partsV'], values['controlPoints']);
+            break;
+        case 'chessboard':
+            var values = primitive['chessboard'];
             primitive["object"] = new Chessboard(this.scene, values['du'], values['dv'], values['textureref'], values['su'], values['sv'], values['c1'], values['c2'], values['cs']);
-			break;
-			case 'vehicle':
-			primitive["object"] = new Vehicle(this.scene);
-			break;
-		}
-	}
+            break;
+        case 'vehicle':
+            primitive["object"] = new Vehicle(this.scene);
+            break;
+        case 'portal':
+            primitive["object"] = new Portal(this.scene);
+            break;
+    }
 };
 
 /**
