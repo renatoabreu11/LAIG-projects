@@ -51,7 +51,7 @@
             <specular r="0" g="0" b="0" a="1" />
         </spot>
 
-        <spot id="light4" enabled="0" angle="60" exponent="1">
+        <spot id="light4" enabled="1" angle="60" exponent="1">
             <target x="15" y="0" z="15" />
             <location x="15" y="25" z="15"/>
             <ambient r="0" g="0" b="0" a="1" />
@@ -112,6 +112,14 @@
            <ambient r="0.1" g="0.5" b="0.5" a="1" />
            <diffuse r="0.1" g="0.4" b="0.4" a="1" />
            <specular r="0.1" g="0.2" b="0.2" a="1" />
+           <shininess value="1" />
+       </material>
+
+       <material id="superbright" >
+           <emission r="1" g="1" b="1" a="1" />
+           <ambient r="0.5" g="0.5" b="0.5" a="1" />
+           <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+           <specular r="0.5" g="0.5" b="0.5" a="1" />
            <shininess value="1" />
        </material>
 
@@ -234,25 +242,25 @@
                 <componentref id="nurbs" />
                 <componentref id="ground" />
                 <componentref id="pyramids" />
-                <componentref id="body" />
+                <!--<componentref id="body" />
                 <componentref id="onix" />
-                <componentref id="solrock" />
+                <componentref id="solrock" />-->
             </children>
         </component>
 
         <component id="nurbs">
             <transformation>
-                <translate x="0" y="10" z="0" />
+                <translate x="0" y="7" z="0" />
             </transformation>
 
             <materials>
-                    <material id="bright" />
+                    <material id="superbright" />
             </materials>
 
             <texture id="none" />
 
             <children>
-                <primitiveref id="chessboard" />
+                <primitiveref id="vehicle" />
              </children>
         </component>
 

@@ -6,20 +6,23 @@
 function Vehicle(scene) {
 	CGFobject.call(this,scene);
 
+	this.domeAppearance = new CGFappearance(this.scene);
+    this.domeAppearance.loadTexture("../res/white.jpg");
+    this.legAppearance = new CGFappearance(this.scene);
+    this.legAppearance.loadTexture("../res/brick.jpg");
+    this.hullAppearance = new CGFappearance(this.scene);
+    this.hullAppearance.loadTexture("../res/onix.jpg");
+
 	this.innerRadius = 5; //not a real radius
 	this.outerRadius = 23;//not a real radius
 	this.height =4;
 
     this.createHull(); //casco
-    this.dome = new HalfSphere(scene,7,6); //cupula
-    this.leg = new Cylinder(scene,.25,.25,6,5,6);//motor(es)
+    this.dome = new HalfSphere(scene,5,8); //cupula
+    this.leg = new Cylinder(scene,.25,.25,6,5,5);//perna(s)
+    this.motor = new Cylinder(scene,1,2,4,8,5); //motor(es)
+    this.motorAux = new Cylinder(scene,.3,.3,3,5,3);
 
-    this.domeAppearance = new CGFappearance(this.scene);
-    this.domeAppearance.loadTexture("../res/white.jpg");
-    this.motorAppearance = new CGFappearance(this.scene);
-    this.motorAppearance.loadTexture("../res/brick.jpg");
-    this.hullAppearance = new CGFappearance(this.scene);
-    this.hullAppearance.loadTexture("../res/onix.jpg");
 }
 
 Vehicle.prototype = Object.create(CGFobject.prototype);
@@ -40,8 +43,28 @@ Vehicle.prototype.display = function () {
     this.scene.scale(4.1,4.6,3.8);
     this.dome.display();
 
-	//motors
-	this.motorAppearance.apply();
+    //motor holder
+    for(i=-1; i<=1; i+=2){
+    	this.scene.popMatrix();
+    	this.scene.pushMatrix();
+    	this.scene.translate(-1,3.3,i*4.5);
+    	if(i==-1)
+    		this.scene.rotate(-Math.PI*2/3,1,0,0);
+    	else this.scene.rotate(-Math.PI/3,1,0,0);
+    	this.motorAux.display();
+    }
+
+    //motor
+    for(i=-1; i<=1; i+=2){
+    	this.scene.popMatrix();
+    	this.scene.pushMatrix();
+    	this.scene.translate(0,6,i*6);
+    	this.scene.rotate(-Math.PI/2,0,1,0);
+    	this.motor.display();
+    }
+
+	//leg
+	this.legAppearance.apply();
     for(i=0;i<3; i++){
     	for(j=-1; j<=1; j+=2){
     		this.scene.popMatrix();
