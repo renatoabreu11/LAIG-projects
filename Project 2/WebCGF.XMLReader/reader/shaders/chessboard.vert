@@ -17,6 +17,8 @@ uniform vec4 c2;
 uniform vec4 cs;
 uniform float du;
 uniform float dv;
+uniform float su;
+uniform float sv;
 
 uniform float normScale;
 

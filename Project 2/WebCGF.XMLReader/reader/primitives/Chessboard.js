@@ -30,7 +30,9 @@ function Chessboard(scene, du, dv, textureref, su, sv, c1, c2, cs) {
         c2: this.colour2,
         cs: this.colourS,
         du: this.du,
-        dv: this.dv
+        dv: this.dv,
+        su: this.su,
+        sv: this.sv
     });
 }
 

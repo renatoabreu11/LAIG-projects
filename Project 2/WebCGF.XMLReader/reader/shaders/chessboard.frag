@@ -12,15 +12,34 @@ uniform vec4 c2;
 uniform vec4 cs;
 uniform float du;
 uniform float dv;
+uniform float su;
+uniform float sv;
 
 void main() {
-    vec2 position = vTextureCoord * vec2(du, dv);
-    vec2 cell = floor(position);
-    vec2 result = mod(position, vec2(2.0, 2.0));
     vec4 resultantColour;
-    if(result.x > 0.1 && result.y > 0.1)
+
+    float x = 0.5*(vTextureCoord.x+1.0); // range [0,1]
+    float y = 0.5*(vTextureCoord.y+1.0); // range [0,1]
+    /*
+    When the fractional part of the x coordinate is lower than 0.5 the shader picks one color,
+    otherwise the other color would be picked.
+
+    GLSL has a function that we can use to create the smoth transitions: smoothstep.
+    */
+
+    float fractX = fract(x * du);
+    float fractY = fract(y * dv);
+    float blendX = smoothstep(0.49, 0.5, fractX) *
+            (1.0 - smoothstep(0.99, 1.0, fractX));
+    float blendY = smoothstep(0.49, 0.5, fractY) *
+            (1.0 - smoothstep(0.99, 1.0, fractY));
+
+   if(floor(x * du) == 7.0)
+        resultantColour = cs;
+   else if ((fractX < 0.5) ^^ (fractY < 0.5))
         resultantColour = c1;
-    else resultantColour = c2;
+   else
+        resultantColour = c2;
 
 	vec4 color = texture2D(uSampler, vTextureCoord);
 	gl_FragColor = color * resultantColour;
