@@ -7,6 +7,7 @@ varying vec2 vTextureCoord;
 uniform sampler2D uSampler;
 uniform sampler2D uSampler2;
 
+varying float isSelected;
 uniform vec4 c1;
 uniform vec4 c2;
 uniform vec4 cs;
@@ -17,10 +18,6 @@ uniform float sv;
 
 void main() {
     vec4 resultantColour;
-
-    /* conversion */
-    float sx = (su/2.0)+4.0;
-    float sy = (sv/2.0)+4.0;
 
     float x = 0.5*(vTextureCoord.x+1.0); // range [0,1]
     float y = 0.5*(vTextureCoord.y+1.0); // range [0,1]
@@ -38,9 +35,7 @@ void main() {
     float blendY = smoothstep(0.49, 0.5, fractY) *
             (1.0 - smoothstep(0.99, 1.0, fractY));
 
-   if( ((x * du >= sx) && (x * du < sx+.5)) &&
-        ((y*dv >= sy) && (y*dv < sy+.5))
-    )
+   if(isSelected == 0.0)
         resultantColour = cs;
    else if ((fractX < 0.5) ^^ (fractY < 0.5))
         resultantColour = c1;
