@@ -68,6 +68,7 @@
         <texture id="sand2" file="../res/sand2.jpg" length_s="20" length_t="20" />
         <texture id="troll" file="../res/troll.jpg" length_s="1" length_t="1" />
         <texture id="solrock" file="../res/solrock.jpg" length_s="1" length_t="1" />
+        <texture id="bluefire" file="../res/bluefire.jpg" length_s="1" length_t="1" />
         <texture id="eye" file="../res/eye.png" length_s="1" length_t="1" />
         <texture id="onix" file="../res/onix.jpg" length_s="1" length_t="1" />
         <texture id="white" file="../res/white.jpg" length_s="1" length_t="1" />
@@ -144,13 +145,38 @@
    <animations>
         <animation id="anim1" span="3" type="linear">
             <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="6" y="0" z="0" />
-            <controlpoint x="12" y="0" z="0" />
             <controlpoint x="18" y="0" z="0" />
         </animation>
 
-        <animation id="anim2" span="3" type="circular" centerx="0" centery="0" centerz="0"
+        <animation id="tpShip" span="1" type="linear">
+            <controlpoint x="-50" y="0" z="0" />
+            <controlpoint x="-50" y="0.001" z="0" />
+        </animation>
+
+        <animation id="moveShip" span="4" type="linear">
+            <controlpoint x="0" y="0" z="0" />
+            <controlpoint x="25" y="0" z="0" />
+        </animation>
+
+        <animation id="pause" span="10" type="linear">
+            <controlpoint x="0" y="0" z="0" />
+            <controlpoint x="0" y="0.001" z="0" />
+        </animation>
+
+        <animation id="shortPause" span="1" type="linear">
+            <controlpoint x="0" y="0" z="0" />
+            <controlpoint x="0" y="0.001" z="0" />
+        </animation>
+
+        <animation id="abduction" span="4" type="linear">
+            <controlpoint x="0" y="0" z="0" />
+            <controlpoint x="0" y="10" z="0" />
+        </animation>
+
+        <animation id="rotate45" span="3" type="circular" centerx="0" centery="0" centerz="0"
             radius="3" startang="0" rotang="60"/>
+
+
    </animations>
 
     <primitives>
@@ -228,9 +254,13 @@
             </patch>
          </primitive>
 
-         <primitive id="vehicle">
+         <primitive id="spaceship">
             <vehicle />
          </primitive>
+
+         <primitive id="portal">
+            <torus inner="8" outer="10" slices="12" loops="12" />
+        </primitive>
 
     </primitives>
 
@@ -247,13 +277,49 @@
             <texture id="none" />
 
             <children>
-                <componentref id="nurbs" />
+                <componentref id="spaceship" />
                 <componentref id="ground" />
                 <componentref id="pyramids" />
                 <componentref id="skybox"/>
-                <!--<componentref id="body" />
+                <componentref id="body" />
                 <componentref id="onix" />
-                <componentref id="solrock" />-->
+                <componentref id="solrock" />
+                <componentref id="portal1" />
+                <componentref id="portal2" />
+            </children>
+        </component>
+
+        <component id="portal1">
+            <transformation>
+                 <translate x="-30" y="20" z="0" />
+                 <rotate axis="y" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="solrock" />
+
+            <children>
+                <primitiveref id="portal" />
+            </children>
+        </component>
+
+        <component id="portal2">
+            <transformation>
+                 <translate x="30" y="20" z="0" />
+                 <rotate axis="y" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="bluefire" />
+
+            <children>
+                <primitiveref id="portal" />
             </children>
         </component>
 
@@ -281,10 +347,10 @@
 
         <component id="top">
             <transformation>
-                 <translate x="0" y="100" z="0" />
-                                  <scale x="200" y="1" z="200" />
-                                  <rotate axis="x" angle="90" />
-                                  <rotate axis="z" angle="180" />
+                <translate x="0" y="100" z="0" />
+                <scale x="200" y="1" z="200" />
+                <rotate axis="x" angle="90" />
+                <rotate axis="z" angle="180" />
             </transformation>
 
             <materials>
@@ -395,17 +461,19 @@
             </children>
         </component>
 
-        <component id="nurbs">
+        <component id="spaceship">
             <transformation>
-                <translate x="0" y="7" z="0" />
+                <translate x="0" y="20" z="0" />
             </transformation>
 
 
             <animation>
-                    	    <animationref id="anim2" />
-                    	    <animationref id="anim2" />
-                    	    <animationref id="anim1" />
-                    	</animation>
+                <animationref id="shortPause" />
+                <animationref id="moveShip" />
+                <animationref id="tpShip" />
+                <animationref id="moveShip" />
+            </animation>
+
             <materials>
                     <material id="superbright" />
             </materials>
@@ -413,7 +481,7 @@
             <texture id="none" />
 
             <children>
-                <primitiveref id="vehicle" />
+                <primitiveref id="spaceship" />
              </children>
         </component>
 
@@ -577,8 +645,12 @@
         <component id="body">
             <transformation>
                 <rotate axis="y" angle="-45" />
-                <scale x=".5" y=".5" z=".5" />
             </transformation>
+
+            <animation>
+                <animationref id="pause"/>
+                <animationref id="abduction"/>
+            </animation>
 
             <materials>
                 <material id="s1" />
@@ -1141,8 +1213,8 @@
         	</transformation>
 
             <animation>
-        	    <animationref id="anim2" />
-        	    <animationref id="anim2" />
+        	    <animationref id="rotate45" />
+        	    <animationref id="rotate45" />
         	</animation>
 
         	<materials>
