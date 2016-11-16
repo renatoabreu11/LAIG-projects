@@ -17,7 +17,10 @@ void main() {
     vTextureCoord = aTextureCoord;
     float xx = aVertexPosition.x;
 	float yy = aVertexPosition.y;
-	float offset = cos(cos(yy/(3.0)-time*2.0)+(xx*(2.0+2.0)+300.0/(-0.3+2.0)));
+	float pi = 3.14159;
+    float A = 0.15;
+    float w = 10.0 * pi;
+	float offset = sin( w*xx + time) * A + cos(w*yy + time)*A;
 
 	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition + aVertexNormal*offset, 1.0);
 }
