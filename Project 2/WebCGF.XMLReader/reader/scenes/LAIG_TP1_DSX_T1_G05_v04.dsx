@@ -74,6 +74,12 @@
         <texture id="grey" file="../res/grey.jpg" length_s="1" length_t="1" />
         <texture id="black" file="../res/black.jpg" length_s="1" length_t="1" />
         <texture id="wood" file="../res/wood.jpg" length_s="1" length_t="1" />
+        <texture id="left" file="../res/left.jpg" length_s="1" length_t="1" />
+        <texture id="back" file="../res/back.jpg" length_s="1" length_t="1" />
+        <texture id="front" file="../res/front.jpg" length_s="1" length_t="1" />
+        <texture id="right" file="../res/right.jpg" length_s="1" length_t="1" />
+        <texture id="bottom" file="../res/bottom.jpg" length_s="1" length_t="1" />
+        <texture id="top" file="../res/top.jpg" length_s="1" length_t="1" />
     </textures>
 
     <materials>
@@ -136,14 +142,14 @@
     </transformations>
 
    <animations>
-        <animation id="anim1" span="10" type="linear">
+        <animation id="anim1" span="3" type="linear">
             <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="1" y="0" z="0" />
-            <controlpoint x="1" y="1" z="1" />
-            <controlpoint x="1" y="1" z="2" />
+            <controlpoint x="6" y="0" z="0" />
+            <controlpoint x="12" y="0" z="0" />
+            <controlpoint x="18" y="0" z="0" />
         </animation>
 
-        <animation id="anim2" span="5" type="circular" centerx="0" centery="0" centerz="0"
+        <animation id="anim2" span="3" type="circular" centerx="0" centery="0" centerz="0"
             radius="3" startang="0" rotang="60"/>
    </animations>
 
@@ -244,9 +250,148 @@
                 <componentref id="nurbs" />
                 <componentref id="ground" />
                 <componentref id="pyramids" />
+                <componentref id="skybox"/>
                 <!--<componentref id="body" />
                 <componentref id="onix" />
                 <componentref id="solrock" />-->
+            </children>
+        </component>
+
+        <component id="skybox">
+            <transformation>
+                 <translate x="0" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="top" />
+                <componentref id="bottom" />
+                <componentref id="right" />
+                <componentref id="left" />
+                <componentref id="front" />
+                <componentref id="back" />
+            </children>
+        </component>
+
+
+        <component id="top">
+            <transformation>
+                 <translate x="0" y="100" z="0" />
+                                  <scale x="200" y="1" z="200" />
+                                  <rotate axis="x" angle="90" />
+                                  <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="top" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+        <component id="bottom">
+            <transformation>
+                 <translate x="0" y="-100" z="0" />
+                 <scale x="200" y="1" z="200" />
+                 <rotate axis="x" angle="-90" />
+                 <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="bottom" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+
+        <component id="back">
+            <transformation>
+                 <translate x="0" y="0" z="100" />
+                 <scale x="200" y="200" z="1" />
+                 <rotate axis="y" angle="180" />
+                 <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="back" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+
+        <component id="front">
+            <transformation>
+                 <translate x="0" y="0" z="-100" />
+                  <scale x="200" y="200" z="1" />
+                  <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="front" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+        <component id="right">
+            <transformation>
+                  <scale x="1" y="200" z="200" />
+                  <translate x="-100" y="0" z="0" />
+                  <rotate axis="y" angle="90" />
+                  <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="right" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+
+        <component id="left">
+            <transformation>
+                 <scale x="1" y="200" z="200" />
+                 <translate x="100" y="0" z="0" />
+                 <rotate axis="y" angle="90" />
+                 <rotate axis="x" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="left" />
+
+            <children>
+                <primitiveref id="plane" />
             </children>
         </component>
 
@@ -255,6 +400,12 @@
                 <translate x="0" y="7" z="0" />
             </transformation>
 
+
+            <animation>
+                    	    <animationref id="anim2" />
+                    	    <animationref id="anim2" />
+                    	    <animationref id="anim1" />
+                    	</animation>
             <materials>
                     <material id="superbright" />
             </materials>
