@@ -26,11 +26,13 @@ uniform float normScale;
 void main() {
     vec3 offset = vec3(0.0, 0.0, 0.0);
     vTextureCoord = aTextureCoord;
-    float x = floor(aTextureCoord.x*du);
-    float y = floor(aTextureCoord.y*dv);
+    float x = aTextureCoord.x*du;
+    float y = aTextureCoord.y*dv;
+
 	if((x >= su && y >= sv) && (x <= (su + 1.0) && y <= (sv + 1.0))){
 	    isSelected = 0.0;
+	    offset=aVertexNormal*.5;
 	}
     else isSelected = 1.0;
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+offset, 1.0);
 }
