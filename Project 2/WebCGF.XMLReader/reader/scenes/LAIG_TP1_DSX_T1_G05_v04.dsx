@@ -220,6 +220,10 @@
             <cylinder base="1" top="1" height="1" slices="8" stacks="8" />
         </primitive>
 
+        <primitive id="support">
+            <cylinder base="0.1" top="0.1" height="1" slices="8" stacks="8" />
+        </primitive>
+
         <primitive id="sper">
             <sphere radius=".5" slices="8" stacks="8" />
         </primitive>
@@ -445,7 +449,7 @@
 
         <component id="topBoard">
             <transformation>
-                <translate x="-3" y="6" z="-3" />
+                <translate x="-2" y="6" z="0" />
                 <rotate axis="x" angle="-90"/>
             </transformation>
 
@@ -457,6 +461,8 @@
 
             <children>
                 <primitiveref id="mediumBoard" />
+                <componentref id="topSmall1" />
+                <componentref id="topSmall2" />
              </children>
         </component>
 
@@ -474,12 +480,13 @@
 
             <children>
                 <primitiveref id="mediumBoard" />
+                <componentref id="centerSmall" />
              </children>
         </component>
 
         <component id="bottomBoard">
             <transformation>
-                <translate x="3" y="2" z="3" />
+                <translate x="2" y="2" z="0" />
                 <rotate axis="x" angle="-90"/>
             </transformation>
 
@@ -491,6 +498,91 @@
 
             <children>
                 <primitiveref id="mediumBoard" />
+                <componentref id="bottomSmall" />
+             </children>
+        </component>
+
+        <component id="topSmall1">
+            <transformation>
+                <translate x="-2" y="2" z="1" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="smallBoard" />
+                <componentref id="support" />
+             </children>
+        </component>
+
+        <component id="topSmall2">
+            <transformation>
+                <translate x="2" y="-2" z="1" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="smallBoard" />
+                <componentref id="support" />
+             </children>
+        </component>
+
+        <component id="bottomSmall">
+            <transformation>
+                  <translate x="2" y="-2" z="1" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="smallBoard" />
+                <componentref id="support" />
+             </children>
+        </component>
+
+        <component id="centerSmall">
+            <transformation>
+                <translate x="2" y="2" z="1" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="smallBoard" />
+                <componentref id="support" />
+             </children>
+        </component>
+
+        <component id="support">
+            <transformation>
+                <rotate axis="x" angle="180"/>
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="support" />
              </children>
         </component>
 
