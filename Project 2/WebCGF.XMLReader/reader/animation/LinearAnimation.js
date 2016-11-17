@@ -64,10 +64,9 @@ LinearAnimation.prototype.addControlPoint=function(x, y, z) {
 LinearAnimation.prototype.getMatrix = function (time) {
     var matrix = mat4.create();
     matrix = mat4.identity(matrix);
-    var length = this.controlPoints.length;
 
     if (time >= this.span){
-        time == this.span;
+        time = this.span;
     }
 
     var currentDist = this.velocity * time;
@@ -96,11 +95,11 @@ LinearAnimation.prototype.lerp = function (point1, point2, t) {
         interpolation[i] = point1[i]*(1-t) + t * point2[i];
     }
     return interpolation;
-}
+};
 
 LinearAnimation.prototype.getAngle = function (point1, point2) {
     var deltaX = point2[0] - point1[0];
     var deltaZ = point2[2]- point1[2];
-    return Math.atan2(deltaZ, deltaX);
-}
+    return -Math.atan2(deltaZ, deltaX);
+};
 
