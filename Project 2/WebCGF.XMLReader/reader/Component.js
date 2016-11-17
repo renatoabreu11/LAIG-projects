@@ -22,7 +22,7 @@
  	//here, only the children with valid ids
  	this.children = {'components': [], 'primitives': []};
  };
-
+ 
  Component.prototype = Object.create(CGFobject.prototype);
  Component.prototype.constructor = Component;
 
