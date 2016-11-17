@@ -148,30 +148,30 @@
             <controlpoint x="18" y="0" z="0" />
         </animation>
 
-        <animation id="enterPortal" span="8" type="linear">
+        <animation id="enterPortal" span="6" type="linear">
             <controlpoint x="0" y="0" z="0" />
             <controlpoint x="40" y="0" z="0" />
-            <controlpoint x="40" y="15" z="15" />
-            <controlpoint x="41" y="25" z="25" />
+            <controlpoint x="55" y="25" z="65" />
         </animation>
 
-        <animation id="reconScene" span="4" type="circular" centerx="-60" centery="0" centerz="0"
-                    radius="60" startang="0" rotang="145"/>
+        <animation id="reconScene" span="4" type="circular" centerx="-110" centery="0" centerz="0"
+                    radius="110" startang="0" rotang="90"/>
 
         <animation id="preparation" span="8" type="linear">
             <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="40" y="-80" z="75" />
-             <controlpoint x="-75" y="-75" z="75" />
-             <controlpoint x="-75" y="-30" z="75" />
-             <controlpoint x="-30" y="-30" z="75" />
+            <controlpoint x="50" y="-80" z="65" />
+            <controlpoint x="-75" y="-80" z="75" />
+            <controlpoint x="-75" y="-30" z="75" />
+            <controlpoint x="-10" y="-30" z="75" />
+
         </animation>
 
         <animation id="exitPortal" span="4" type="linear">
              <controlpoint x="0" y="0" z="0" />
-             <controlpoint x="120" y="5" z="-35" />
+             <controlpoint x="120" y="5" z="8" />
         </animation>
 
-        <animation id="pause" span="20" type="linear">
+        <animation id="pause" span="18" type="linear">
             <controlpoint x="0" y="0" z="0" />
             <controlpoint x="0" y="0.001" z="0" />
         </animation>
@@ -188,7 +188,7 @@
 
         <animation id="takenAway" span="4" type="linear">
                     <controlpoint x="0" y="0" z="0" />
-                    <controlpoint x="-75" y="5" z="-120" />
+                    <controlpoint x="120" y="8" z="-75" />
         </animation>
 
         <animation id="rotate45" span="3" type="circular" centerx="0" centery="0" centerz="0"
@@ -378,7 +378,7 @@
                 <componentref id="ground" />
                 <componentref id="pyramids" />
                 <componentref id="skybox"/>
-                <componentref id="body" />
+                <componentref id="persons" />
                 <componentref id="onix" />
                 <componentref id="solrock" />
                 <componentref id="bottomPortal" />
@@ -387,9 +387,67 @@
             </children>
         </component>
 
+        <component id="persons">
+            <transformation>
+            </transformation>
+
+            <materials>
+              <material id="s1" />
+              <material id="s2" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="person1" />
+                <componentref id="person2" />
+             </children>
+        </component>
+
+        <component id="person1">
+            <transformation>
+            </transformation>
+
+            <animation>
+                <animationref id="pause"/>
+                <animationref id="abduction"/>
+                <animationref id="takenAway"/>
+            </animation>
+
+            <materials>
+              <material id="s1" />
+              <material id="s2" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="body" />
+             </children>
+        </component>
+
+        <component id="person2">
+            <transformation>
+                <translate x="15" y="0" z="15" />
+                 //<rotate axis="y" angle="180"/>
+            </transformation>
+
+            <materials>
+              <material id="s1" />
+              <material id="s2" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="body" />
+             </children>
+        </component>
+
+
         <component id="chessboard">
             <transformation>
-                <translate x="5" y="5" z="5" />
+                <translate x="7.5" y="3.5" z="7.5" />
                 <rotate axis="x" angle="-90"/>
             </transformation>
 
@@ -784,12 +842,6 @@
             <transformation>
                 <rotate axis="y" angle="-45" />
             </transformation>
-
-            <animation>
-                <animationref id="pause"/>
-                <animationref id="abduction"/>
-                <animationref id="takenAway"/>
-            </animation>
 
             <materials>
                 <material id="s1" />
