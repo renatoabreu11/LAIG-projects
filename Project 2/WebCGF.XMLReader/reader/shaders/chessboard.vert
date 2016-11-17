@@ -29,10 +29,12 @@ void main() {
     vTextureCoord = aTextureCoord;
     coords = vec2(aTextureCoord.x*du, aTextureCoord.y*dv);
     vec2 indexCoords = coords;
-    if((indexCoords.x >= su && indexCoords.y >= sv) && (indexCoords.x <= (su + 1.0) && indexCoords.y <=(sv + 1.0))){
-        isSelected = 0.0;
-        offset=aVertexNormal*.2;
-    }
-    else isSelected = 1.0;
+    if(su != -1.0 && sv != -1.0){
+            if((indexCoords.x >= su && indexCoords.y >= sv) && (indexCoords.x <= (su + 1.0) && indexCoords.y <=(sv + 1.0))){
+                isSelected = 0.0;
+                offset=aVertexNormal*.2;
+            }
+            else isSelected = 1.0;
+    } else isSelected = 1.0;
 	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+offset, 1.0);
 }

@@ -246,7 +246,23 @@
         </primitive>
 
         <primitive id="chessboard">
-        <chessboard du="8" dv="8" textureref="wood" su="2" sv="2">
+        <chessboard du="8" dv="8" textureref="wood" su="1" sv="1">
+                   <c1 r="0.2" g="0.3" b="0.4" a="1" />
+                   <c2 r="1" g="1" b=".5" a="1" />
+                   <cs r="1" g="0" b="0" a="1" />
+        </chessboard>
+        </primitive>
+
+        <primitive id="smallBoard">
+        <chessboard du="2" dv="2" textureref="skin" su="-1" sv="-1">
+                   <c1 r="0.2" g="0.3" b="0.4" a="1" />
+                   <c2 r="1" g="1" b=".5" a="1" />
+                   <cs r="1" g="0" b="0" a="1" />
+        </chessboard>
+        </primitive>
+
+        <primitive id="mediumBoard">
+        <chessboard du="4" dv="4" textureref="skin" su="-1" sv="-1">
                    <c1 r="0.2" g="0.3" b="0.4" a="1" />
                    <c2 r="1" g="1" b=".5" a="1" />
                    <cs r="1" g="0" b="0" a="1" />
@@ -405,13 +421,83 @@
                 <componentref id="bottomPortal" />
                 <componentref id="topPortal" />
                 <componentref id="chessboard" />
+                <componentref id="3Dboard" />
             </children>
+        </component>
+
+        <component id="3Dboard">
+            <transformation>
+                <translate x="0" y="15" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="topBoard" />
+                <componentref id="bottomBoard" />
+                <componentref id="centerBoard" />
+             </children>
+        </component>
+
+        <component id="topBoard">
+            <transformation>
+                <translate x="-3" y="6" z="-3" />
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="mediumBoard" />
+             </children>
+        </component>
+
+        <component id="centerBoard">
+            <transformation>
+                <translate x="0" y="4" z="0" />
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="mediumBoard" />
+             </children>
+        </component>
+
+        <component id="bottomBoard">
+            <transformation>
+                <translate x="3" y="2" z="3" />
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="mediumBoard" />
+             </children>
         </component>
 
         <component id="persons">
             <transformation>
+                <translate x="0" y="0" z="0" />
             </transformation>
-
             <materials>
                 <material id="s1" />
                 <material id="s2" />
@@ -427,8 +513,8 @@
 
         <component id="person1">
             <transformation>
+                <translate x="0" y="0" z="0" />
             </transformation>
-
             <animation>
                 <animationref id="pause"/>
                 <animationref id="abduction"/>
