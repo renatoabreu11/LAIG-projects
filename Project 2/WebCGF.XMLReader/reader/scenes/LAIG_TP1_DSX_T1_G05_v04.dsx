@@ -347,7 +347,28 @@
          </primitive>
 
          <primitive id="bottomMountain">
-            <cylinder base="6" top="1" height="8" slices="8" stacks="8" />
+            <patch orderU="2" orderV="5" partsU="3" partsV="15" >
+                <controlpoint x="-0.048" y="-0.491" z="-0.000" />
+                <controlpoint x="-0.048" y="-0.491" z="-0.000" />
+                <controlpoint x="-0.048" y="-0.491" z="0.000" />
+                <controlpoint x="-0.048" y="-0.491" z="-0.000" />
+                <controlpoint x="0.048"  y="-0.491" z="-0.000" />
+                <controlpoint x="-0.048" y="-0.491" z="-0.000" />
+
+                <controlpoint x="0.000" y="-1.000" z="0.400" />
+                <controlpoint x="-1.000" y="-1.000" z="0.400" />
+                <controlpoint x="-1.000" y="1.000" z="0.400" />
+                <controlpoint x="1.000" y="1.000" z="0.400" />
+                <controlpoint x="1.000" y="-1.000" z="0.400" />
+                <controlpoint x="0.000" y="-1.000" z="0.400" />
+
+                <controlpoint x="0.000" y="-1.000" z="0.800" />
+                <controlpoint x="-1.000" y="-1.000" z="0.800" />
+                <controlpoint x="-1.000" y="1.000" z="0.800" />
+                <controlpoint x="1.000" y="1.000" z="0.800" />
+                <controlpoint x="1.000" y="-1.000" z="0.800" />
+                <controlpoint x="0.000" y="-1.000" z="0.800" />
+            </patch>
         </primitive>
 
          <primitive id="spaceship">
@@ -492,14 +513,32 @@
             </transformation>
 
             <materials>
-                <material id="s1" />
-                <material id="s2" />
+                <material id="inherit" />
             </materials>
 
             <texture id="ice" />
 
             <children>
                 <primitiveref id="mountain" />
+                <componentref id="mountainBottom" />
+            </children>
+        </component>
+
+        <component id="mountainBottom">
+            <transformation>
+                <translate x=".01" y="6.72" z="4.97" />
+                <scale x="8.66" y="8.4" z="7.8" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="bottomMountain" />
             </children>
         </component>
 
