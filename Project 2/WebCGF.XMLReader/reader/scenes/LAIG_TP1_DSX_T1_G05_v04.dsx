@@ -61,7 +61,6 @@
     </lights>
     
     <textures>
-        <texture id="brick" file="../res/brick.jpg" length_s="1" length_t="1.5" />
         <texture id="grass" file="../res/grass.jpg" length_s="2" length_t="1" />
         <texture id="skin" file="../res/skin.jpg" length_s="1" length_t="1" />
         <texture id="sand" file="../res/sand.jpg" length_s="20" length_t="20" />
@@ -81,6 +80,7 @@
         <texture id="right" file="../res/right.jpg" length_s="1" length_t="1" />
         <texture id="bottom" file="../res/bottom.jpg" length_s="1" length_t="1" />
         <texture id="top" file="../res/top.jpg" length_s="1" length_t="1" />
+        <texture id="ice" file="../res/ice.jpg" length_s="1" length_t="1" />
     </textures>
 
     <materials>
@@ -383,8 +383,27 @@
                 <componentref id="solrock" />
                 <componentref id="bottomPortal" />
                 <componentref id="topPortal" />
+                <componentref id="chessboard" />
             </children>
         </component>
+
+        <component id="chessboard">
+            <transformation>
+                <translate x="5" y="5" z="5" />
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                    <material id="superbright" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="chessboard" />
+             </children>
+        </component>
+
 
         <component id="spaceship">
             <transformation>
@@ -412,7 +431,7 @@
 
         <component id="mountain">
             <transformation>
-                <translate x="-30" y="15" z="-45" />
+                <translate x="45" y="-45" z="40" />
                 <scale x="5" y="5" z="5" />
                 <rotate axis="z" angle="180"/>
             </transformation>
@@ -422,7 +441,7 @@
                 <material id="s2" />
             </materials>
 
-            <texture id="none" />
+            <texture id="ice" />
 
             <children>
                 <primitiveref id="mountain" />
@@ -1013,8 +1032,9 @@
 
         <component id="onix">
         	<transformation>
-        		<translate x="5" y="0" z="23" />
-        		<rotate axis="y" angle="50" />
+
+        		<translate x="75" y="-52" z="55" />
+                <rotate axis="y" angle="180" />
         	</transformation>
 
             <animation>
@@ -1328,7 +1348,7 @@
 
         <component id="solrock">
         	<transformation>
-        		<translate x="20" y="0" z="8" />
+        		<translate x="30" y="-45" z="55" />
         		<rotate axis="y" angle="-45" />
         	</transformation>
 
