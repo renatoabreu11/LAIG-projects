@@ -144,9 +144,9 @@
     </transformations>
 
    <animations>
-        <animation id="anim1" span="3" type="linear">
+        <animation id="moveOnix" span="7" type="linear">
             <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="18" y="0" z="0" />
+            <controlpoint x="18" y="35" z="15" />
         </animation>
 
         <animation id="enterPortal" span="8" type="linear">
@@ -188,12 +188,12 @@
         </animation>
 
         <animation id="takenAway" span="4" type="linear">
-                    <controlpoint x="0" y="0" z="0" />
-                    <controlpoint x="30" y="5" z="-120" />
+            <controlpoint x="0" y="0" z="0" />
+            <controlpoint x="30" y="5" z="-120" />
         </animation>
 
-        <animation id="rotate45" span="3" type="circular" centerx="0" centery="0" centerz="0"
-            radius="3" startang="0" rotang="60"/>
+        <animation id="rotate60" span="2" type="circular" centerx="0" centery="0" centerz="0"
+            radius="0" startang="0" rotang="60"/>
    </animations>
 
     <primitives>
@@ -415,7 +415,9 @@
             <texture id="none" />
 
             <children>
-                <componentref id="mountain" />
+                <componentref id="mountain1" />
+                <componentref id="mountain2" />
+                <componentref id="mountain3" />
                 <componentref id="spaceship" />
                 <componentref id="ground" />
                 <componentref id="pyramids" />
@@ -684,9 +686,49 @@
              </children>
         </component>
 
-        <component id="mountain">
+        <component id="mountain1">
             <transformation>
-                <translate x="45" y="-45" z="40" />
+                <translate x="-70" y="-30" z="20" />
+                <scale x="4" y="4" z="4" />
+                <rotate axis="y" angle="180" />
+                <rotate axis="z" angle="180"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="ice" />
+
+            <children>
+                <primitiveref id="mountain" />
+                <componentref id="mountainBottom" />
+            </children>
+        </component>
+
+        <component id="mountain2">
+            <transformation>
+                <translate x="0" y="10" z="-85" />
+                <scale x="2.5" y="2.5" z="2.5" />
+                <rotate axis="y" angle="90" />
+                <rotate axis="z" angle="180"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="ice" />
+
+            <children>
+                <primitiveref id="mountain" />
+                <componentref id="mountainBottom" />
+            </children>
+        </component>
+
+        <component id="mountain3">
+            <transformation>
+                <translate x="-65" y="0" z="-50" />
                 <scale x="5" y="5" z="5" />
                 <rotate axis="z" angle="180"/>
             </transformation>
@@ -1278,13 +1320,14 @@
 
         <component id="onix">
         	<transformation>
-
-        		<translate x="75" y="-52" z="55" />
+        		<translate x="-47" y="-3" z="-38" />
                 <rotate axis="y" angle="180" />
         	</transformation>
 
             <animation>
-                <animationref id="anim1" />
+                <animationref id="moveOnix" />
+                <animationref id="rotate60" />
+                <animationref id="rotate60" />
             </animation>
 
         	<materials>
@@ -1594,14 +1637,16 @@
 
         <component id="solrock">
         	<transformation>
-        		<translate x="30" y="-45" z="55" />
-        		<rotate axis="y" angle="-45" />
+        		<translate x="-73" y="14" z="-25" />
+        		<rotate axis="y" angle="-30" />
         	</transformation>
 
             <animation>
-        	    <animationref id="rotate45" />
-        	    <animationref id="rotate45" />
-        	</animation>
+                <animationref id="rotate60" />
+                <animationref id="rotate60" />
+                <animationref id="rotate60" />
+                <animationref id="abduction"/>
+            </animation>
 
         	<materials>
         		<material id="s1" />
