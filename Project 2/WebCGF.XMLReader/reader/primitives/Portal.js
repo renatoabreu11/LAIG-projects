@@ -30,7 +30,7 @@ function Portal(scene) {
         [1.906, 0.425, -0.547, 1],
         [1.004, 0.945, -0.281, 1]
     ];
-
+ 
     this.portal = new Patch(this.scene, 3, 3, 8, 8, this.controlVertexes);
 }
 
