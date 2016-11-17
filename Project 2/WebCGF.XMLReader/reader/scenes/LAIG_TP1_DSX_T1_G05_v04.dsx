@@ -1335,6 +1335,7 @@
         	</transformation>
 
             <animation>
+                <animationref id="shortPause" />
                 <animationref id="moveOnix" />
                 <animationref id="rotate60" />
                 <animationref id="rotate60" />
@@ -1652,6 +1653,7 @@
         	</transformation>
 
             <animation>
+                <animationref id="shortPause" />
                 <animationref id="rotate60" />
                 <animationref id="rotate60" />
                 <animationref id="rotate60" />
