@@ -252,6 +252,86 @@
             </patch>
          </primitive>
 
+         <primitive id="mountain">
+            <patch orderU="7" orderV="7" partsU="7" partsV="7" >
+                <controlpoint x="-3.5" y="0" z="-1.5" />
+                <controlpoint x="-4.5" y="0" z="-0.5" />
+                <controlpoint x="-4.5" y="0" z="0.5" />
+                <controlpoint x="-5.5" y="0" z="1.5" />
+                <controlpoint x="-5.5" y="0" z="2.5" />
+                <controlpoint x="-4.5" y="0" z="3.5" />
+                <controlpoint x="-4.5" y="0" z="4.5" />
+                <controlpoint x="-3.5" y="0" z="5.5" />
+
+                <controlpoint x="-2.5" y="0"  z="-2.5" />
+                <controlpoint x="-2.5" y="-7" z="-0.5" />
+                <controlpoint x="-2.5" y="-1" z="0.5" />
+                <controlpoint x="-2.5" y="-1" z="1.5" />
+                <controlpoint x="-2.5" y="-1" z="2.5" />
+                <controlpoint x="-2.5" y="-1" z="3.5" />
+                <controlpoint x="4.5"  y="15" z="2.5" />
+                <controlpoint x="-2.5" y="0"  z="6.5" />
+
+                <controlpoint x="-1.5" y="0"  z="-2.5" />
+                <controlpoint x="-1.5" y="-7" z="-0.5" />
+                <controlpoint x="-1.5" y="-1" z="0.5" />
+                <controlpoint x="-1.5" y="-1" z="1.5" />
+                <controlpoint x="-1.5" y="-1" z="2.5" />
+                <controlpoint x="-1.5" y="10" z="3.5" />
+                <controlpoint x="-1.5" y="-1" z="4.5" />
+                <controlpoint x="-1.5" y="0"  z="6.5" />
+
+                <controlpoint x="-0.5" y="0"   z="-3.5" />
+                <controlpoint x="-0.5" y="-20" z="-0.5" />
+                <controlpoint x="-0.5" y="-1"  z="0.5" />
+                <controlpoint x="-0.5" y="-1"  z="1.5" />
+                <controlpoint x="-0.5" y="-1"  z="2.5" />
+                <controlpoint x="-0.5" y="10"  z="3.5" />
+                <controlpoint x="-0.5" y="-4"  z="4.5" />
+                <controlpoint x="-0.5" y="0"   z="7.5" />
+
+                <controlpoint x="0.5" y="0"   z="-3.5" />
+                <controlpoint x="0.5" y="-30"  z="-0.5" />
+                <controlpoint x="0.5" y="-1"   z="0.5" />
+                <controlpoint x="0.5" y="-1"   z="1.5" />
+                <controlpoint x="0.5" y="10" z="2.5" />
+                <controlpoint x="0.5" y="-1"   z="3.5" />
+                <controlpoint x="0.5" y="-14"  z="4.5" />
+                <controlpoint x="0.5" y="0"   z="7.5" />
+
+                <controlpoint x="1.5" y="0"   z="-2.5" />
+                <controlpoint x="1.5" y="-8"   z="-0.5" />
+                <controlpoint x="1.5" y="-1"   z="0.5" />
+                <controlpoint x="1.5" y="-1"   z="1.5" />
+                <controlpoint x="1.5" y="10" z="2.5" />
+                <controlpoint x="1.5" y="-1"   z="3.5" />
+                <controlpoint x="1.5" y="-12"  z="4.5" />
+                <controlpoint x="1.5" y="0"   z="6.5" />
+
+                <controlpoint x="2.5" y="0"   z="-2.5" />
+                <controlpoint x="2.5" y="-4"   z="-0.5" />
+                <controlpoint x="2.5" y="-1"   z="0.5" />
+                <controlpoint x="2.5" y="10" z="1.5" />
+                <controlpoint x="2.5" y="10" z="2.5" />
+                <controlpoint x="2.5" y="-1"   z="3.5" />
+                <controlpoint x="2.5" y="-7"   z="4.5" />
+                <controlpoint x="2.5" y="0"   z="6.5" />
+
+                <controlpoint x="3.5" y="0" z="-1.5" />
+                <controlpoint x="4.5" y="0" z="-0.5" />
+                <controlpoint x="4.5" y="0" z="0.5" />
+                <controlpoint x="5.5" y="0" z="1.5" />
+                <controlpoint x="5.5" y="0" z="2.5" />
+                <controlpoint x="4.5" y="0" z="3.5" />
+                <controlpoint x="4.5" y="0" z="4.5" />
+                <controlpoint x="3.5" y="0" z="5.5" />
+            </patch>
+         </primitive>
+
+         <primitive id="bottomMountain">
+            <cylinder base="6" top="1" height="8" slices="8" stacks="8" />
+        </primitive>
+
          <primitive id="spaceship">
             <vehicle />
          </primitive>
@@ -275,6 +355,7 @@
             <texture id="none" />
 
             <children>
+                <componentref id="mountain" />
                 <componentref id="spaceship" />
                 <componentref id="ground" />
                 <componentref id="pyramids" />
@@ -284,6 +365,25 @@
                 <componentref id="solrock" />
                 <componentref id="bottomPortal" />
                 <componentref id="topPortal" />
+            </children>
+        </component>
+
+        <component id="mountain">
+            <transformation>
+                <translate x="-30" y="15" z="-45" />
+                <scale x="5" y="5" z="5" />
+                <rotate axis="z" angle="180"/>
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+                <material id="s2" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="mountain" />
             </children>
         </component>
 
