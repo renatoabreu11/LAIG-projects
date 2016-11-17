@@ -40,6 +40,7 @@ Chessboard.prototype = Object.create(CGFobject.prototype);
 Chessboard.prototype.constructor=Chessboard;
 
 Chessboard.prototype.display = function () {
+    this.updateSelectedCell();
     this.appearance.apply();
     this.scene.setActiveShader(this.boardShader);
     this.board.display();
@@ -47,4 +48,23 @@ Chessboard.prototype.display = function () {
 }
 
 Chessboard.prototype.updateTexCoords = function (length_s, length_t) {
+}
+
+Chessboard.prototype.updateSelectedCell = function(){
+    if(this.su == -1 || this.sv == -1)
+        return;
+    else{
+        if(this.su >= this.du){
+            this.su = 0;
+            this.sv++;
+        }else this.su++;
+
+        if(this.sv >= this.dv)
+            this.sv = 0;
+
+        this.boardShader.setUniformsValues({
+            su: this.su,
+            sv: this.sv
+        });
+    }
 }
