@@ -15,6 +15,12 @@ function Vehicle(scene) {
     this.fireAppearance = new CGFappearance(this.scene);
     this.fireAppearance.loadTexture("../res/bluefire.jpg");
 
+	this.fireShader = new CGFshader(this.scene.gl, "shaders/fire.vert", "shaders/fire.frag");
+	this.fireShader.setUniformsValues({
+		uSampler2: 1,
+		time: 0
+	});
+
 	this.innerRadius = 5; //not a real radius
 	this.outerRadius = 23;//not a real radius
 	this.height =4;
@@ -24,8 +30,7 @@ function Vehicle(scene) {
     this.leg = new Cylinder(scene,.25,.25,6,5,5);//perna(s)
     this.motor = new Cylinder(scene,1,2,4,7,5); //motor(es)
     this.motorAux = new Cylinder(scene,.3,.3,3,5,3); //motor holder
-    this.fire = new Cylinder(scene,1.8,.1,5,7,5); //FOGO :DD
-
+	this.fire = new Cylinder(scene, 1.5, .1, 6, 12, 5); //FOGO :DD
 }
 
 Vehicle.prototype = Object.create(CGFobject.prototype);
@@ -70,7 +75,7 @@ Vehicle.prototype.display = function () {
     	this.scene.pushMatrix();
     	this.scene.translate(-1,3.3,i*4.5);
     	if(i==-1)
-    		this.scene.rotate(-Math.PI*2/3,1,0,0);
+			this.scene.rotate(Math.PI * 2 / 3, 1, 0, 0);
     	else this.scene.rotate(-Math.PI/3,1,0,0);
     	this.motorAux.display();
     }
@@ -86,13 +91,15 @@ Vehicle.prototype.display = function () {
     }
 
     //fire
-    this.fireAppearance.apply();
     for(i=-1; i<=1; i+=2){
-    	this.scene.popMatrix();
-    	this.scene.pushMatrix();
-    	this.scene.translate(-4,6,i*6);
-    	this.scene.rotate(-Math.PI/2,0,1,0);
-    	this.fire.display();
+		this.scene.popMatrix();
+		this.scene.pushMatrix();
+		this.fireAppearance.apply();
+		this.scene.setActiveShader(this.fireShader);
+		this.scene.translate(-4, 6, i * 6);
+		this.scene.rotate(-Math.PI / 2, 0, 1, 0);
+		this.fire.display();
+		this.scene.setActiveShader(this.scene.defaultShader)
     }
 
 	this.scene.popMatrix();
@@ -123,5 +130,10 @@ Vehicle.prototype.createHull = function(){
 	this.hull = new Patch(this.scene,orderU,orderV,4,9,controlPoints);
 }
 
+Vehicle.prototype.updateTime = function (elapsedTime) {
+	this.fireShader.setUniformsValues({
+		time: elapsedTime,
+	});
+}
 
 Vehicle.prototype.updateTexCoords = function (length_s, length_t){}

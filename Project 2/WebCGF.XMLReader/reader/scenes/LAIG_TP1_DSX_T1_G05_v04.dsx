@@ -287,43 +287,11 @@
             </children>
         </component>
 
-        <component id="portal1">
-            <transformation>
-                 <translate x="-30" y="20" z="0" />
-                 <rotate axis="y" angle="90" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-
-            <texture id="solrock" />
-
-            <children>
-                <primitiveref id="portal" />
-            </children>
-        </component>
-
-        <component id="portal2">
-            <transformation>
-                 <translate x="30" y="20" z="0" />
-                 <rotate axis="y" angle="90" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-
-            <texture id="bluefire" />
-
-            <children>
-                <primitiveref id="portal" />
-            </children>
-        </component>
-
         <component id="bottomPortal">
             <transformation>
-                <translate x="25" y="-98" z="25" />
+                <translate x="-98" y="25" z="25" />
+                <rotate axis="x" angle="90" />
+                <rotate axis="z" angle="-90" />
             </transformation>
 
             <materials>
@@ -339,8 +307,10 @@
 
             <component id="topPortal">
             <transformation>
-                <translate x="50" y="98" z="0" />
-                <rotate axis="x" angle="180" />
+                 <translate x="25" y="25" z="-98" />
+                 <rotate axis="z" angle="90" />
+                 <rotate axis="y" angle="-90" />
+                 <rotate axis="z" angle="-90" />
             </transformation>
 
             <materials>
