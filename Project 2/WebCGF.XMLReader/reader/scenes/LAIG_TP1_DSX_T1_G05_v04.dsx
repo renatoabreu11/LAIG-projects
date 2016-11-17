@@ -144,9 +144,19 @@
     </transformations>
 
    <animations>
-        <animation id="moveOnix" span="7" type="linear">
+        <animation id="moveOnix" span="8" type="linear">
             <controlpoint x="0" y="0" z="0" />
             <controlpoint x="18" y="35" z="15" />
+        </animation>
+
+        <animation id="solrockAttack" span="1" type="linear">
+        <controlpoint x="0" y="0" z="0" />
+        <controlpoint x="5" y="10" z="17" />
+        </animation>
+
+        <animation id="solrockFall" span="3" type="linear">
+        <controlpoint x="0" y="0" z="0" />
+        <controlpoint x="0" y="-40" z="-7" />
         </animation>
 
         <animation id="enterPortal" span="8" type="linear">
@@ -192,7 +202,7 @@
             <controlpoint x="30" y="5" z="-120" />
         </animation>
 
-        <animation id="rotate60" span="2" type="circular" centerx="0" centery="0" centerz="0"
+        <animation id="rotate60" span="1" type="circular" centerx="0" centery="0" centerz="0"
             radius="0" startang="0" rotang="60"/>
    </animations>
 
@@ -1638,14 +1648,19 @@
         <component id="solrock">
         	<transformation>
         		<translate x="-73" y="14" z="-25" />
-        		<rotate axis="y" angle="-30" />
+        		<rotate axis="y" angle="150" />
         	</transformation>
 
             <animation>
                 <animationref id="rotate60" />
                 <animationref id="rotate60" />
                 <animationref id="rotate60" />
+                <animationref id="rotate60" />
+                <animationref id="rotate60" />
+                <animationref id="rotate60" />
                 <animationref id="abduction"/>
+                <animationref id="solrockAttack"/>
+                <animationref id="solrockFall"/>
             </animation>
 
         	<materials>
