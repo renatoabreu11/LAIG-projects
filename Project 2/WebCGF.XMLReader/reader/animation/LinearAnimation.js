@@ -100,6 +100,6 @@ LinearAnimation.prototype.lerp = function (point1, point2, t) {
 LinearAnimation.prototype.getAngle = function (point1, point2) {
     var deltaX = point2[0] - point1[0];
     var deltaZ = point2[2]- point1[2];
-    return (-Math.atan2(deltaZ, deltaX) + Math.PI/8);
+    return -Math.atan2(deltaZ, deltaX);
 };
 

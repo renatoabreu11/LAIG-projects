@@ -188,7 +188,7 @@
 
         <animation id="takenAway" span="4" type="linear">
                     <controlpoint x="0" y="0" z="0" />
-                    <controlpoint x="-75" y="5" z="-120" />
+                    <controlpoint x="30" y="5" z="-120" />
         </animation>
 
         <animation id="rotate45" span="3" type="circular" centerx="0" centery="0" centerz="0"
