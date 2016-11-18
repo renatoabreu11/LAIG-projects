@@ -632,8 +632,8 @@ MySceneGraph.prototype.parseAnimations= function(animationsBlock) {
                 var nrChild = controlPointBlock.length;
                 var linearAnimation = new LinearAnimation(id, span);
                 for(controlPoint of controlPointBlock) {
-                    var point = this.readCoordinates(0, controlPoint, animationsBlock.tagName);
-                    linearAnimation.addControlPoint(point['x'], point['y'], point['z']);
+                    var point = this.readCoordinates(2, controlPoint, animationsBlock.tagName);
+                    linearAnimation.addControlPoint(point['xx'], point['yy'], point['zz']);
                 }
                 this.animations.push(linearAnimation);
             }else if (type == 'circular'){
@@ -1229,7 +1229,8 @@ MySceneGraph.prototype.readCoordinates= function(coordsType, block, blockTag){
 	var list = null;
 	if(coordsType == 0){
 		list = ['x', 'y', 'z'];
-	}else list = ['x', 'y', 'z', 'w'];
+	}else if(coordsType == 1) list = ['x', 'y', 'z', 'w'];
+	else list =['xx', 'yy', 'zz'];
 
 	var values = [];
 	for(var j = 0; j < list.length; j++){

@@ -145,61 +145,61 @@
 
    <animations>
         <animation id="moveOnix" span="8" type="linear">
-            <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="18" y="35" z="15" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="18" yy="35" zz="15" />
         </animation>
 
         <animation id="solrockAttack" span="1" type="linear">
-        <controlpoint x="0" y="0" z="0" />
-        <controlpoint x="5" y="10" z="17" />
+        <controlpoint xx="0" yy="0" zz="0" />
+        <controlpoint xx="5" yy="10" zz="17" />
         </animation>
 
         <animation id="solrockFall" span="3" type="linear">
-        <controlpoint x="0" y="0" z="0" />
-        <controlpoint x="0" y="-40" z="-7" />
+        <controlpoint xx="0" yy="0" zz="0" />
+        <controlpoint xx="0" yy="-40" zz="-7" />
         </animation>
 
         <animation id="enterPortal" span="8" type="linear">
-            <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="40" y="0" z="0" />
-            <controlpoint x="40" y="15" z="15" />
-            <controlpoint x="41" y="25" z="25" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="40" yy="0" zz="0" />
+            <controlpoint xx="40" yy="15" zz="15" />
+            <controlpoint xx="41" yy="25" zz="25" />
         </animation>
 
         <animation id="reconScene" span="4" type="circular" centerx="-60" centery="0" centerz="0"
                     radius="60" startang="0" rotang="145"/>
 
         <animation id="preparation" span="8" type="linear">
-            <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="40" y="-80" z="75" />
-             <controlpoint x="-75" y="-75" z="75" />
-             <controlpoint x="-75" y="-30" z="75" />
-             <controlpoint x="-30" y="-30" z="75" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="40" yy="-80" zz="75" />
+             <controlpoint xx="-75" yy="-75" zz="75" />
+             <controlpoint xx="-75" yy="-30" zz="75" />
+             <controlpoint xx="-30" yy="-30" zz="75" />
         </animation>
 
         <animation id="exitPortal" span="4" type="linear">
-             <controlpoint x="0" y="0" z="0" />
-             <controlpoint x="120" y="5" z="-35" />
+             <controlpoint xx="0" yy="0" zz="0" />
+             <controlpoint xx="120" yy="5" zz="-35" />
         </animation>
 
         <animation id="pause" span="20" type="linear">
-            <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="0" y="0.001" z="0" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0.001" zz="0" />
         </animation>
 
         <animation id="shortPause" span="4" type="linear">
-            <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="0" y="0.001" z="0" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0.001" zz="0" />
         </animation>
 
         <animation id="abduction" span="4" type="linear">
-            <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="0" y="10" z="0" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="10" zz="0" />
         </animation>
 
         <animation id="takenAway" span="4" type="linear">
-            <controlpoint x="0" y="0" z="0" />
-            <controlpoint x="30" y="5" z="-120" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="30" yy="5" zz="-120" />
         </animation>
 
         <animation id="rotate60" span="1" type="circular" centerx="0" centery="0" centerz="0"
