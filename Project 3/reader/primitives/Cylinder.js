@@ -65,7 +65,7 @@ Cylinder.prototype.constructor = Cylinder;
     this.bottomCircle.display();
     this.scene.translate(0, 0, -this.height);
     this.scene.rotate(Math.PI, 1, 0, 0)
-    this.scene.rotate(Math.PI, 0, 0, 1)
+    //this.scene.rotate(Math.PI, 0, 0, 1)
     this.topCircle.display();
     this.scene.popMatrix();
 };
