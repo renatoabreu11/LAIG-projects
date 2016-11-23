@@ -1,0 +1,226 @@
+<dsx>
+    <scene root="root" axis_length="30.0" />
+    
+    <views default="front" >
+        <perspective id="front" near="0.1" far="500.0" angle="60.0">
+            <from x="45" y="45" z="45.0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+
+        <perspective id="back" near="0.2" far="500.0" angle="60.0">
+            <from x="-45" y="45" z="-45.0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+
+        <perspective id="side" near="0.2" far="500.0" angle="60.0">
+            <from x="5" y="30.0" z="30.0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+
+        <perspective id="other" near="0.2" far="500.0" angle="90.0">
+            <from x="30" y="25.0" z="4.0" />
+            <to x="0" y="0" z="0" />
+        </perspective>  
+    </views>
+
+    <illumination doublesided="1" local="0" >
+        <ambient r="0.5" g="1" b="0.5" a="0.5" />
+        <background r="0" g="0" b="0" a="1" />
+    </illumination>
+    
+    <lights>
+        <omni id="light1" enabled="1" >
+            <location x="-17.75" y="12.2" z="9" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
+        </omni>
+
+        <omni id="light2" enabled="1" >
+            <location x="12" y="16" z="-17.85" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
+        </omni>
+        
+        <spot id="light3" enabled="1" angle="60" exponent="1">
+            <target x="0" y="7.5" z="0" />
+            <location x="-10.5" y="18" z="-12.5"/>
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
+        </spot>
+
+        <spot id="light4" enabled="1" angle="60" exponent="1">
+            <target x="15" y="0" z="15" />
+            <location x="15" y="45" z="15"/>
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
+        </spot>
+    </lights>
+    
+    <textures>
+        <texture id="grass" file="../res/grass.jpg" length_s="2" length_t="1" />
+        <texture id="skin" file="../res/skin.jpg" length_s="1" length_t="1" />
+        <texture id="sand" file="../res/sand.jpg" length_s="20" length_t="20" />
+        <texture id="sand2" file="../res/sand2.jpg" length_s="20" length_t="20" />
+        <texture id="troll" file="../res/troll.jpg" length_s="1" length_t="1" />
+        <texture id="solrock" file="../res/solrock.jpg" length_s="1" length_t="1" />
+        <texture id="bluefire" file="../res/bluefire.jpg" length_s="1" length_t="1" />
+        <texture id="eye" file="../res/eye.png" length_s="1" length_t="1" />
+        <texture id="onix" file="../res/onix.jpg" length_s="1" length_t="1" />
+        <texture id="white" file="../res/white.jpg" length_s="1" length_t="1" />
+        <texture id="grey" file="../res/grey.jpg" length_s="1" length_t="1" />
+        <texture id="black" file="../res/black.jpg" length_s="1" length_t="1" />
+        <texture id="wood" file="../res/wood.jpg" length_s="1" length_t="1" />
+        <texture id="left" file="../res/left.jpg" length_s="1" length_t="1" />
+        <texture id="back" file="../res/back.jpg" length_s="1" length_t="1" />
+        <texture id="front" file="../res/front.jpg" length_s="1" length_t="1" />
+        <texture id="right" file="../res/right.jpg" length_s="1" length_t="1" />
+        <texture id="bottom" file="../res/bottom.jpg" length_s="1" length_t="1" />
+        <texture id="top" file="../res/top.jpg" length_s="1" length_t="1" />
+        <texture id="ice" file="../res/ice.jpg" length_s="1" length_t="1" />
+        <texture id="marble" file="../res/marble.jpg" length_s="1" length_t="1" />
+        <texture id="nodesboard" file="../res/nodesboard.png" length_s="1" length_t="1" />
+    </textures>
+
+    <materials>
+        <material id="s1" >
+            <emission r="0.3" g="0.4" b="0.5" a="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.3" g="0.2" b="0.6" a="1" />
+            <specular r="0.2" g="0.2" b="0.2" a="1" />
+            <shininess value="120" />
+        </material>
+
+        <material id="s2" >
+            <emission r="0.3" g="0.4" b="0.5" a="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.6" a="1" />
+            <specular r="0.1" g="0.1" b="0.4" a="1" />
+            <shininess value="1" />
+        </material>
+
+        <material id="yellow" >
+            <emission r="0.1" g="0.4" b="0.5" a="1" />
+            <ambient r="1" g="0.843137" b="0" a="1" />
+            <diffuse r="0.7" g="0.843137" b="0" a="1" />
+            <specular r="0.1" g="0.1" b="0.4" a="1" />
+            <shininess value="1" />
+        </material>
+
+        <material id="shirt" >
+           <emission r="0.1" g="0.4" b="0.5" a="1" />
+           <ambient r="0.117647" g="0.564706" b="1" a="1" />
+           <diffuse r="0.1" g="0.1" b="0" a="1" />
+           <specular r="0.1" g="0.1" b="0.1" a="1" />
+           <shininess value="1" />
+       </material>
+
+       <material id="bright" >
+           <emission r=".5" g=".5" b="0" a="1" />
+           <ambient r="0.1" g="0.5" b="0.5" a="1" />
+           <diffuse r="0.1" g="0.4" b="0.4" a="1" />
+           <specular r="0.1" g="0.2" b="0.2" a="1" />
+           <shininess value="1" />
+       </material>
+
+       <material id="superbright" >
+           <emission r="1" g="1" b="1" a="1" />
+           <ambient r="0.5" g="0.5" b="0.5" a="1" />
+           <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+           <specular r="0.5" g="0.5" b="0.5" a="1" />
+           <shininess value="1" />
+       </material>
+
+   </materials>
+
+   <transformations>
+        <transformation id="transf">
+            <translate x="0" y="0" z="0" />
+            <rotate axis="x" angle="90" />
+            <scale x="1" y="1" z="1" />
+        </transformation>
+    </transformations>
+
+   <animations>
+        <animation id="pause" span="20" type="linear">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0.001" zz="0" />
+        </animation>
+
+        <animation id="shortPause" span="4" type="linear">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0.001" zz="0" />
+        </animation>
+
+        <animation id="rotate60" span="1" type="circular" centerx="0" centery="0" centerz="0"
+            radius="0" startang="0" rotang="60"/>
+   </animations>
+
+    <primitives>
+    	<primitive id="rect">
+    		<rectangle x1="10" y1="10" x2="-10" y2="-10" />
+    	</primitive>
+
+        <primitive id="hexboard">
+            <hexboard />
+        </primitive>
+
+    </primitives>
+
+    <components>
+        <component id="root">
+            <transformation>
+            </transformation>
+
+            <materials>
+                <material id="s1" />
+                <material id="s2" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="ground" />
+                <componentref id="hexboard" />
+            </children>
+        </component>
+
+        <component id="hexboard">
+            <transformation>
+                <translate x="7.5" y="3.5" z="7.5" />
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+
+            <materials>
+                    <material id="superbright" />
+            </materials>
+
+            <texture id="nodesboard" />
+
+            <children>
+                <primitiveref id="hexboard" />
+             </children>
+        </component>
+
+        <component id="ground">
+            <transformation>
+                <scale x="3" y="3" z="3" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="bright" />
+            </materials>
+
+            <texture id="sand" />
+
+            <children>
+                <primitiveref id="rect" />
+            </children>
+        </component>
+
+    </components>
+</dsx>
