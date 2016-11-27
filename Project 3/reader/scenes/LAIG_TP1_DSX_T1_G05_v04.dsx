@@ -1,26 +1,17 @@
 <dsx>
     <scene root="root" axis_length="30.0" />
     
-    <views default="front" >
-        <perspective id="front" near="0.1" far="500.0" angle="60.0">
-            <from x="45" y="45" z="45.0" />
-            <to x="0" y="0" z="0" />
+    <views default="player1" >
+        <perspective id="player1" near="0.1" far="500.0" angle="60.0">
+            <from x="-15" y="20" z="0" />
+            <to x="0" y="5" z="0" />
         </perspective>
 
-        <perspective id="back" near="0.2" far="500.0" angle="60.0">
-            <from x="-45" y="45" z="-45.0" />
-            <to x="0" y="0" z="0" />
+        <perspective id="player2" near="0.1" far="500.0" angle="60.0">
+            <from x="15" y="20" z="0" />
+            <to x="0" y="5" z="0" />
         </perspective>
 
-        <perspective id="side" near="0.2" far="500.0" angle="60.0">
-            <from x="5" y="30.0" z="30.0" />
-            <to x="0" y="0" z="0" />
-        </perspective>
-
-        <perspective id="other" near="0.2" far="500.0" angle="90.0">
-            <from x="30" y="25.0" z="4.0" />
-            <to x="0" y="0" z="0" />
-        </perspective>  
     </views>
 
     <illumination doublesided="1" local="0" >
@@ -168,6 +159,19 @@
             <hexboard />
         </primitive>
 
+        <primitive id="plane">
+         <plane dimX="200" dimY="200" partsX="1" partsY="1" >
+         </plane>
+        </primitive>
+
+        <primitive id="node">
+            <node />
+        </primitive>
+
+        <primitive id="unit">
+            <unit />
+        </primitive>
+
     </primitives>
 
     <components>
@@ -185,14 +189,16 @@
             <children>
                 <componentref id="ground" />
                 <componentref id="hexboard" />
+                <componentref id="pieces" />
+                <componentref id="skybox" />
             </children>
         </component>
 
         <component id="hexboard">
             <transformation>
-                <scale x="3" y="3" z="3" />
-                <translate x="5" y="8" z="5" />
-                <rotate axis="y" angle="45" />
+                <translate x="0" y="8" z="0" />
+                <scale x="1.03" y="1.03" z="1.03" />
+                <rotate axis="y" angle="-90" />
                 <rotate axis="x" angle="-90"/>
             </transformation>
 
@@ -221,6 +227,187 @@
 
             <children>
                 <primitiveref id="rect" />
+            </children>
+        </component>
+
+        <component id="pieces">
+            <transformation>
+                <translate x="-4" y="8" z="0" />
+            </transformation>
+
+            <materials>
+                    <material id="superbright" />
+            </materials>
+
+            <texture id="solrock" />
+
+            <children>
+                <componentref id="node" />
+                <componentref id="unit" />
+             </children>
+        </component>
+
+        <component id="node">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                    <material id="superbright" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="node" />
+             </children>
+        </component>
+
+        <component id="unit">
+            <transformation>
+                <translate x="2" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                    <material id="superbright" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+        <component id="skybox">
+            <transformation>
+                 <translate x="0" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="top" />
+                <componentref id="bottom" />
+                <componentref id="right" />
+                <componentref id="left" />
+                <componentref id="front" />
+                <componentref id="back" />
+            </children>
+        </component>
+
+
+        <component id="top">
+            <transformation>
+                <translate x="0" y="100" z="0" />
+                <rotate axis="x" angle="90" />
+                <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="top" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+        <component id="bottom">
+            <transformation>
+                 <translate x="0" y="-100" z="0" />
+                 <rotate axis="x" angle="-90" />
+                 <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="bottom" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+
+        <component id="back">
+            <transformation>
+                 <translate x="0" y="0" z="100" />
+                 <rotate axis="y" angle="180" />
+                 <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="back" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+
+        <component id="front">
+            <transformation>
+                 <translate x="0" y="0" z="-100" />
+                  <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="front" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+        <component id="right">
+            <transformation>
+                  <translate x="-100" y="0" z="0" />
+                  <rotate axis="y" angle="90" />
+                  <rotate axis="z" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="right" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+
+        <component id="left">
+            <transformation>
+                 <translate x="100" y="0" z="0" />
+                 <rotate axis="y" angle="90" />
+                 <rotate axis="x" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="left" />
+
+            <children>
+                <primitiveref id="plane" />
             </children>
         </component>
 

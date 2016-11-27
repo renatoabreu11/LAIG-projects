@@ -12,6 +12,7 @@ Node.prototype.constructor=Node;
 Node.prototype.display = function () {
 	this.scene.pushMatrix();
 	this.scene.rotate(-Math.PI/2,1,0,0);
+	this.scene.scale(.08,.08,.08);
 
 	this.scene.pushMatrix();
 	this.base.display();

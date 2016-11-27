@@ -9,7 +9,7 @@ Unit.prototype.constructor=Unit;
 
 Unit.prototype.display = function () {
 	this.scene.pushMatrix();
-	this.scene.scale(4,4,4);
+	this.scene.scale(.3,.3,.3);
 	this.unit.display();
 	this.scene.popMatrix();
 }
