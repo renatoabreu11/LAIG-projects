@@ -12,10 +12,10 @@ function HexBoard(scene) {
     du=10;
     dv=10;
 
-    su=2.75;
-    sv=2.75;
+    su=7;
+    sv=9;
 
-    this.board = new Plane(this.scene, du, dv, 36, 36);
+    this.board = new Plane(this.scene, du, dv, 31, 31);
     this.boardShader = new CGFshader(this.scene.gl, "shaders/nodesboard.vert", "shaders/nodesboard.frag");
     this.boardShader.setUniformsValues({
         uSampler2: 1,

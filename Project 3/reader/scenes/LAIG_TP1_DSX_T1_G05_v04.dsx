@@ -190,7 +190,9 @@
 
         <component id="hexboard">
             <transformation>
-                <translate x="7.5" y="3.5" z="7.5" />
+                <scale x="3" y="3" z="3" />
+                <translate x="5" y="8" z="5" />
+                <rotate axis="y" angle="45" />
                 <rotate axis="x" angle="-90"/>
             </transformation>
 
