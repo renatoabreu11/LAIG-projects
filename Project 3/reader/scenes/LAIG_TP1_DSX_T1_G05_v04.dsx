@@ -187,9 +187,10 @@
             <texture id="none" />
 
             <children>
-                <componentref id="ground" />
                 <componentref id="hexboard" />
-                <componentref id="pieces" />
+                <componentref id="piecesP1" />
+                <componentref id="piecesP2" />
+                <componentref id="ground" />
                 <componentref id="skybox" />
             </children>
         </component>
@@ -213,6 +214,363 @@
              </children>
         </component>
 
+
+        <component id="piecesP1">
+            <transformation>
+                <translate x="-4" y="8" z="-4" />
+            </transformation>
+
+            <materials>
+                    <material id="superbright" />
+            </materials>
+
+            <texture id="solrock" />
+
+            <children>
+                <componentref id="P1Node1" />
+                <componentref id="P1Unit1" />
+                <componentref id="P1Unit2" />
+                <componentref id="P1Unit3" />
+                <componentref id="P1Unit4" />
+                <componentref id="P1Unit5" />
+                <componentref id="P1Unit6" />
+                <componentref id="P1Unit7" />
+                <componentref id="P1Unit8" />
+             </children>
+        </component>
+
+
+        <component id="piecesP2">
+            <transformation>
+                <translate x="-4" y="8" z="-4" />
+            </transformation>
+
+            <materials>
+                    <material id="superbright" />
+            </materials>
+
+            <texture id="solrock" />
+
+            <children>
+                <componentref id="P2Node1" />
+                <componentref id="P2Unit1" />
+                <componentref id="P2Unit2" />
+                <componentref id="P2Unit3" />
+                <componentref id="P2Unit4" />
+                <componentref id="P2Unit5" />
+                <componentref id="P2Unit6" />
+                <componentref id="P2Unit7" />
+                <componentref id="P2Unit8" />
+             </children>
+        </component>
+
+
+        <component id="P1Node1">
+            <transformation>
+                <translate x="0" y="0" z="4" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="node" />
+             </children>
+        </component>
+
+
+        <component id="P1Unit1">
+            <transformation>
+                <translate x="0" y="0" z="2" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P1Unit2">
+            <transformation>
+                <translate x="0" y="0" z="3" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P1Unit3">
+            <transformation>
+                <translate x="0" y="0" z="5" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P1Unit4">
+            <transformation>
+                <translate x="0" y="0" z="6" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P1Unit5">
+            <transformation>
+                <translate x="1" y="0" z="3" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P1Unit6">
+            <transformation>
+                <translate x="1" y="0" z="4" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P1Unit7">
+            <transformation>
+                <translate x="1" y="0" z="5" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P1Unit8">
+            <transformation>
+                <translate x="2" y="0" z="4" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P2Node1">
+            <transformation>
+                <translate x="8" y="0" z="4" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="node" />
+             </children>
+        </component>
+
+
+        <component id="P2Unit1">
+            <transformation>
+                <translate x="8" y="0" z="2" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P2Unit2">
+            <transformation>
+                <translate x="8" y="0" z="3" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P2Unit3">
+            <transformation>
+                <translate x="8" y="0" z="5" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P2Unit4">
+            <transformation>
+                <translate x="8" y="0" z="6" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P2Unit5">
+            <transformation>
+                <translate x="7" y="0" z="3" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P2Unit6">
+            <transformation>
+                <translate x="7" y="0" z="4" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P2Unit7">
+            <transformation>
+                <translate x="7" y="0" z="5" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
+        <component id="P2Unit8">
+            <transformation>
+                <translate x="6" y="0" z="4" />
+            </transformation>
+
+            <materials>
+                    <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="unit" />
+             </children>
+        </component>
+
+
         <component id="ground">
             <transformation>
                 <scale x="3" y="3" z="3" />
@@ -230,54 +588,6 @@
             </children>
         </component>
 
-        <component id="pieces">
-            <transformation>
-                <translate x="-4" y="8" z="0" />
-            </transformation>
-
-            <materials>
-                    <material id="superbright" />
-            </materials>
-
-            <texture id="solrock" />
-
-            <children>
-                <componentref id="node" />
-                <componentref id="unit" />
-             </children>
-        </component>
-
-        <component id="node">
-            <transformation>
-                <translate x="0" y="0" z="0" />
-            </transformation>
-
-            <materials>
-                    <material id="superbright" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="node" />
-             </children>
-        </component>
-
-        <component id="unit">
-            <transformation>
-                <translate x="2" y="0" z="0" />
-            </transformation>
-
-            <materials>
-                    <material id="superbright" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="unit" />
-             </children>
-        </component>
 
         <component id="skybox">
             <transformation>
