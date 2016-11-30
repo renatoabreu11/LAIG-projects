@@ -115,6 +115,23 @@
            <shininess value="1" />
        </material>
 
+        <material id="emerald" >
+           <emission r="0" g="0" b="0" a="1" />
+           <ambient r="0.0215" g="0.1745" b="0.0215" a="1" />
+           <diffuse r="0.07568" g="0.61424" b="0.07568" a="1" />
+           <specular r="0.633" g="0.727811" b="0.633" a="1" />
+           <shininess value="0.6" />
+       </material>
+
+
+        <material id="ruby" >
+           <emission r="0.1745" g="0.01175" b="0.01175" a="1" />
+           <ambient r="0.1745" g="0.01175" b="0.01175" a="1" />
+           <diffuse r="0.61424" g="0.04136" b="0.04136" a="1" />
+           <specular r="0.727811" g="0.626959" b="0.626959" a="1" />
+           <shininess value="0.6" />
+       </material>
+
    </materials>
 
    <transformations>
@@ -211,10 +228,10 @@
             </transformation>
 
             <materials>
-                    <material id="superbright" />
+                    <material id="ruby" />
             </materials>
 
-            <texture id="marble" />
+            <texture id="none" />
 
             <children>
                 <componentref id="P1Node1" />
@@ -236,10 +253,10 @@
             </transformation>
 
             <materials>
-                    <material id="superbright" />
+                    <material id="emerald" />
             </materials>
 
-            <texture id="marble" />
+            <texture id="none" />
 
             <children>
                 <componentref id="P2Node1" />
