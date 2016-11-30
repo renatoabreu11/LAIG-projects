@@ -17,10 +17,7 @@ MyInterface.prototype.constructor = MyInterface;
 MyInterface.prototype.init = function(application) {
 	// call CGFinterface init
 	CGFinterface.prototype.init.call(this, application);
-	
-	// init GUI. For more information on the methods, check:
-	//  http://workshop.chromeexperiments.com/examples/gui
-	
+
 	this.gui = new dat.GUI();
 
 	this.lightGroup=this.gui.addFolder('Lights');	

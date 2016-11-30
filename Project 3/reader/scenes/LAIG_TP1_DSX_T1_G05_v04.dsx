@@ -53,17 +53,7 @@
     
     <textures>
         <texture id="grass" file="../res/grass.jpg" length_s="2" length_t="1" />
-        <texture id="skin" file="../res/skin.jpg" length_s="1" length_t="1" />
         <texture id="sand" file="../res/sand.jpg" length_s="20" length_t="20" />
-        <texture id="sand2" file="../res/sand2.jpg" length_s="20" length_t="20" />
-        <texture id="troll" file="../res/troll.jpg" length_s="1" length_t="1" />
-        <texture id="solrock" file="../res/solrock.jpg" length_s="1" length_t="1" />
-        <texture id="bluefire" file="../res/bluefire.jpg" length_s="1" length_t="1" />
-        <texture id="eye" file="../res/eye.png" length_s="1" length_t="1" />
-        <texture id="onix" file="../res/onix.jpg" length_s="1" length_t="1" />
-        <texture id="white" file="../res/white.jpg" length_s="1" length_t="1" />
-        <texture id="grey" file="../res/grey.jpg" length_s="1" length_t="1" />
-        <texture id="black" file="../res/black.jpg" length_s="1" length_t="1" />
         <texture id="wood" file="../res/wood.jpg" length_s="1" length_t="1" />
         <texture id="left" file="../res/left.jpg" length_s="1" length_t="1" />
         <texture id="back" file="../res/back.jpg" length_s="1" length_t="1" />
@@ -239,7 +229,7 @@
                     <material id="superbright" />
             </materials>
 
-            <texture id="solrock" />
+            <texture id="marble" />
 
             <children>
                 <componentref id="node" />

@@ -16,8 +16,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
                 'Primitives/Cylinder.js', 'Primitives/Sphere.js',
                 'Primitives/Torus.js', 'Primitives/Circle.js',
                 'Primitives/Plane.js', 'Primitives/Patch.js',
-                'Primitives/Chessboard.js', 'Primitives/Vehicle.js',
-                'Primitives/HalfSphere.js', 'Primitives/Portal.js',
+                'Primitives/HalfSphere.js',
                 'Primitives/HexBoard.js', 'Primitives/Node.js', 'Primitives/Unit.js',
                 'Animation/Animation.js', 'Animation/LinearAnimation.js', 'Animation/CircularAnimation.js',,
                 

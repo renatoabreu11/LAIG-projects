@@ -37,6 +37,7 @@ XMLscene.prototype.init = function (application) {
     this.setUpdatePeriod(this.updatePeriod);
     this.initialTime = 0;
     this.elapsedTime = 0;
+	this.setPickEnabled(true);
 };
 
 /**
@@ -167,6 +168,7 @@ XMLscene.prototype.update = function(currTime){
  */
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
+    this.clearPickRegistration();
 	
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
