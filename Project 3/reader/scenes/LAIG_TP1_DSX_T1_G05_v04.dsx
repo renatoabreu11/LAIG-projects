@@ -145,13 +145,16 @@
     		<rectangle x1="10" y1="10" x2="-10" y2="-10" />
     	</primitive>
 
-        <primitive id="hexboard">
-            <hexboard />
+        <primitive id="tableLeg">
+         <cylinder base=".5" top=".5" height="8" slices="5" stacks="8" />
         </primitive>
 
-        <primitive id="plane">
-         <plane dimX="200" dimY="200" partsX="1" partsY="1" >
-         </plane>
+        <primitive id="tableTop">
+         <cylinder base="7.5" top="7.5" height=".5" slices="4" stacks="2" />
+        </primitive>
+
+        <primitive id="hexboard">
+            <hexboard />
         </primitive>
 
         <primitive id="node">
@@ -180,6 +183,7 @@
                 <componentref id="hexboard" />
                 <componentref id="piecesP1" />
                 <componentref id="piecesP2" />
+                <componentref id="table" />
                 <componentref id="ground" />
                 <componentref id="skybox" />
             </children>
@@ -558,6 +562,26 @@
             <children>
                 <primitiveref id="unit" />
              </children>
+        </component>
+
+
+        <component id="table">
+            <transformation>
+                <translate x="0" y="7.99" z="0" />
+                <rotate axis="y" angle="45" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="tableTop" />
+                <primitiveref id="tableLeg" />
+            </children>
         </component>
 
 
