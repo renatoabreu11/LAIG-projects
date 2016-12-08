@@ -143,21 +143,25 @@
     </transformations>
 
    <animations>
-        <animation id="pause" span="20" type="linear">
+        <animation id="pause" span="5" type="linear">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="0.001" zz="0" />
+            <controlpoint xx="0" yy="0.00001" zz="0" />
         </animation>
 
-        <animation id="shortPause" span="4" type="linear">
+        <animation id="jump" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="0.001" zz="0" />
+            <controlpoint xx="0" yy="1" zz="0" />
+            <controlpoint xx="2" yy="1" zz="0" />
+            <controlpoint xx="2" yy="0" zz="0" />
         </animation>
-
-        <animation id="rotate60" span="1" type="circular" centerx="0" centery="0" centerz="0"
-            radius="0" startang="0" rotang="60"/>
    </animations>
 
     <primitives>
+
+        <primitive id="plane">
+            <plane dimX="200" dimY="200" partsX="1" partsY="1" />
+        </primitive>
+
     	<primitive id="rect">
     		<rectangle x1="10" y1="10" x2="-10" y2="-10" />
     	</primitive>
@@ -191,7 +195,6 @@
 
             <materials>
                 <material id="s1" />
-                <material id="s2" />
             </materials>
 
             <texture id="none" />
@@ -215,7 +218,7 @@
             </transformation>
 
             <materials>
-                    <material id="superbright" />
+                    <material id="s2" />
             </materials>
 
             <texture id="nodesboard" />
@@ -382,6 +385,11 @@
             <transformation>
                 <translate x="1" y="0" z="4" />
             </transformation>
+
+            <animation>
+                <animationref id="pause"/>
+                <animationref id="jump"/>
+            </animation>
 
             <materials>
                     <material id="inherit" />

@@ -629,14 +629,13 @@ MySceneGraph.prototype.parseAnimations= function(animationsBlock) {
                     this.blockWarnings.push('No Control point found at animation block with id ' + id);
                     return;
                 }
-                var nrChild = controlPointBlock.length;
                 var linearAnimation = new LinearAnimation(id, span);
                 for(controlPoint of controlPointBlock) {
                     var point = this.readCoordinates(2, controlPoint, animationsBlock.tagName);
                     linearAnimation.addControlPoint(point['xx'], point['yy'], point['zz']);
                 }
                 this.animations.push(linearAnimation);
-            }else if (type == 'circular'){
+            } else if(type == 'circular'){
                 var radius = this.reader.getFloat(animation, 'radius');
                 check = this.checkFloatValue(span, 'Radius', animationsBlock.tagName);
                 if(!check){
@@ -667,7 +666,28 @@ MySceneGraph.prototype.parseAnimations= function(animationsBlock) {
 
                 var circularAnimation = new CircularAnimation(id, span, center, radius, startAngle, rotAngle);
                 this.animations.push(circularAnimation);
-            }else {
+
+            }else if(type == 'keyframe') {
+            	var controlPointBlock = animation.getElementsByTagName('controlpoint');
+                if(controlPointBlock == null){
+                    this.blockWarnings.push('No control point found at animation block with id ' + id);
+                    return;
+                } else if(controlPointBlock.length < 4){
+                	this.blockWarnings.push('Not enough control points found at animation block with id ' + id);
+                    return;
+                } else if(controlPointBlock.length > 4){
+                	this.blockWarnings.push('Too many control points found at animation block with id ' + id + '. Will only use first 4 points.');
+                    return;
+                }
+
+                var keyframeAnimation = new KeyFrameAnimation(id, span);
+                for(controlPoint of controlPointBlock) {
+                    var point = this.readCoordinates(2, controlPoint, animationsBlock.tagName);
+                    keyframeAnimation.addControlPoint(point['xx'], point['yy'], point['zz']);
+                }
+                this.animations.push(keyframeAnimation);
+
+            } else {
                 this.blockErrors.push("Invalid animation type!");
                 return;
             }
