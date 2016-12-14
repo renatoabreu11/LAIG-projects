@@ -38,6 +38,7 @@ XMLscene.prototype.init = function (application) {
     this.initialTime = 0;
     this.elapsedTime = 0;
 	this.setPickEnabled(true);
+    this.pickObjectID = 1;
 };
 
 /**
@@ -163,11 +164,30 @@ XMLscene.prototype.update = function(currTime){
     this.elapsedTime = (currTime - this.initialTime)/1000;
 }
 
+XMLscene.prototype.logPicking = function ()
+{
+    this.pickObjectID = 1;
+    if (this.pickMode == false) {
+        if (this.pickResults != null && this.pickResults.length > 0) {
+            for (var i=0; i< this.pickResults.length; i++) {
+                var obj = this.pickResults[i][0];
+                if (obj)
+                {
+                    var customId = this.pickResults[i][1];
+                    console.log("Picked object: " + obj + ", with pick id " + customId);
+                }
+            }
+            this.pickResults.splice(0,this.pickResults.length);
+        }
+    }
+}
+
 /**
  * Loop which display the objects that belong to the scene
  */
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
+    this.logPicking();
     this.clearPickRegistration();
 	
 	// Clear image and depth buffer everytime we update the scene
