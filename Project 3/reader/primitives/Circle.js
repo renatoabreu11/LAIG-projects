@@ -7,7 +7,6 @@
 	
 	this.slices = slices;
 	this.radius = radius;
-	this.radius = radius;
  	this.initBuffers();
  };
 
