@@ -105,8 +105,16 @@ print_header_line(_).
 :-include('nodes.pl').
 
 parse_input(quit, goodbye).
-parse_input(testjs(C,N), Res) :- test(C,Res,N).
 
-%parse_input(Board,From,To,FinalBoard).
+%check gameOver
+parse_input(endGame(Board, Player), true) :- endGame(Board, Player).
+parse_input(endGame(_, _),false).
 
-	
+%attempt to move piece
+parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), FinalBoard) :- 
+	move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn).
+parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), false).
+
+%checks if turn has ended
+parse_input(endTurn(Piece, Player), true) :- endTurn(Piece, Player).
+parse_input(endTurn(_, _), false).

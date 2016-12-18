@@ -8,71 +8,16 @@
 		<h1>Sicstus HTTP Test</h1>
 	
 		<div>
-			<input id="query_field" type="Text" value="handshake"/>
+			<input id="query_field" type="Text"/>
 			<br>
 			<button id="send_button" type="button" onClick="makeRequest();"> Send </button>
 		</div>
 		<h3> Result: </h3>
 		<div id="query_result"></div>
 		
-		<script>document.querySelector("#query_result").innerHTML=boardPLtoJS(boardJStoPL(getInitialBoard()));
-			function getInitialBoard(){
-	return [
-		['empty', 'empty', 'blueUnit', 'blueUnit', 'blueNode', 'blueUnit', 'blueUnit', 'empty', 'empty'],
-		['empty', 'space', 'space', 'blueUnit', 'blueUnit', 'blueUnit', 'space', 'space', 'empty'],
-		['space', 'space', 'space', 'space', 'blueUnit', 'space', 'space', 'space', 'space'],
-		['space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space'],
-		['space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space'],
-		['space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space'],
-		['space', 'space', 'space', 'space', 'redUnit', 'space', 'space', 'space', 'space'],
-		['empty', 'space', 'space', 'redUnit', 'redUnit', 'redUnit', 'space', 'space', 'empty'],
-		['empty', 'empty', 'redUnit', 'redUnit', 'redNode', 'redUnit', 'redUnit', 'empty', 'empty'],
-	];
-}
+		<script>
 
-function boardJStoPL(jsBoard){
-	plBoard="[";
-	
-	for(i=0; i<jsBoard.length; i++){
-		var line = jsBoard[i];
-		plBoard+="[";
-
-		for(j=0; j<line.length; j++){
-			plBoard+=line[j];
-			if(j+1 != line.length)
-				plBoard+=",";
-		}
-
-		plBoard+="]";
-		if(i+1 != jsBoard.length)
-			plBoard+=",";
-	}
-
-	plBoard+="]";
-
-	return plBoard;
-}
-
-function boardPLtoJS(plBoard){ //inverter
-	var jsBoard=[];
-	var startIndex=2;
-
-	while(plBoard.length>1) {
-		finalIndex=plBoard.indexOf("]");
-		var lineStr = plBoard.substring(startIndex,finalIndex);
-		var lineArray = lineStr.split(",");
-		jsBoard.push([lineArray]);
-
-		plBoard = plBoard.substring(finalIndex+1);
-	}
-	
-	console.log(jsBoard);
-	console.log(plBoard);
-
-	return jsBoard;
-}
-			function getPrologRequest(requestString, onSuccess, onError, port)
-			{
+			function getPrologRequest(requestString, onSuccess, onError, port) {
 				var requestPort = port || 8081;
 				var request = new XMLHttpRequest();
 				request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
@@ -84,8 +29,7 @@ function boardPLtoJS(plBoard){ //inverter
 				request.send();
 			}
 		
-			function makeRequest()
-			{
+			function makeRequest() {
 				// Get Parameter Values
 				var requestString = document.querySelector("#query_field").value;				
 				
@@ -96,6 +40,76 @@ function boardPLtoJS(plBoard){ //inverter
 			//Handle the Reply
 			function handleReply(data){
 				document.querySelector("#query_result").innerHTML=data.target.response;
+			}
+
+			//----------------------------------------------------------------------------------------------
+
+			var str = boardJStoPL(getInitialBoard());
+			//document.querySelector("#query_result").innerHTML=str;
+			document.getElementById("query_field").value = "endGame(" + str + ",blue)";
+
+			//----------------------------------------------------------------------------------------------
+
+
+
+
+
+			
+			//-------------------------------------- BOARD PARSING -----------------------------------------------
+
+			function getInitialBoard(){
+				return [
+					['empty', 'empty', 'blueUnit', 'blueUnit', 'blueNode', 'blueUnit', 'blueUnit', 'empty', 'empty'],
+					['empty', 'space', 'space', 'blueUnit', 'blueUnit', 'blueUnit', 'space', 'space', 'empty'],
+					['space', 'space', 'space', 'space', 'blueUnit', 'space', 'space', 'space', 'space'],
+					['space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space'],
+					['space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space'],
+					['space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space'],
+					['space', 'space', 'space', 'space', 'redUnit', 'space', 'space', 'space', 'space'],
+					['empty', 'space', 'space', 'redUnit', 'redUnit', 'redUnit', 'space', 'space', 'empty'],
+					['empty', 'empty', 'redUnit', 'redUnit', 'redNode', 'redUnit', 'redUnit', 'empty', 'empty'],
+				];
+			}
+
+			function boardJStoPL(jsBoard){
+				plBoard="[";
+				
+				for(i=0; i<jsBoard.length; i++){
+					var line = jsBoard[i];
+					plBoard+="[";
+
+					for(j=0; j<line.length; j++){
+						plBoard+=line[j];
+						if(j+1 != line.length)
+							plBoard+=",";
+					}
+
+					plBoard+="]";
+					if(i+1 != jsBoard.length)
+						plBoard+=",";
+				}
+
+				plBoard+="]";
+
+				return plBoard;
+			}
+
+			function boardPLtoJS(plBoard){ //inverter
+				var jsBoard=[];
+				var startIndex=2;
+
+				while(plBoard.length>1) {
+					finalIndex=plBoard.indexOf("]");
+					var lineStr = plBoard.substring(startIndex,finalIndex);
+					var lineArray = lineStr.split(",");
+					jsBoard.push(lineArray);
+
+					plBoard = plBoard.substring(finalIndex+1);
+				}
+				
+				console.log(jsBoard);
+
+				return jsBoard;
 			}
 		
 		</script>

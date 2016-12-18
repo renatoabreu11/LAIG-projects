@@ -112,9 +112,9 @@ endTurn(_, _, FinalBoard, Bot, Difficulty, Mode):-
 	game(Mode, FinalBoard, Enemy, Difficulty).
 
 % Check if it's the end turn in pvp mode
-endTurn(Piece, FinalBoard, Player, Mode, Difficulty):-
+endTurn(Piece, Player):-
 	getOtherPlayer(Player, Enemy),
-	if1(isPlayerNode(Piece, Player), game(Mode, FinalBoard, Enemy, Difficulty), game(Mode, FinalBoard, Player, Difficulty)).
+	isPlayerNode(Piece, Player).
 
 % Switches the current player/bot
 getOtherPlayer(Player, red):-
@@ -127,12 +127,10 @@ getOtherPlayer(Player, blue):-
 */
 
 %Predicate that is responsible for the player movement
-move(Board, Player, Piece, FinalBoard):-
-	%selects the unit to move and checks if it's possible to move it.
-	selectSource(Row, Column, Piece, Board, Player),
+move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn):-
+	validateSource(Row, Column, Piece, Board, Player), !
 
-	%selects the coordinates of where to move it
-	selectDestiny(DestRow, DestColumn, Row, Column, Board),
+	validateDestiny(DestRow, DestColumn, Row, Column, Board),
 
 	movePiece(Piece, Row, Column, DestRow, DestColumn, Board, FinalBoard),
 	write('Press enter to continue'), nl,
