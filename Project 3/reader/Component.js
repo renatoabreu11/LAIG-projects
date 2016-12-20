@@ -251,14 +251,14 @@ Component.prototype.display= function(fatherTex, fatherMat, elapsedTime){
  		if(compTexture != 'none'){
  			prim.updateTexCoords(compTexture["length_s"], compTexture["length_t"]);
  		}
- 		if((prim instanceof Node || prim instanceof Unit) && this.scene.pickObjectID <= 18){
-            this.scene.registerForPick(this.scene.pickObjectID, prim);
+ 		if(prim instanceof Node || prim instanceof Unit){
+            this.scene.registerForPick(this.scene.pickObjectID+0, prim);
             this.scene.pickObjectID++;
-        }else this.scene.clearPickRegistration();
+        } else this.scene.clearPickRegistration();
 
-        if(prim instanceof HexBoard){
+        /*if(prim instanceof HexBoard){
             prim.registerCellsForPick();
-        }
+        }*/
 
  		prim.display();
  	}

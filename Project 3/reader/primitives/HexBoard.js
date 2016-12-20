@@ -38,6 +38,14 @@ HexBoard.prototype = Object.create(CGFobject.prototype);
 HexBoard.prototype.constructor=HexBoard;
 
 HexBoard.prototype.display = function () {
+    this.scene.pushMatrix();
+    this.scene.setActiveShader(this.boardShader);
+    this.scene.scale(1.03, 1.03, 1.03);
+    this.scene.rotate(-90*Math.PI/180, 0, 1, 0);
+    this.scene.rotate(-90*Math.PI/180, 1, 0, 0);
+    this.board.display();
+    this.scene.setActiveShader(this.scene.defaultShader);
+    this.scene.popMatrix();
 
     var coordX = -4;
     var coordZ = -4;
@@ -55,10 +63,12 @@ HexBoard.prototype.display = function () {
             nrPieces = 7;
         }else nrPieces = 9;
         for (var i = 0; i < nrPieces; i++) {
-            this.scene.pushMatrix()
+            this.scene.pushMatrix();
             this.scene.translate(coordX, 0.03, 0);
             this.scene.rotate(-90 * Math.PI / 180, 0, 1, 0);
             this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);
+            this.scene.registerForPick(this.scene.pickObjectID, this.cells[cellIndex]);
+            this.scene.pickObjectID++;
             this.cells[cellIndex].display();
             cellIndex++;
             this.scene.popMatrix()
@@ -68,15 +78,6 @@ HexBoard.prototype.display = function () {
         coordX = -4;
         coordZ += inc;
     }
-
-    this.scene.pushMatrix()
-    this.scene.setActiveShader(this.boardShader)
-    this.scene.scale(1.03, 1.03, 1.03);
-    this.scene.rotate(-90*Math.PI/180, 0, 1, 0);
-    this.scene.rotate(-90*Math.PI/180, 1, 0, 0);
-    this.board.display();
-    this.scene.setActiveShader(this.scene.defaultShader);
-    this.scene.popMatrix();
 }
 
 HexBoard.prototype.registerCellsForPick = function () {
