@@ -97,23 +97,27 @@ XMLscene.prototype.updateCamera = function () {
 
 XMLscene.prototype.animateCameraTransition = function () {
 	var camInfo=this.transitionCam;
-	console.log(transitionCam);
 
 	//finish animation
 	if(this.elapsedTime>=this.transitionCam["finishTime"]){
-		var view = camInfo["newCam"];
-		var fov = view["angle"];
-		var near = view["near"];
-		var far = view["far"];
-		var position = view["from"];
-		var target = view["to"];
-		this.camera = new CGFcamera(fov, near, far, vec3.fromValues(position["x"], position["y"], position["z"]), 
-									vec3.fromValues(target["x"], target["y"], target["z"]));
+		this.updateCamera();
 		this.transitionCam=null;
 		return;
 	}
 
-	//animation
+	var offset = camInfo["animation"].getCurrPos((camInfo["finishTime"] - this.elapsedTime)/camInfo["animation"].span);
+
+	var view = camInfo["newCam"];
+	var fov = view["angle"];
+	var near = view["near"];
+	var far = view["far"];
+	var position = [];
+	position["x"] = view["from"]["x"] + offset[0];
+	position["y"] = view["from"]["y"] + offset[1];
+	position["z"] = view["from"]["z"] + offset[2];
+	var target = view["to"];
+	this.camera = this.camera = new CGFcamera(fov, near, far, vec3.fromValues(position["x"], position["y"], position["z"]), 
+									vec3.fromValues(target["x"], target["y"], target["z"]));
 }
 
 /**

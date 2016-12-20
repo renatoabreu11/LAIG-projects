@@ -28,6 +28,22 @@ KeyFrameAnimation.prototype.vecAddVec = function (vec1,vec2){
     return vec;
 };
 
+KeyFrameAnimation.prototype.getCurrPos = function(t){
+    var u = 1-t;
+    var tt = t*t;
+    var uu = u*u;
+    var uuu = uu*u;
+    var ttt = tt*t;
+
+    var p = [0,0,0];
+    p = this.vecMultN(uuu,this.points[0]); //first term
+    p = this.vecAddVec(p,this.vecMultN(3*uu*t,this.points[1])); //second term
+    p = this.vecAddVec(p,this.vecMultN(3*u*tt,this.points[2])); //third term
+    p = this.vecAddVec(p,this.vecMultN(ttt,this.points[3])); //fourth term
+
+    return p;
+}
+
 /**
  * Returns transformation matrix
  */
@@ -40,17 +56,7 @@ KeyFrameAnimation.prototype.getMatrix = function (time) {
         time = this.span;
     var t = time/this.span;
 
-    var u = 1-t;
-    var tt = t*t;
-    var uu = u*u;
-    var uuu = uu*u;
-    var ttt = tt*t;
-
-    var p = [0,0,0];
-    p = this.vecMultN(uuu,this.points[0]); //first term
-    p = this.vecAddVec(p,this.vecMultN(3*uu*t,this.points[1])); //second term
-    p = this.vecAddVec(p,this.vecMultN(3*u*tt,this.points[2])); //third term
-    p = this.vecAddVec(p,this.vecMultN(ttt,this.points[3])); //fourth term
+    var p = this.getCurrPos(t);
 
     var pos = vec3.create();
     vec3.set(pos,p[0],p[1],p[2]);

@@ -157,11 +157,18 @@
             <controlpoint xx="0" yy="0.00001" zz="0" />
         </animation>
 
-        <animation id="camTransition1" span="2" type="keyframe">
+        <animation id="camTransition1" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="3" zz="22" />
-            <controlpoint xx="25" yy="3" zz="27" />
+            <controlpoint xx="0" yy="5" zz="22" />
+            <controlpoint xx="25" yy="5" zz="27" />
             <controlpoint xx="30" yy="0" zz="14" />
+        </animation>
+
+        <animation id="camTransition2" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="5" zz="-22" />
+            <controlpoint xx="-25" yy="5" zz="-27" />
+            <controlpoint xx="-30" yy="0" zz="-14" />
         </animation>
 
         <animation id="jump" span="1" type="keyframe">

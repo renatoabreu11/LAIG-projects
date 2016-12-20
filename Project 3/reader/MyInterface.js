@@ -49,18 +49,6 @@ MyInterface.prototype.processKeyboard = function(event) {
 	// for better cross-browser support, you may also check suggestions on using event.which in http://www.w3schools.com/jsref/event_key_keycode.asp
 	switch (event.keyCode)
 	{
-		case (65):	
-		case (65+32):	// 'A' or 'a'
-			break;
-		case(68):
-		case(68+32):	// 'D' or 'd'
-			break;
-		case(87):
-		case(87+32):	// 'W' or 'w'
-			break;
-		case(83):
-		case(83+32):	// 'S' or 's'
-			break;
 		case(86):
 		case(86+32):
 			this.scene.updateCamera();
@@ -76,12 +64,13 @@ MyInterface.prototype.processKeyboard = function(event) {
 				break;
 			transitionCam=[];
 			transitionCam["newCam"]=this.scene.graph.getNextView();
-			transitionCam["animation"]=this.scene.graph.animations[this.scene.graph.checkIfExists(this.scene.graph.animations, "camTransition1")];
+			transitionCam["animation"]=this.scene.graph.animations[this.scene.graph.checkIfExists(this.scene.graph.animations, transitionCam["newCam"]["id"]=="player1" ? "camTransition1" : "camTransition2")];
 			transitionCam["finishTime"]=this.scene.elapsedTime+transitionCam["animation"].span;
 			this.scene.transitionCam=transitionCam;
+			break;
 
 		default:
-			console.log("Unexpected keystroke "+event.keyCode);
+			console.log("Unexpected keystroke with code "+event.keyCode);
 			break;
 
 	};
