@@ -55,13 +55,22 @@
         <texture id="grass" file="../res/grass.jpg" length_s="2" length_t="1" />
         <texture id="sand" file="../res/sand.jpg" length_s="20" length_t="20" />
         <texture id="wood" file="../res/wood.jpg" length_s="1" length_t="1" />
-        <texture id="left" file="../res/left.jpg" length_s="1" length_t="1" />
-        <texture id="back" file="../res/back.jpg" length_s="1" length_t="1" />
-        <texture id="front" file="../res/front.jpg" length_s="1" length_t="1" />
-        <texture id="right" file="../res/right.jpg" length_s="1" length_t="1" />
-        <texture id="bottom" file="../res/bottom.jpg" length_s="1" length_t="1" />
-        <texture id="top" file="../res/top.jpg" length_s="1" length_t="1" />
         <texture id="ice" file="../res/ice.jpg" length_s="1" length_t="1" />
+
+        <!--<texture id="front" file="../res/SanFrancisco4/posz.jpg" length_s="1" length_t="1" />
+        <texture id="left" file="../res/SanFrancisco4/negx.jpg" length_s="1" length_t="1" />
+        <texture id="right" file="../res/SanFrancisco4/posx.jpg" length_s="1" length_t="1" />
+        <texture id="back" file="../res/SanFrancisco4/negz.jpg" length_s="1" length_t="1" />
+        <texture id="bottom" file="../res/SanFrancisco4/negy.jpg" length_s="1" length_t="1" />
+        <texture id="top" file="../res/SanFrancisco4/posy.jpg" length_s="1" length_t="1" />-->
+
+        <texture id="front" file="../res/tron/front.jpg" length_s="1" length_t="1" />
+        <texture id="left" file="../res/tron/left.jpg" length_s="1" length_t="1" />
+        <texture id="right" file="../res/tron/right.jpg" length_s="1" length_t="1" />
+        <texture id="back" file="../res/tron/back.jpg" length_s="1" length_t="1" />
+        <texture id="bottom" file="../res/tron/bottom.jpg" length_s="1" length_t="1" />
+        <texture id="top" file="../res/tron/top.jpg" length_s="1" length_t="1" />
+
         <texture id="marble" file="../res/marble.jpg" length_s="1" length_t="1" />
         <texture id="nodesboard" file="../res/nodesboard.png" length_s="1" length_t="1" />
     </textures>
@@ -158,8 +167,36 @@
 
     <primitives>
 
-        <primitive id="plane">
-            <plane dimX="200" dimY="200" partsX="1" partsY="1" />
+    <primitive id="plane">
+        <plane dimX="100" dimY="100" partsX="1" partsY="1"/>
+    </primitive>
+
+        <primitive id="wall">
+            <patch orderU="3" orderV="4" partsU="10" partsV="10" >
+                <controlpoint x="-60" y="-50" z="-10" />
+                <controlpoint x="-70" y="-30" z="-20" />
+                <controlpoint x="-100" y="20" z="-50" />
+                <controlpoint x="-80" y="40" z="-30" />
+                <controlpoint x="-50" y="50" z="0" />
+
+                <controlpoint x="-20" y="-50" z="-10" />
+                <controlpoint x="-17" y="-30" z="-30" />
+                <controlpoint x="-17" y="20" z="-70" />
+                <controlpoint x="-17" y="40" z="-40" />
+                <controlpoint x="-17" y="50" z="0" />
+
+                <controlpoint x="20" y="-50" z="-10" />
+                <controlpoint x="17" y="-30" z="-30" />
+                <controlpoint x="17" y="20" z="-70" />
+                <controlpoint x="17" y="40" z="-40" />
+                <controlpoint x="17" y="50" z="0" />
+
+                <controlpoint x="60" y="-50" z="-10" />
+                <controlpoint x="70" y="-30" z="-20" />
+                <controlpoint x="100" y="20" z="-50" />
+                <controlpoint x="80" y="40" z="-30" />
+                <controlpoint x="50" y="50" z="0" />
+            </patch>
         </primitive>
 
     	<primitive id="rect">
@@ -167,7 +204,7 @@
     	</primitive>
 
         <primitive id="tableLeg">
-         <cylinder base=".5" top=".5" height="8" slices="5" stacks="8" />
+         <cylinder base=".5" top=".5" height="15" slices="5" stacks="8" />
         </primitive>
 
         <primitive id="tableTop">
@@ -204,7 +241,6 @@
                 <componentref id="piecesP1" />
                 <componentref id="piecesP2" />
                 <componentref id="table" />
-                <componentref id="ground" />
                 <componentref id="skybox" />
             </children>
         </component>
@@ -610,27 +646,10 @@
         </component>
 
 
-        <component id="ground">
-            <transformation>
-                <scale x="3" y="3" z="3" />
-                <rotate axis="x" angle="-90" />
-            </transformation>
-
-            <materials>
-                <material id="bright" />
-            </materials>
-
-            <texture id="sand" />
-
-            <children>
-                <primitiveref id="rect" />
-            </children>
-        </component>
-
-
         <component id="skybox">
             <transformation>
-                 <translate x="0" y="0" z="0" />
+                 <translate x="0" y="25" z="0" />
+                <scale x=".75" y=".75" z=".75" />
             </transformation>
 
             <materials>
@@ -652,7 +671,8 @@
 
         <component id="top">
             <transformation>
-                <translate x="0" y="100" z="0" />
+                <scale x="1.2" y="1" z="1.2" />
+                <translate x="0" y="50" z="0" />
                 <rotate axis="x" angle="90" />
                 <rotate axis="z" angle="180" />
             </transformation>
@@ -670,9 +690,9 @@
 
         <component id="bottom">
             <transformation>
-                 <translate x="0" y="-100" z="0" />
-                 <rotate axis="x" angle="-90" />
-                 <rotate axis="z" angle="180" />
+                <translate x="0" y="-50" z="0" />
+                <rotate axis="x" angle="-90" />
+                <rotate axis="z" angle="180" />
             </transformation>
 
             <materials>
@@ -689,7 +709,7 @@
 
         <component id="back">
             <transformation>
-                 <translate x="0" y="0" z="100" />
+                 <translate x="0" y="0" z="50" />
                  <rotate axis="y" angle="180" />
                  <rotate axis="z" angle="180" />
             </transformation>
@@ -701,14 +721,14 @@
             <texture id="back" />
 
             <children>
-                <primitiveref id="plane" />
+                <primitiveref id="wall" />
             </children>
         </component>
 
 
         <component id="front">
             <transformation>
-                 <translate x="0" y="0" z="-100" />
+                 <translate x="0" y="0" z="-50" />
                   <rotate axis="z" angle="180" />
             </transformation>
 
@@ -719,13 +739,13 @@
             <texture id="front" />
 
             <children>
-                <primitiveref id="plane" />
+                <primitiveref id="wall" />
             </children>
         </component>
 
         <component id="right">
             <transformation>
-                  <translate x="-100" y="0" z="0" />
+                  <translate x="-50" y="0" z="0" />
                   <rotate axis="y" angle="90" />
                   <rotate axis="z" angle="180" />
             </transformation>
@@ -737,14 +757,14 @@
             <texture id="right" />
 
             <children>
-                <primitiveref id="plane" />
+                <primitiveref id="wall" />
             </children>
         </component>
 
 
         <component id="left">
             <transformation>
-                 <translate x="100" y="0" z="0" />
+                 <translate x="50" y="0" z="0" />
                  <rotate axis="y" angle="90" />
                  <rotate axis="x" angle="180" />
             </transformation>
@@ -756,7 +776,7 @@
             <texture id="left" />
 
             <children>
-                <primitiveref id="plane" />
+                <primitiveref id="wall" />
             </children>
         </component>
 
