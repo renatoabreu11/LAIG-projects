@@ -3,12 +3,12 @@
     
     <views default="player1" >
         <perspective id="player1" near="0.1" far="500.0" angle="60.0">
-            <from x="-15" y="20" z="-3" />
+            <from x="-15" y="25" z="-7" />
             <to x="0" y="5" z="0" />
         </perspective>
 
         <perspective id="player2" near="0.1" far="500.0" angle="60.0">
-            <from x="15" y="20" z="3" />
+            <from x="15" y="25" z="7" />
             <to x="0" y="5" z="0" />
         </perspective>
 
@@ -152,9 +152,16 @@
     </transformations>
 
    <animations>
-        <animation id="pause" span="5" type="linear">
+        <animation id="pause" span="2" type="linear">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="0" yy="0.00001" zz="0" />
+        </animation>
+
+        <animation id="camTransition1" span="2" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="3" zz="22" />
+            <controlpoint xx="25" yy="3" zz="27" />
+            <controlpoint xx="30" yy="0" zz="14" />
         </animation>
 
         <animation id="jump" span="1" type="keyframe">
@@ -166,7 +173,6 @@
    </animations>
 
     <primitives>
-
     <primitive id="plane">
         <plane dimX="100" dimY="100" partsX="1" partsY="1"/>
     </primitive>
@@ -222,7 +228,6 @@
         <primitive id="unit">
             <unit />
         </primitive>
-
     </primitives>
 
     <components>
@@ -248,7 +253,7 @@
         <component id="hexboard">
             <transformation>
                 <translate x="0" y="8" z="0" />
-                <scale x="1.03" y="1.03" z="1.03" />
+                <rotate axis="z" angle="90" />
                 <rotate axis="y" angle="-90" />
                 <rotate axis="x" angle="-90"/>
             </transformation>

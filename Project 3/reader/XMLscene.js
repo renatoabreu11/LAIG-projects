@@ -39,6 +39,8 @@ XMLscene.prototype.init = function (application) {
     this.elapsedTime = 0;
 	this.setPickEnabled(true);
     this.pickObjectID = 1;
+
+    this.transitionCam=null;
 };
 
 /**
@@ -91,6 +93,27 @@ XMLscene.prototype.initCameras = function () {
 XMLscene.prototype.updateCamera = function () {
 	this.graph.setNextView();
 	this.camera = this.graph.getDefaultView();
+}
+
+XMLscene.prototype.animateCameraTransition = function () {
+	var camInfo=this.transitionCam;
+	console.log(transitionCam);
+
+	//finish animation
+	if(this.elapsedTime>=this.transitionCam["finishTime"]){
+		var view = camInfo["newCam"];
+		var fov = view["angle"];
+		var near = view["near"];
+		var far = view["far"];
+		var position = view["from"];
+		var target = view["to"];
+		this.camera = new CGFcamera(fov, near, far, vec3.fromValues(position["x"], position["y"], position["z"]), 
+									vec3.fromValues(target["x"], target["y"], target["z"]));
+		this.transitionCam=null;
+		return;
+	}
+
+	//animation
 }
 
 /**
@@ -193,6 +216,11 @@ XMLscene.prototype.display = function () {
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+    //Make camera transition if necessary
+    if(this.transitionCam != null){
+    	this.animateCameraTransition();
+    }
 
 	// Initialize Model-View matrix as identity (no transformation
 	this.updateProjectionMatrix();

@@ -70,6 +70,19 @@ MyInterface.prototype.processKeyboard = function(event) {
 		case(77+32):
 			this.scene.updateMaterials();
 			break;
+		case(76): //debug [L]
+		case(108):
+			if(this.scene.transitionCam != null) //caso a transicao nao tenha acabado, nao permite iniciar uma nova
+				break;
+			transitionCam=[];
+			transitionCam["newCam"]=this.scene.graph.getNextView();
+			transitionCam["animation"]=this.scene.graph.animations[this.scene.graph.checkIfExists(this.scene.graph.animations, "camTransition1")];
+			transitionCam["finishTime"]=this.scene.elapsedTime+transitionCam["animation"].span;
+			this.scene.transitionCam=transitionCam;
+
+		default:
+			console.log("Unexpected keystroke "+event.keyCode);
+			break;
 
 	};
 };

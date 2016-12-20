@@ -1212,6 +1212,19 @@ MySceneGraph.prototype.setNextView=function() {
 }
 
 /**
+ * Returns the next view
+ */
+MySceneGraph.prototype.getNextView=function() {
+	for(var k = 0; k < this.views.length; k++){
+		if(this.views[k]["id"] == this.defaultView){
+			if(k + 1 == this.views.length)
+				return this.views[0];
+			else return this.views[k + 1];
+		}
+	}
+}
+
+/**
  * Returns elements with name equal to tag
  * @param  {string} tag name
  * @param  {Block}  block  block with information to read
