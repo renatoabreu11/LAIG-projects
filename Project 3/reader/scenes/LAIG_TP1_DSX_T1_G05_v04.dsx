@@ -249,11 +249,11 @@
             <texture id="none" />
 
             <children>
-                <componentref id="hexboard" />
                 <componentref id="piecesP1" />
                 <componentref id="piecesP2" />
                 <componentref id="table" />
                 <componentref id="skybox" />
+                <componentref id="hexboard" />
             </children>
         </component>
 

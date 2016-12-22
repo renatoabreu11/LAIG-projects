@@ -16,7 +16,7 @@ function HexBoard(scene) {
     sv=-1;
 
     this.board = new Plane(this.scene, du, dv, 31, 31);
-    /*this.boardShader = new CGFshader(this.scene.gl, "shaders/nodesboard.vert", "shaders/nodesboard.frag");
+    this.boardShader = new CGFshader(this.scene.gl, "shaders/nodesboard.vert", "shaders/nodesboard.frag");
     this.boardShader.setUniformsValues({
         uSampler2: 1,
         cs: colourS,
@@ -24,9 +24,7 @@ function HexBoard(scene) {
         dv: dv,
         su: su,
         sv: sv
-    });*/
-
-    this.nrPieces = 18;
+    });
 
     this.cells = [];
     for(var i = 0; i < 69; i++){
@@ -41,12 +39,12 @@ HexBoard.prototype.constructor=HexBoard;
 
 HexBoard.prototype.display = function () {
     this.scene.pushMatrix();
-    //this.scene.setActiveShader(this.boardShader);
+    this.scene.setActiveShader(this.boardShader);
     this.scene.scale(1.03, 1.03, 1.03);
     this.scene.rotate(-90*Math.PI/180, 0, 1, 0);
     this.scene.rotate(-90*Math.PI/180, 1, 0, 0);
     this.board.display();
-    //this.scene.setActiveShader(this.scene.defaultShader);
+    this.scene.setActiveShader(this.scene.defaultShader);
     this.scene.popMatrix();
 
     var coordX = -4;
