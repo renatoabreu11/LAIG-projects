@@ -16,7 +16,7 @@ function HexBoard(scene) {
     sv=-1;
 
     this.board = new Plane(this.scene, du, dv, 31, 31);
-    this.boardShader = new CGFshader(this.scene.gl, "shaders/nodesboard.vert", "shaders/nodesboard.frag");
+    /*this.boardShader = new CGFshader(this.scene.gl, "shaders/nodesboard.vert", "shaders/nodesboard.frag");
     this.boardShader.setUniformsValues({
         uSampler2: 1,
         cs: colourS,
@@ -24,7 +24,7 @@ function HexBoard(scene) {
         dv: dv,
         su: su,
         sv: sv
-    });
+    });*/
 
     this.nrPieces = 18;
 
@@ -32,6 +32,8 @@ function HexBoard(scene) {
     for(var i = 0; i < 69; i++){
         this.cells.push(new Circle(this.scene, 0.4, 12));
     }
+    this.cellAppearance = new CGFappearance(this.scene);
+    this.cellAppearance.loadTexture('../res/transparent.png');
 }
 
 HexBoard.prototype = Object.create(CGFobject.prototype);
@@ -39,12 +41,12 @@ HexBoard.prototype.constructor=HexBoard;
 
 HexBoard.prototype.display = function () {
     this.scene.pushMatrix();
-    this.scene.setActiveShader(this.boardShader);
+    //this.scene.setActiveShader(this.boardShader);
     this.scene.scale(1.03, 1.03, 1.03);
     this.scene.rotate(-90*Math.PI/180, 0, 1, 0);
     this.scene.rotate(-90*Math.PI/180, 1, 0, 0);
     this.board.display();
-    this.scene.setActiveShader(this.scene.defaultShader);
+    //this.scene.setActiveShader(this.scene.defaultShader);
     this.scene.popMatrix();
 
     var coordX = -4;
@@ -52,6 +54,7 @@ HexBoard.prototype.display = function () {
     var inc = 1;
     var nrPieces = 9;
     var cellIndex = 0;
+    this.cellAppearance.apply();
     for(var j = 0; j <= 8; j++) {
         this.scene.pushMatrix()
         this.scene.translate(0, 0, coordZ);
@@ -62,6 +65,7 @@ HexBoard.prototype.display = function () {
             coordX = -3;
             nrPieces = 7;
         }else nrPieces = 9;
+
         for (var i = 0; i < nrPieces; i++) {
             this.scene.pushMatrix();
             this.scene.translate(coordX, 0.03, 0);
