@@ -113,7 +113,6 @@ endTurn(_, _, FinalBoard, Bot, Difficulty, Mode):-
 
 % Check if it's the end turn in pvp mode
 endTurn(Piece, Player):-
-	getOtherPlayer(Player, Enemy),
 	isPlayerNode(Piece, Player).
 
 % Switches the current player/bot

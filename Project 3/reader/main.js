@@ -41,11 +41,6 @@ main=function()
 
 	var filename=getUrlVars()['file'] || "LAIG_TP1_DSX_T1_G05_v04.dsx";
 
-	var client = new Client(8081);
-	client.makeRequest("getInitialBoard", function(data) {
-        var board = new Board(data.target.response);
-    });
-
 	var myGraph = new MySceneGraph(filename, myScene);
 	
 	// start

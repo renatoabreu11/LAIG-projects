@@ -106,7 +106,14 @@ print_header_line(_).
 
 parse_input(quit, goodbye).
 
+%get initial board
 parse_input(getInitialBoard, Board):-initialBoard(Board).
+
+%attempt to move piece
+parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), FinalBoard) :-
+	move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn).
+parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), false).
+ 
 
 %check gameOver
 parse_input(endGame(Board, Player), true) :- endGame(Board, Player).

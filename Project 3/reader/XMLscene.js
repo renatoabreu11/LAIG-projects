@@ -43,6 +43,14 @@ XMLscene.prototype.init = function (application) {
     this.transitionCam=null;
 
     this.selectedPiece=null;
+
+    var own = this;
+    this.currBoard=null;
+    this.serverResponse = null;
+    this.client=new Client(8081);
+    this.client.makeRequest("getInitialBoard", function(data) {
+        own.currBoard = new Board(data.target.response);
+    });
 };
 
 /**
@@ -191,6 +199,12 @@ XMLscene.prototype.update = function(currTime){
         this.initialTime = currTime;
 
     this.elapsedTime = (currTime - this.initialTime)/1000;
+
+
+    if(this.response!=null) {
+    	this.console.log(response);
+    	this.response=null;
+    }
 }
 
 XMLscene.prototype.idToCoords = function(id) {
@@ -259,7 +273,20 @@ XMLscene.prototype.logPicking = function ()
 	                    }
 	                } else if(this.selectedPiece != null){
 	                	var coords = this.idToCoords(customId);
-	                	console.log("moving selected piece to "+ coords);
+
+	                	var own = this;
+	                	var request = "move("+this.currBoard.toPrologStruct()+
+        									",blue,"+
+        									(obj instanceof Node ? "node" : "unit")+
+        									",FinalBoard,"+
+        									coords[0]+"-"+coords[1]+","+
+        									coords[0]+"-"+coords[1]+
+        									")";
+        									console.log(request);
+	                	this.client.makeRequest(request , function(data) {
+        					own.serverResponse = data.target.response;
+    					});
+
 	                	this.selectedPiece.deselect();
 	                	this.selectedPiece=null;
 
