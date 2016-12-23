@@ -11,7 +11,6 @@
             <from x="15" y="25" z="7" />
             <to x="0" y="5" z="0" />
         </perspective>
-
     </views>
 
     <illumination doublesided="1" local="0" >
@@ -228,13 +227,78 @@
             <hexboard />
         </primitive>
 
-        <primitive id="node">
+        <primitive id="P1Node">
             <node />
         </primitive>
 
-        <primitive id="unit">
+        <primitive id="P2Node">
+            <node />
+        </primitive>
+
+        <primitive id="P1Unit1">
             <unit />
         </primitive>
+
+        <primitive id="P1Unit2">
+            <unit />
+        </primitive>
+
+        <primitive id="P1Unit3">
+            <unit />
+        </primitive>
+
+        <primitive id="P1Unit4">
+            <unit />
+        </primitive>
+
+        <primitive id="P1Unit5">
+            <unit />
+        </primitive>
+
+        <primitive id="P1Unit6">
+            <unit />
+        </primitive>
+
+        <primitive id="P1Unit7">
+            <unit />
+        </primitive>
+
+        <primitive id="P1Unit8">
+            <unit />
+        </primitive>
+
+        <primitive id="P2Unit1">
+            <unit />
+        </primitive>
+
+        <primitive id="P2Unit2">
+            <unit />
+        </primitive>
+
+        <primitive id="P2Unit3">
+            <unit />
+        </primitive>
+
+        <primitive id="P2Unit4">
+            <unit />
+        </primitive>
+
+        <primitive id="P2Unit5">
+            <unit />
+        </primitive>
+
+        <primitive id="P2Unit6">
+            <unit />
+        </primitive>
+
+        <primitive id="P2Unit7">
+            <unit />
+        </primitive>
+
+        <primitive id="P2Unit8">
+            <unit />
+        </primitive>
+
     </primitives>
 
     <components>
@@ -289,7 +353,7 @@
             <texture id="none" />
 
             <children>
-                <componentref id="P1Node1" />
+                <componentref id="P1Node" />
                 <componentref id="P1Unit1" />
                 <componentref id="P1Unit2" />
                 <componentref id="P1Unit3" />
@@ -314,7 +378,7 @@
             <texture id="none" />
 
             <children>
-                <componentref id="P2Node1" />
+                <componentref id="P2Node" />
                 <componentref id="P2Unit1" />
                 <componentref id="P2Unit2" />
                 <componentref id="P2Unit3" />
@@ -327,7 +391,7 @@
         </component>
 
 
-        <component id="P1Node1">
+        <component id="P1Node">
             <transformation>
                 <translate x="0" y="0" z="4" />
             </transformation>
@@ -339,7 +403,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="node" />
+                <primitiveref id="P1Node" />
              </children>
         </component>
 
@@ -356,7 +420,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P1Unit1" />
              </children>
         </component>
 
@@ -373,7 +437,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P1Unit2" />
              </children>
         </component>
 
@@ -390,7 +454,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P1Unit3" />
              </children>
         </component>
 
@@ -407,7 +471,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P1Unit4" />
              </children>
         </component>
 
@@ -424,7 +488,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P1Unit5" />
              </children>
         </component>
 
@@ -446,7 +510,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P1Unit6" />
              </children>
         </component>
 
@@ -463,7 +527,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P1Unit7" />
              </children>
         </component>
 
@@ -480,12 +544,12 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P1Unit8" />
              </children>
         </component>
 
 
-        <component id="P2Node1">
+        <component id="P2Node">
             <transformation>
                 <translate x="8" y="0" z="4" />
             </transformation>
@@ -497,7 +561,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="node" />
+                <primitiveref id="P2Node" />
              </children>
         </component>
 
@@ -514,7 +578,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P2Unit1" />
              </children>
         </component>
 
@@ -531,7 +595,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P2Unit2" />
              </children>
         </component>
 
@@ -548,7 +612,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P2Unit3" />
              </children>
         </component>
 
@@ -565,7 +629,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P2Unit4" />
              </children>
         </component>
 
@@ -582,7 +646,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P2Unit5" />
              </children>
         </component>
 
@@ -599,7 +663,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P2Unit6" />
              </children>
         </component>
 
@@ -616,7 +680,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P2Unit7" />
              </children>
         </component>
 
@@ -633,7 +697,7 @@
             <texture id="inherit" />
 
             <children>
-                <primitiveref id="unit" />
+                <primitiveref id="P2Unit8" />
              </children>
         </component>
 

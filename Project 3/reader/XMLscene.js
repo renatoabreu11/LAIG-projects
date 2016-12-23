@@ -41,6 +41,8 @@ XMLscene.prototype.init = function (application) {
     this.pickObjectID = 1;
 
     this.transitionCam=null;
+
+    this.selectedPiece=null;
 };
 
 /**
@@ -191,6 +193,49 @@ XMLscene.prototype.update = function(currTime){
     this.elapsedTime = (currTime - this.initialTime)/1000;
 }
 
+XMLscene.prototype.idToCoords = function(id) {
+	var col = id - 18; //id is now from 0 to 68
+	var line;
+	for(line=1; col>9; line++){ //until col reaches a valid value
+		//know how much to decrement col
+		switch(line){
+
+			case 1:
+			case 9:
+				col -= 5;
+				break;
+			case 2:
+			case 8:
+				col -= 7;
+				break;
+			default:
+				col -= 9;
+				break;
+		}
+	}
+
+	if(line==1){
+		if(col>5){
+			col -= 4;
+			line++;
+		} else col += 2;
+
+	} else if(line==2) {
+		if(col>7){
+			col -=7;
+			line++;
+		} else col += 1;
+	} else if(line==8) {
+		if(col>7){
+			col -= 5;
+			line++;
+		} else col += 1;
+	} else if(line==9){
+		col += 2;
+	}
+	return [line,col];
+};
+
 XMLscene.prototype.logPicking = function ()
 {
     this.pickObjectID = 1;
@@ -201,7 +246,24 @@ XMLscene.prototype.logPicking = function ()
                 if (obj)
                 {
                     var customId = this.pickResults[i][1];
-                    console.log("Picked object: " + obj + ", with pick id " + customId);
+                    console.log("Picked object: " + (obj instanceof Node ? "Node" : obj instanceof Unit ? "Unit" : "Location") + ", with pick id " + customId);
+                    
+                    if(obj instanceof Node || obj instanceof Unit){
+	                    if(this.selectedPiece==null){
+	                    	obj.select();
+	                    	this.selectedPiece=obj;
+	                    } else {
+	                    	this.selectedPiece.deselect();
+	                    	obj.select();
+	                    	this.selectedPiece=obj;
+	                    }
+	                } else if(this.selectedPiece != null){
+	                	var coords = this.idToCoords(customId);
+	                	console.log("moving selected piece to "+ coords);
+	                	this.selectedPiece.deselect();
+	                	this.selectedPiece=null;
+
+	                }
                 }
             }
             this.pickResults.splice(0,this.pickResults.length);
