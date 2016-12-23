@@ -20,6 +20,8 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
                 'Primitives/HexBoard.js', 'Primitives/Node.js', 'Primitives/Unit.js',
                 'Animation/Animation.js', 'Animation/LinearAnimation.js',
                 'Animation/CircularAnimation.js', 'Animation/KeyFrameAnimation.js',
+                'Game/Board.js', 'Game/Nodes.js',
+                'Client.js',
                 
 
 main=function()
@@ -42,7 +44,11 @@ main=function()
 	
 	var filename=getUrlVars()['file'] || "LAIG_TP1_DSX_T1_G05_v04.dsx";
 
-	// create and load graph, and associate it to scene. 
+	var board = new Board("");
+	var client = new Client(8081);
+	client.makeRequest("getInitialBoard");
+
+	// create and load graph, and associate it to scene.
 	// Check console for loading errors
 	var myGraph = new MySceneGraph(filename, myScene);
 	

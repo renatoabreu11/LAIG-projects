@@ -128,7 +128,7 @@ getOtherPlayer(Player, blue):-
 
 %Predicate that is responsible for the player movement
 move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn):-
-	validateSource(Row, Column, Piece, Board, Player), !
+	validateSource(Row, Column, Piece, Board, Player), !,
 
 	validateDestiny(DestRow, DestColumn, Row, Column, Board),
 
