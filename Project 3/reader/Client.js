@@ -5,7 +5,6 @@
 function Client(port) {
     this.port = port || 8081;
     this.request = null;
-    this.reply = null;
 }
 
 /**
@@ -18,10 +17,10 @@ Client.prototype.constructor = Client;
  *
  * @param requestString
  */
-Client.prototype.makeRequest=function(requestString)
+Client.prototype.makeRequest=function(requestString, handler)
 {
     this.request = requestString;
-    this.getPrologRequest(this.handleReply);
+    this.getPrologRequest(handler);
 }
 
 /**
@@ -46,27 +45,10 @@ Client.prototype.getPrologRequest = function(onSuccess, onError)
 
 /**
  *
- * @param data
- */
-Client.prototype.handleReply = function(data){
-    this.reply = data.target.response;
-    console.log(data.target.response);
-}
-
-/**
- *
  * @returns {*|number}
  */
 Client.prototype.getPort=function () {
     return this.port;
-}
-
-/**
- *
- * @returns {Object|*|null}
- */
-Client.prototype.getReply = function () {
-    return this.reply;
 }
 
 /**

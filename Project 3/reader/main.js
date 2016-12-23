@@ -39,17 +39,13 @@ main=function()
     myInterface.setActiveCamera(myScene.camera);
     myScene.setInterface(myInterface);
 
-	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
-	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
-	
 	var filename=getUrlVars()['file'] || "LAIG_TP1_DSX_T1_G05_v04.dsx";
 
-	var board = new Board("");
 	var client = new Client(8081);
-	client.makeRequest("getInitialBoard");
+	client.makeRequest("getInitialBoard", function(data) {
+        var board = new Board(data.target.response);
+    });
 
-	// create and load graph, and associate it to scene.
-	// Check console for loading errors
 	var myGraph = new MySceneGraph(filename, myScene);
 	
 	// start
