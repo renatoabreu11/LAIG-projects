@@ -43,6 +43,8 @@ XMLscene.prototype.init = function (application) {
     this.transitionCam=null;
 
     this.selectedPiece=null;
+    this.destination=null;
+    this.currPlayer="blue";
 
     var own = this;
     this.currBoard=null;
@@ -110,6 +112,10 @@ XMLscene.prototype.animateCameraTransition = function () {
 
 	//finish animation
 	if(this.elapsedTime>=this.transitionCam["finishTime"]){
+		if(this.currPlayer=="blue")
+			this.currPlayer="red";
+		else this.currPlayer="blue";
+
 		this.updateCamera();
 		this.transitionCam=null;
 		return;
@@ -202,7 +208,26 @@ XMLscene.prototype.update = function(currTime){
 
 
     if(this.serverResponse!=null) {
-    	console.log(this.serverResponse);
+    	if(this.serverResponse =! "false"){
+    		if(this.serverResponse == "gameOver")
+    			console.log("GAMEOVER! "+(this.currPlayer=="blue"?"Red":"Green")+" player lost :(");
+    		
+    		else { //received board from succcessful movement
+
+    			//TODO: make the move! includes updating arraysBoard and piece's coords
+
+    			
+    			//check for gameOver
+    			var own = this;
+            	var request = "endGame("+this.serverResponse+","+
+            						this.currPlayer+")";
+            	this.client.makeRequest(request , function(data) {
+					own.serverResponse = data.target.response;
+				});
+    		}
+    	}
+	    this.selectedPiece=null;
+	    this.destination=null;
     	this.serverResponse=null;
     }
 }
@@ -270,23 +295,22 @@ XMLscene.prototype.logPicking = function ()
 	                    	obj.select();
 	                    	this.selectedPiece=obj;
 	                    }
-	                } else if(this.selectedPiece != null){ //selecionar destino e tentar mover
-	                	var coords = this.idToCoords(customId);
+	                } else if(this.selectedPiece != null && this.destination==null){ //selecionar destino e tentar mover
+	                	this.destination = this.idToCoords(customId);
 
 	                	var own = this;
 	                	var request = "move("+this.currBoard.toPrologStruct()+","+
-	                						this.selectedPiece.player+","+
+	                						this.currPlayer+","+
 	                						"Piece,"+
         									"FinalBoard,"+
         									this.selectedPiece.coords[0]+"-"+this.selectedPiece.coords[1]+","+
-        									coords[0]+"-"+coords[1]+
+        									this.destination[0]+"-"+this.destination[1]+
         									")";
 	                	this.client.makeRequest(request , function(data) {
         					own.serverResponse = data.target.response;
     					});
 
 	                	this.selectedPiece.deselect();
-	                	this.selectedPiece=null;
 
 	                }
                 }
