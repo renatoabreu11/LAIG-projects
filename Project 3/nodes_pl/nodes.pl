@@ -129,11 +129,9 @@ getOtherPlayer(Player, blue):-
 move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn):-
 	validateSource(Row, Column, Piece, Board, Player), !,
 
-	validateDestiny(DestRow, DestColumn, Row, Column, Board),
+	validateDestiny(DestRow, DestColumn, Row, Column, DestRow, DestColumn, Board),
 
-	movePiece(Piece, Row, Column, DestRow, DestColumn, Board, FinalBoard),
-	write('Press enter to continue'), nl,
-	waitForKey.
+	movePiece(Piece, Row, Column, DestRow, DestColumn, Board, FinalBoard).
 
 %Repeats until one source is valid
 selectSource(Row, Column, Piece, Board, Player):-
@@ -158,7 +156,7 @@ validateSource(Row, Column, Piece, Board, Player):-
 	if1(
 			not(isEmpty(Piece)),
 			true,
-			outputMessage('The unit to move must belong to your team!')
+			(write('The unit to move must belong to your team!'),!,fail)
 	), !,
 	belongsTo(Piece, Player),
 	%evaluate if has communication from a node
@@ -167,7 +165,7 @@ validateSource(Row, Column, Piece, Board, Player):-
 	if1(
 			checkCommunicationLines(Row, Column, BlueNodeRow, BlueNodeCol, RedNodeRow, RedNodeCol, Board),
 			true,
-			outputMessage('A unit can only move if its receiving signal from a node.')
+			(write('A unit can only move if its receiving signal from a node.'),!,fail)
 	).
 
 %Repeats until one destiny is valid
@@ -177,21 +175,21 @@ selectDestiny(DestRow, DestColumn, SrcRow, SrcCol, Board):-
 	validateDestiny(DestRow, DestColumn, SrcRow, SrcCol, Board), !.
 
 %Verifies if the destiny is valid
-validateDestiny(DestRow, DestColumn, SrcRow, SrcCol, Board):-
-	nl, write('Write the coordinates of where to move it.'), nl,
-	getCoords(DestRow, DestColumn),
+validateDestiny(DestRow, DestColumn, SrcRow, SrcCol, DestRow, DestCol, Board):-
+	%nl, write('Write the coordinates of where to move it.'), nl,
+	%getCoords(DestRow, DestColumn),
 	%Verifies if the coordinates are from a cell outside the board boundaries
 	if1(
 			checkIfOutsideBoard(DestRow, DestColumn),
 			true,
-			outputMessage('Invalid piece coordinates!')
+			(write('Invalid piece coordinates!'),!,fail)
 	),
 	%Gets the piece present at the given coordinates
 	getMatrixElement(Board, DestRow, DestColumn, Piece), !,
 	if1(
 			isEmpty(Piece),
 			true,
-			outputMessage('A piece can be only moved to empty spaces!')
+			(write('A piece can be only moved to empty spaces!'),!,fail)
 	), !,
 	%check if movement itself is valid. First checks if it is a jump then a normal move.
 	if1(
@@ -200,7 +198,7 @@ validateDestiny(DestRow, DestColumn, SrcRow, SrcCol, Board):-
 			if1(
 					validateMovement(SrcRow,SrcCol,DestRow,DestColumn),
 					true,
-					outputMessage('A unit can be only moved to adjacent cells')
+					(write('A unit can be only moved to adjacent cells'),!,fail)
 			)
 	).
 

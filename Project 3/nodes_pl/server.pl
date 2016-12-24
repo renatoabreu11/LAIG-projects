@@ -110,7 +110,7 @@ parse_input(quit, goodbye).
 parse_input(getInitialBoard, Board):-initialBoard(Board).
 
 %attempt to move piece
-parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), FinalBoard) :-
+parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), true) :-
 	move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn).
 parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), false).
  

@@ -201,25 +201,24 @@ XMLscene.prototype.update = function(currTime){
     this.elapsedTime = (currTime - this.initialTime)/1000;
 
 
-    if(this.response!=null) {
-    	this.console.log(response);
-    	this.response=null;
+    if(this.serverResponse!=null) {
+    	console.log(this.serverResponse);
+    	this.serverResponse=null;
     }
 }
 
 XMLscene.prototype.idToCoords = function(id) {
-	var col = id - 18; //id is now from 0 to 68
+	var col = id - 19; //id is now from 0 to 68
 	var line;
-	for(line=1; col>9; line++){ //until col reaches a valid value
+	for(line=8; col>8; line--){ //until col reaches a valid value
 		//know how much to decrement col
 		switch(line){
 
-			case 1:
-			case 9:
+			case 8:
 				col -= 5;
 				break;
-			case 2:
-			case 8:
+			case 1:
+			case 7:
 				col -= 7;
 				break;
 			default:
@@ -228,23 +227,23 @@ XMLscene.prototype.idToCoords = function(id) {
 		}
 	}
 
-	if(line==1){
-		if(col>5){
+	if(line==8){
+		if(col>4){
 			col -= 4;
-			line++;
+			line--;
 		} else col += 2;
 
-	} else if(line==2) {
-		if(col>7){
+	} else if(line==7) {
+		if(col>6){
 			col -=7;
-			line++;
+			line--;
 		} else col += 1;
-	} else if(line==8) {
-		if(col>7){
+	} else if(line==1) {
+		if(col>6){
 			col -= 5;
-			line++;
+			line--;
 		} else col += 1;
-	} else if(line==9){
+	} else if(line==0){
 		col += 2;
 	}
 	return [line,col];
@@ -260,9 +259,9 @@ XMLscene.prototype.logPicking = function ()
                 if (obj)
                 {
                     var customId = this.pickResults[i][1];
-                    console.log("Picked object: " + (obj instanceof Node ? "Node" : obj instanceof Unit ? "Unit" : "Location") + ", with pick id " + customId);
+                    console.log("Picked object: " + (obj instanceof Node ? "Node" : obj instanceof Unit ? "Unit" : "Location: "+this.idToCoords(customId)) + ", with pick id " + customId);
                     
-                    if(obj instanceof Node || obj instanceof Unit){
+                    if(obj instanceof Node || obj instanceof Unit){ //selecionar peca a mover
 	                    if(this.selectedPiece==null){
 	                    	obj.select();
 	                    	this.selectedPiece=obj;
@@ -271,18 +270,17 @@ XMLscene.prototype.logPicking = function ()
 	                    	obj.select();
 	                    	this.selectedPiece=obj;
 	                    }
-	                } else if(this.selectedPiece != null){
+	                } else if(this.selectedPiece != null){ //selecionar destino e tentar mover
 	                	var coords = this.idToCoords(customId);
 
 	                	var own = this;
-	                	var request = "move("+this.currBoard.toPrologStruct()+
-        									",blue,"+
-        									(obj instanceof Node ? "node" : "unit")+
-        									",FinalBoard,"+
-        									coords[0]+"-"+coords[1]+","+
+	                	var request = "move("+this.currBoard.toPrologStruct()+","+
+	                						this.selectedPiece.player+","+
+	                						"Piece,"+
+        									"FinalBoard,"+
+        									this.selectedPiece.coords[0]+"-"+this.selectedPiece.coords[1]+","+
         									coords[0]+"-"+coords[1]+
         									")";
-        									console.log(request);
 	                	this.client.makeRequest(request , function(data) {
         					own.serverResponse = data.target.response;
     					});

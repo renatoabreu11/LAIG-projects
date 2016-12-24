@@ -92,6 +92,16 @@ Component.prototype.getAnimation = function () {
  */
  Component.prototype.addChildPrimitive= function(child) {
  	this.children["primitives"].push(child);
+    if(child instanceof Node || child instanceof Unit){
+        var player = this.id.substring(0,2);
+        if(player=="P1")
+            child.player="blue";
+        else child.player="red";
+
+        if(child instanceof Unit){
+            child.coords=[this.transformation[12],this.transformation[14]];
+        } else child.coords= player=="P1" ? [0,4] : [8,4];
+    }
  }
 
 /**

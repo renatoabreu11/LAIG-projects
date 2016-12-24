@@ -498,11 +498,6 @@
                 <translate x="1" y="0" z="4" />
             </transformation>
 
-            <animation>
-                <animationref id="pause"/>
-                <animationref id="jump"/>
-            </animation>
-
             <materials>
                     <material id="inherit" />
             </materials>
