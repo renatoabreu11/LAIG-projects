@@ -47,11 +47,12 @@ Board.prototype.constructor = Board;
  */
 Board.prototype.plBoardParser = function (board_encoded) {
     var startIndex=2;
+    this.board=[];
     while(board_encoded.length>1) {
         finalIndex=board_encoded.indexOf("]");
         var lineStr = board_encoded.substring(startIndex,finalIndex);
         var lineArray = lineStr.split(",");
-        this.board .push(lineArray);
+        this.board.push(lineArray);
         board_encoded = board_encoded.substring(finalIndex+1);
     }
 };
