@@ -46,13 +46,10 @@ XMLscene.prototype.init = function (application) {
     this.destination=null;
     this.currPlayer="blue";
 
-    var own = this;
     this.currBoard=null;
     this.serverResponse = null;
-    this.client=new Client(8081);
-    this.client.makeRequest("getInitialBoard", function(data) {
-        own.currBoard = new Board(data.target.response);
-    });
+    this.nodes = new Nodes(this);
+    this.nodes.newSinglePlayerGame();
 };
 
 /**
@@ -352,10 +349,13 @@ XMLscene.prototype.display = function () {
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
+    this.nodes.display();
+/*
     if (this.graph.loadedOk){
 		this.updateLights();
 		this.materialDefault.apply();
 		this.graph.getRootComponent().display(null, null, this.elapsedTime);
      }
+*/
 };
 
