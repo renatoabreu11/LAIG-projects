@@ -9,6 +9,7 @@ function Move(scene,piece,src,dest) {
     this.piece = piece;
     this.srcTile = src;
     this.dstTile = dest;
+    this.animation = null;
 }
 
 /**
@@ -52,7 +53,38 @@ Move.prototype.makeMove = function (board, player, client) {
         own.srcTile.setPiece(null);
         own.dstTile.setPiece(own.piece);
         own.piece.setTile(own.dstTile);
+
+        own.animation = own.chooseAnimation();
     });
+}
+
+Move.prototype.chooseAnimation = function(){
+    var xDif = this.dstTile.row - this.srcTile.row; //offset to move in X
+    var zDif = this.dstTile.row - this.srcTile.row; //offset to move in Z
+    
+    var type;
+    if(Math.abs(xDif)+Math.abs(zDif) == 2)
+        type="jump";
+    else type="move";
+
+    var direction;
+    if(xDif==0){ //move Z
+        if(zDif<0)
+            direction="Z-";
+        else direction="Z+";
+    } else { //move X
+        if(xDif<0)
+            direction="X+";
+        else direction="X-";
+    }
+
+    var id = type+direction;
+    /*var index = this.scene.scenegraph.checkIfExists(this.scene.scenegraph.animations, id);
+    if (index == -1) {
+        console.log("No animation found");
+    } else this.animation=this.scene.scenegraph[index];*/
+
+    console.log(id);
 }
 
 Move.prototype.display = function () {

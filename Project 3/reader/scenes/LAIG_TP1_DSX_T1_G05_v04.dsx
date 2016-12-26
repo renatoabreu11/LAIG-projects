@@ -170,11 +170,62 @@
             <controlpoint xx="-30" yy="0" zz="-14" />
         </animation>
 
-        <animation id="jump" span="1" type="keyframe">
+        <!--jumps-->
+        <animation id="jumpX+" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="0" yy="1" zz="0" />
             <controlpoint xx="2" yy="1" zz="0" />
             <controlpoint xx="2" yy="0" zz="0" />
+        </animation>
+
+        <animation id="jumpX-" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="1" zz="0" />
+            <controlpoint xx="-2" yy="1" zz="0" />
+            <controlpoint xx="-2" yy="0" zz="0" />
+        </animation>
+
+        <animation id="jumpZ+" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="1" zz="0" />
+            <controlpoint xx="0" yy="1" zz="2" />
+            <controlpoint xx="0" yy="0" zz="2" />
+        </animation>
+
+        <animation id="jumpZ-" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="1" zz="0" />
+            <controlpoint xx="0" yy="1" zz="-2" />
+            <controlpoint xx="0" yy="0" zz="-2" />
+        </animation>
+
+        <!--movements-->
+        <animation id="moveX+" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy=".25" zz="0" />
+            <controlpoint xx="1" yy=".25" zz="0" />
+            <controlpoint xx="1" yy="0" zz="0" />
+        </animation>
+
+        <animation id="moveX-" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy=".25" zz="0" />
+            <controlpoint xx="-1" yy=".25" zz="0" />
+            <controlpoint xx="-1" yy="0" zz="0" />
+        </animation>
+
+        <animation id="moveZ+" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy=".25" zz="0" />
+            <controlpoint xx="0" yy=".25" zz="1" />
+            <controlpoint xx="0" yy="0" zz="1" />
+        </animation>
+
+        <animation id="moveZ-" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy=".25" zz="0" />
+            <controlpoint xx="0" yy=".25" zz="-1" />
+            <controlpoint xx="0" yy="0" zz="-1" />
         </animation>
    </animations>
 
