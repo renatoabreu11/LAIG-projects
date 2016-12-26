@@ -29,19 +29,19 @@ Tile.prototype.getPiece = function () {
     return this.piece;
 }
 
-Tile.prototype.display = function (currentPlayer, currentMove) {
+Tile.prototype.display = function (currentPlayer, currentMove, pickingMode) {
     this.scene.pushMatrix();
     this.scene.translate(-this.row, 0.03, this.col);
 
     if(this.piece != null) {
-        if(currentPlayer == this.piece.getColour()){
+        if(currentPlayer == this.piece.getColour() && pickingMode){
             this.scene.registerForPick(this.scene.pickObjectID, this.piece);
             this.scene.pickObjectID++;
         }
         this.piece.display();
     }
 
-    if(currentMove.getPiece() != null && this.piece == null && this.element != "empty"){
+    if(currentMove.getPiece() != null && this.piece == null && this.element != "empty" && pickingMode){
         this.scene.registerForPick(this.scene.pickObjectID, this);
         this.scene.pickObjectID++;
     }

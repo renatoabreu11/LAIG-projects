@@ -39,6 +39,10 @@ Piece.prototype.getColour = function () {
     return this.colour;
 }
 
+Piece.prototype.getType = function () {
+    return this.type;
+}
+
 Piece.prototype.display = function () {
     this.scene.pushMatrix();
     if(this.isSelected)

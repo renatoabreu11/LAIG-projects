@@ -10,6 +10,7 @@ function Move(scene,piece,src,dest) {
     this.srcTile = src;
     this.dstTile = dest;
     this.animation = null;
+    this.timer = 0;
 }
 
 /**
@@ -32,7 +33,7 @@ Move.prototype.setDstTile = function (dest) {
     this.dstTile = dest;
 }
 
-Move.prototype.makeMove = function (board, player, client) {
+Move.prototype.makeMove = function (board, player, client, nodes) {
     if(this.dstTile.getPiece() != null || this.srcTile.getPiece() == null)
         return;
 
@@ -47,14 +48,17 @@ Move.prototype.makeMove = function (board, player, client) {
         var response = data.target.response;
         if(response=="false"){
             console.log("Move.js says: Move failed!");
-            return;
+            return false;
         }
+        own.piece.deselect();
         board.setBoard(response);
         own.srcTile.setPiece(null);
         own.dstTile.setPiece(own.piece);
         own.piece.setTile(own.dstTile);
 
         own.animation = own.chooseAnimation();
+        nodes.state = Nodes.gameState.MOVE_ANIMATION;
+        own.timer = nodes.elapsedTime;
     });
 }
 
@@ -87,5 +91,9 @@ Move.prototype.chooseAnimation = function(){
 
 Move.prototype.display = function () {
     //display da transição da peça
+}
+
+Move.prototype.getInitialTime = function () {
+    return this.timer;
 }
 

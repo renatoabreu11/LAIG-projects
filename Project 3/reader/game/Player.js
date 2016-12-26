@@ -3,9 +3,10 @@
  * @constructor
  */
 
-function Player(team, score) {
+function Player(team, score, isBot) {
     this.team = team;
     this.score = score; // Tempo total das jogadas, número de vitorias, ou algo do género
+    this.isBot = false;
 }
 
 /**
@@ -21,4 +22,8 @@ Player.prototype.getTeam = function () {
 
 Player.prototype.getScore = function () {
     return this.score;
+}
+
+Player.prototype.getIsBot = function () {
+    return this.isBot;
 }

@@ -1,10 +1,23 @@
 Nodes.mode = {
     PvP: 0,
-    PvC_EASY: 1,
-    PvC_MEDIUM: 2,
-    CvC_EASY: 3,
-    CvC_MEDIUM: 4,
-    NONE: 5,
+    PvC: 1,
+    CvC: 2,
+    NONE: 3,
+}
+
+Nodes.difficulty = {
+    EASY: 0,
+    MEDIUM: 1,
+    NONE: 2,
+}
+
+Nodes.gameState = {
+    MENU: 0,
+    PIECE_SELECTION: 1,
+    MOVE_ANIMATION: 2,
+    END_TURN: 3,
+    END_GAME: 4,
+    AI_TURN: 5,
 }
 
 /**
@@ -18,15 +31,20 @@ function Nodes(scene) {
     this.pieces = [];
     this.tiles = [];
     this.board = new Board(scene, []);
+
     this.mode = Nodes.mode.NONE;
+    this.difficulty = Nodes.difficulty.NONE;
+    this.state = Nodes.gameState.PIECE_SELECTION;
 
     this.gameSequence = new Sequence();
     this.currentMove = new Move(this.scene, null, null, null)
 
-    var player1 = new Player("blue",0);
-    var player2 = new Player("red",0);
-    this.players = [player1, player2];
-    this.currentPlayer = player1;
+    this.player1 = new Player("blue",0, false);
+    this.player2 = new Player("red",0, false);
+    this.currentPlayer = this.player1;
+
+    this.elapsedTime = 0;
+    this.initialTime = 0;
 
     this.cellAppearance = new CGFappearance(this.scene);
     this.cellAppearance.loadTexture('../res/ice.jpg');
@@ -46,7 +64,7 @@ Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
     this.client.makeRequest("getInitialBoard", function(data){
         nodes.initializeBoard(data);
-        //nodes.startGame(mode, difficulty);
+        nodes.startGame(mode, difficulty);
     });
 }
 
@@ -56,41 +74,52 @@ Nodes.prototype.getCurrentMove = function () {
 
 Nodes.prototype.tryMovement = function (dstTile) {
     this.currentMove.setDstTile(dstTile);
-    this.currentMove.makeMove(this.board, this.currentPlayer, this.client);
+    this.currentMove.makeMove(this.board, this.currentPlayer, this.client, this);
+}
+
+Nodes.prototype.switchPlayer = function () {
+    if(this.currentPlayer == this.player1)
+        this.currentPlayer = this.player2;
+    else this.currentPlayer = this.player1;
+
+    if(this.currentPlayer.getIsBot())
+        this.state = Nodes.gameState.AI_TURN;
+    else this.state = Nodes.gameState.PIECE_SELECTION;
+};
+
+Nodes.prototype.nextMove = function () {
+    var movedPiece = this.currentMove.getPiece();
+    if(movedPiece.getType() == "Node"){
+        this.state = Nodes.gameState.END_TURN;
+        this.switchPlayer();
+    } else{
+        if(this.currentPlayer.getIsBot())
+            this.state = Nodes.gameState.AI_TURN;
+        else this.state = Nodes.gameState.PIECE_SELECTION;
+    }
     this.gameSequence.addMove(this.currentMove);
-    this.currentMove.getPiece().deselect();
     this.currentMove = new Move(this.scene, null, null, null);
 }
 
 Nodes.prototype.startGame = function (mode, difficulty) {
-    var request;
-
-    var board = this.board.toPrologStruct();
-    if(mode == "pvp"){
+    if (mode == "pvp") {
         this.mode = Nodes.mode.PvP;
-        request = "game(pvp, " + board + ", blue, none)";
-    }else if(mode == "pvc"){
-        if(difficulty == "easy"){
-            this.mode = Nodes.mode.PvC_EASY;
-            request = "game(pvc, " + board + ", blue, easy)";
-        }
-        else{
-            this.mode = Nodes.mode.PvC_MEDIUM;
-            request = "game(pvc, " + board + ", blue, medium)";
-        }
-    }else if(mode == "cvc"){
-        if(difficulty == "easy"){
-            this.mode = Nodes.mode.CvC_EASY;
-            request = "game(cvc, " + board + ", blue, easy)";
-        }
-        else{
-            this.mode = Nodes.mode.CvC_MEDIUM;
-            request = "game(cvc, " + board + ", blue, medium)";
-        }
+        this.difficulty = Nodes.difficulty.NONE;
+    } else if (mode == "pvc") {
+        this.mode = Nodes.mode.PvC;
+        if (difficulty == "easy")
+            this.difficulty = Nodes.difficulty.EASY;
+        else
+            this.difficulty = Nodes.difficulty.MEDIUM;
+
+    } else if (mode == "cvc") {
+        this.mode = Nodes.mode.CvC;
+        if (difficulty == "easy")
+            this.difficulty = Nodes.difficulty.EASY;
+        else
+            this.difficulty = Nodes.difficulty.MEDIUM;
     }
-    this.client.makeRequest(request, function(data){
-        console.log(data);
-    });}
+}
 
 /**
  *
@@ -125,7 +154,6 @@ Nodes.prototype.initializeBoard = function (data) {
                 var tile = new Tile(this.scene, element, i, j);
                 this.tiles.push(tile);
 
-                console.log(colour)
                 piece = new Piece(this.scene, element, type, colour);
                 this.pieces.push(piece);
                 tile.setPiece(piece);
@@ -165,9 +193,30 @@ Nodes.prototype.display= function(){
     this.scene.translate(4, 0, -4);
     for(var i = 0; i < this.tiles.length; i++){
         this.cellAppearance.apply();
-        this.tiles[i].display(this.currentPlayer.getTeam(), this.currentMove);
+
+        var pickingMode = false;
+        if(this.state == Nodes.gameState.PIECE_SELECTION)
+            pickingMode = true;
+
+        this.tiles[i].display(this.currentPlayer.getTeam(), this.currentMove, pickingMode);
     }
 
     this.scene.popMatrix();
     this.scene.popMatrix();
+}
+
+Nodes.prototype.update = function(currTime) {
+    if (this.initialTime == 0) {
+        this.initialTime = currTime;
+    }
+    this.elapsedTime = (currTime - this.initialTime)/1000;
+
+    if(this.state == Nodes.gameState.MOVE_ANIMATION){
+        var diff = this.elapsedTime - this.currentMove.getInitialTime();
+        if(diff > 3) {
+            this.nextMove();
+        }
+    }
+
+    console.log(this.state)
 }
