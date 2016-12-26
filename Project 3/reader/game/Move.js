@@ -60,7 +60,7 @@ Move.prototype.makeMove = function (board, player, client) {
 
 Move.prototype.chooseAnimation = function(){
     var xDif = this.dstTile.row - this.srcTile.row; //offset to move in X
-    var zDif = this.dstTile.row - this.srcTile.row; //offset to move in Z
+    var zDif = this.dstTile.col - this.srcTile.col; //offset to move in Z
     
     var type;
     if(Math.abs(xDif)+Math.abs(zDif) == 2)
@@ -79,12 +79,10 @@ Move.prototype.chooseAnimation = function(){
     }
 
     var id = type+direction;
-    /*var index = this.scene.scenegraph.checkIfExists(this.scene.scenegraph.animations, id);
+    var index = this.scene.graph.checkIfExists(this.scene.graph.animations, id);
     if (index == -1) {
-        console.log("No animation found");
-    } else this.animation=this.scene.scenegraph[index];*/
-
-    console.log(id);
+        console.log("No animation found for this movement!");
+    } else this.animation=this.scene.graph.animations[index];
 }
 
 Move.prototype.display = function () {
