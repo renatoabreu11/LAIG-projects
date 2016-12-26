@@ -4,18 +4,12 @@ function Node(scene){
 	this.base = new Cylinder(scene,4,3.5,.5,12,2);
 	this.support = new Cylinder(scene,.75,.75,8,6,6);
 	this.head = new Sphere(scene,2.5,10,10);
-
-	this.isSelected=false;
-	this.selected = new CGFappearance(this.scene);
-    this.selected.loadTexture('../res/sand.jpg');
 }
 
 Node.prototype = Object.create(CGFobject.prototype);
 Node.prototype.constructor=Node;
 
 Node.prototype.display = function () {
-	if(this.isSelected)
-		this.selected.apply();
 	this.scene.pushMatrix();
 	this.scene.rotate(-Math.PI/2,1,0,0);
 	this.scene.scale(.08,.08,.08);
@@ -38,12 +32,4 @@ Node.prototype.display = function () {
 }
 
 Node.prototype.updateTexCoords = function (length_s, length_t) {
-}
-
-Node.prototype.select = function () {
-	this.isSelected=true;
-}
-
-Node.prototype.deselect = function () {
-	this.isSelected=false;
 }

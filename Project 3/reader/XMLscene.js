@@ -42,11 +42,6 @@ XMLscene.prototype.init = function (application) {
 
     this.transitionCam=null;
 
-    this.selectedPiece=null;
-    this.destination=null;
-    this.currPlayer="blue";
-
-    this.currBoard=null;
     this.serverResponse = null;
     this.nodes = new Nodes(this);
     this.nodes.newSinglePlayerGame();
@@ -229,48 +224,6 @@ XMLscene.prototype.update = function(currTime){
     }
 }
 
-XMLscene.prototype.idToCoords = function(id) {
-	var col = id - 19; //id is now from 0 to 68
-	var line;
-	for(line=8; col>8; line--){ //until col reaches a valid value
-		//know how much to decrement col
-		switch(line){
-
-			case 8:
-				col -= 5;
-				break;
-			case 1:
-			case 7:
-				col -= 7;
-				break;
-			default:
-				col -= 9;
-				break;
-		}
-	}
-
-	if(line==8){
-		if(col>4){
-			col -= 4;
-			line--;
-		} else col += 2;
-
-	} else if(line==7) {
-		if(col>6){
-			col -=7;
-			line--;
-		} else col += 1;
-	} else if(line==1) {
-		if(col>6){
-			col -= 5;
-			line--;
-		} else col += 1;
-	} else if(line==0){
-		col += 2;
-	}
-	return [line,col];
-};
-
 XMLscene.prototype.logPicking = function ()
 {
     this.pickObjectID = 1;
@@ -281,35 +234,9 @@ XMLscene.prototype.logPicking = function ()
                 if (obj)
                 {
                     var customId = this.pickResults[i][1];
-                    console.log("Picked object: " + (obj instanceof Node ? "Node" : obj instanceof Unit ? "Unit" : "Location: "+this.idToCoords(customId)) + ", with pick id " + customId);
-                    
-                    if(obj instanceof Node || obj instanceof Unit){ //selecionar peca a mover
-	                    if(this.selectedPiece==null){
-	                    	obj.select();
-	                    	this.selectedPiece=obj;
-	                    } else {
-	                    	this.selectedPiece.deselect();
-	                    	obj.select();
-	                    	this.selectedPiece=obj;
-	                    }
-	                } else if(this.selectedPiece != null && this.destination==null){ //selecionar destino e tentar mover
-	                	this.destination = this.idToCoords(customId);
-
-	                	var own = this;
-	                	var request = "move("+this.currBoard.toPrologStruct()+","+
-	                						this.currPlayer+","+
-	                						"Piece,"+
-        									"FinalBoard,"+
-        									this.selectedPiece.coords[0]+"-"+this.selectedPiece.coords[1]+","+
-        									this.destination[0]+"-"+this.destination[1]+
-        									")";
-	                	this.client.makeRequest(request , function(data) {
-        					own.serverResponse = data.target.response;
-    					});
-
-	                	this.selectedPiece.deselect();
-
-	                }
+                    console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
+                    this.nodes.deselectPieces();
+                    obj.select();
                 }
             }
             this.pickResults.splice(0,this.pickResults.length);

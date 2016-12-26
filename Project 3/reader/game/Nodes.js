@@ -64,8 +64,15 @@ Nodes.prototype.initializeBoard = function (data) {
                 piece = new Piece(this.scene, element, type);
                 this.pieces.push(piece);
                 tile.setPiece(piece);
+                piece.setTile(tile);
             }
         }
+    }
+}
+
+Nodes.prototype.deselectPieces = function () {
+    for(var i = 0; i < this.pieces.length; i++){
+        this.pieces[i].deselect();
     }
 }
 
@@ -83,6 +90,7 @@ Nodes.prototype.display= function(){
         this.cellAppearance.apply();
         this.tiles[i].display();
     }
+
     this.scene.popMatrix();
     this.scene.popMatrix();
 }

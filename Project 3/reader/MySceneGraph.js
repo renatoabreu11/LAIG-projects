@@ -798,9 +798,6 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 
                     case 'portal':
                         break;
-
-                    case 'hexboard':
-						break;
 					
 					case 'node':
 						break;
@@ -890,9 +887,6 @@ MySceneGraph.prototype.initPrimitives =function(){
         case 'portal':
             primitive["object"] = new Portal(this.scene);
             break;
-        case 'hexboard':
-        	primitive["object"] = new HexBoard(this.scene);
-        	break;
         case 'node':
         	primitive["object"] = new Node(this.scene);
         	break;

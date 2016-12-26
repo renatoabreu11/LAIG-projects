@@ -25,11 +25,21 @@ Tile.prototype.setPiece = function (piece) {
     this.piece = piece;
 }
 
+Tile.prototype.getPiece = function () {
+    return this.piece;
+}
+
 Tile.prototype.display = function () {
     this.scene.pushMatrix();
     this.scene.translate(-this.row, 0.03, this.col);
-    if(this.piece != null)
+
+    if(this.piece != null){
+        this.scene.registerForPick(this.scene.pickObjectID,  this.piece);
+        this.scene.pickObjectID++;
         this.piece.display();
+        this.scene.clearPickRegistration();
+    }
+
     this.scene.rotate(-90 * Math.PI / 180, 0, 1, 0);
     this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);
     this.object.display();
