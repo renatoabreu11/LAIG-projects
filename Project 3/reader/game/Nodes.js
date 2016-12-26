@@ -7,10 +7,14 @@ function Nodes(scene) {
     CGFobject.call(this,scene);
     this.scene = scene;
     this.client= new Client(8081);
-    this.board = null;
     this.pieces = [];
     this.tiles = [];
     this.board = new Board(scene, []);
+
+    var player1 = new Player("blue",0);
+    var player2 = new Player("red",0);
+    this.players = [player1, player2];
+    this.currentPlayer = player1;
 
     this.cellAppearance = new CGFappearance(this.scene);
     this.cellAppearance.loadTexture('../res/ice.jpg');
@@ -74,6 +78,18 @@ Nodes.prototype.deselectPieces = function () {
     for(var i = 0; i < this.pieces.length; i++){
         this.pieces[i].deselect();
     }
+}
+
+Nodes.prototype.getBoard = function(){
+    return this.board;
+}
+
+Nodes.prototype.getClient = function(){
+    return this.client;
+}
+
+Nodes.prototype.getPlayer = function(){
+    return this.currentPlayer;
 }
 
 /**

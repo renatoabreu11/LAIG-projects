@@ -3,12 +3,12 @@
  * @constructor
  */
 
-function Move(scene) {
+function Move(scene,piece,src,dest) {
     CGFobject.call(this,scene);
     this.scene = scene;
-    this.piece = null;
-    this.srcTile = null;
-    this.dstTile = null;
+    this.piece = piece;
+    this.srcTile = src;
+    this.dstTile = dest;
 }
 
 /**
@@ -30,9 +30,14 @@ Move.prototype.makeMove = function (board, player, client) {
         this.dstTile.row + "-" + this.dstTile.col + ")";
 
     client.makeRequest(request, function(data) {
-        board.setBoard(data.target.response);
-        this.srcTile.setPiece(null);
-        this.dstTile.setPiece(this.piece);
+        var response = data.target.response;
+        if(response=="false"){
+            console.log("Move.js says: Move failed!");
+            return;
+        }
+        board.setBoard(response);
+        own.srcTile.setPiece(null);
+        own.dstTile.setPiece(own.piece);
     });
 }
 

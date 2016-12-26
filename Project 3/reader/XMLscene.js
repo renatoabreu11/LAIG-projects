@@ -42,7 +42,7 @@ XMLscene.prototype.init = function (application) {
 
     this.transitionCam=null;
 
-    this.serverResponse = null;
+    this.selectedPiece = null;
     this.nodes = new Nodes(this);
     this.nodes.newSinglePlayerGame();
 };
@@ -197,31 +197,6 @@ XMLscene.prototype.update = function(currTime){
         this.initialTime = currTime;
 
     this.elapsedTime = (currTime - this.initialTime)/1000;
-
-
-    if(this.serverResponse!=null) {
-    	if(this.serverResponse =! "false"){
-    		if(this.serverResponse == "gameOver")
-    			console.log("GAMEOVER! "+(this.currPlayer=="blue"?"Red":"Green")+" player lost :(");
-    		
-    		else { //received board from succcessful movement
-
-    			//TODO: make the move! includes updating arraysBoard and piece's coords
-
-    			
-    			//check for gameOver
-    			var own = this;
-            	var request = "endGame("+this.serverResponse+","+
-            						this.currPlayer+")";
-            	this.client.makeRequest(request , function(data) {
-					own.serverResponse = data.target.response;
-				});
-    		}
-    	}
-	    this.selectedPiece=null;
-	    this.destination=null;
-    	this.serverResponse=null;
-    }
 }
 
 XMLscene.prototype.logPicking = function ()
@@ -236,7 +211,13 @@ XMLscene.prototype.logPicking = function ()
                     var customId = this.pickResults[i][1];
                     console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
                     this.nodes.deselectPieces();
-                    obj.select();
+                    if (this.selectedPiece!=null && obj instanceof Tile){
+                    	var move = new Move(this,this.selectedPiece,this.selectedPiece.getTile(),obj);
+                    	move.makeMove(this.nodes.getBoard(),this.nodes.getPlayer(),this.nodes.getClient());
+					} else if (!(obj instanceof Tile)) {
+						this.selectedPiece=obj;
+						obj.select();
+					}
                 }
             }
             this.pickResults.splice(0,this.pickResults.length);
