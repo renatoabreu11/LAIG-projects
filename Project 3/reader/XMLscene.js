@@ -44,7 +44,7 @@ XMLscene.prototype.init = function (application) {
 
     this.serverResponse = null;
     this.nodes = new Nodes(this);
-    this.nodes.newSinglePlayerGame();
+    this.nodes.initializeGame("pvp", "none");
 };
 
 /**

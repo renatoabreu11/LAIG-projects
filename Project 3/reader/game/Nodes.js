@@ -1,16 +1,29 @@
+Nodes.mode = {
+    PvP: 0,
+    PvC_EASY: 1,
+    PvC_MEDIUM: 2,
+    CvC_EASY: 3,
+    CvC_MEDIUM: 4,
+    NONE: 5,
+}
+
 /**
  * Nodes
  * @constructor
  */
-
 function Nodes(scene) {
     CGFobject.call(this,scene);
     this.scene = scene;
     this.client= new Client(8081);
-    this.board = null;
     this.pieces = [];
     this.tiles = [];
     this.board = new Board(scene, []);
+    this.mode = Nodes.mode.NONE;
+
+    this.player1 = null;
+    this.player2 = null;
+
+    this.gameSequence = new Sequence();
 
     this.cellAppearance = new CGFappearance(this.scene);
     this.cellAppearance.loadTexture('../res/ice.jpg');
@@ -26,12 +39,44 @@ Nodes.prototype.constructor = Nodes;
 /**
  *
  */
-Nodes.prototype.newSinglePlayerGame = function () {
+Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
     this.client.makeRequest("getInitialBoard", function(data){
         nodes.initializeBoard(data);
+        nodes.startGame(mode, difficulty);
     });
 }
+
+Nodes.prototype.startGame = function (mode, difficulty) {
+    var request;
+
+    var board = this.board.toPrologStruct();
+    if(mode == "pvp"){
+        this.mode = Nodes.mode.PvP;
+        request = "game(pvp, " + board + ", blue, none)";
+    }else if(mode == "pvc"){
+        if(difficulty == "easy"){
+            this.mode = Nodes.mode.PvC_EASY;
+            request = "game(pvc, " + board + ", blue, easy)";
+        }
+        else{
+            this.mode = Nodes.mode.PvC_MEDIUM;
+            request = "game(pvc, " + board + ", blue, medium)";
+        }
+    }else if(mode == "cvc"){
+        if(difficulty == "easy"){
+            this.mode = Nodes.mode.CvC_EASY;
+            request = "game(cvc, " + board + ", blue, easy)";
+        }
+        else{
+            this.mode = Nodes.mode.CvC_MEDIUM;
+            request = "game(cvc, " + board + ", blue, medium)";
+        }
+    }
+    console.log(request);
+    this.client.makeRequest(request, function(data){
+        console.log(data);
+    });}
 
 /**
  *

@@ -40,6 +40,7 @@ Tile.prototype.display = function () {
         this.scene.clearPickRegistration();
     }
 
+    this.scene.setDefaultAppearance();
     this.scene.rotate(-90 * Math.PI / 180, 0, 1, 0);
     this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);
     this.object.display();
