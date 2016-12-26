@@ -84,7 +84,7 @@ Nodes.prototype.moveAI = function () {
         difficulty = "easy";
     else difficulty = "medium";
 
-    var request = "pickMove(" + difficulty + ", " + board + ", FinalBoard, " + this.currentPlayer.getTeam() + ", NodeRowI-NodeColI, NodeRowF-NodeColF)";
+    var request = "pickMove(" + difficulty + "," + board + ",FinalBoard," + this.currentPlayer.getTeam() + ",NodeRowI-NodeColI,NodeRowF-NodeColF)";
     console.log(request);
 
     this.client.makeRequest(request, function(data) {
