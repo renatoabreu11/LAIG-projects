@@ -43,7 +43,7 @@ XMLscene.prototype.init = function (application) {
     this.transitionCam=null;
 
     this.nodes = new Nodes(this);
-    this.nodes.initializeGame("pvp", "none");
+    this.nodes.initializeGame("cvc", "easy");
 };
 
 /**
@@ -196,6 +196,7 @@ XMLscene.prototype.update = function(currTime){
         this.initialTime = currTime;
 
     this.elapsedTime = (currTime - this.initialTime)/1000;
+    this.nodes.update(currTime);
 }
 
 XMLscene.prototype.logPicking = function ()

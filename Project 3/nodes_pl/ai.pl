@@ -19,9 +19,7 @@ pickRandomMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF):-
     random(0, Length, Value),
     getRowElement(ValidMoves, Value, FinalBoard),
     displayBoard(FinalBoard), 
-    getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF),
-    write('Press enter to continue'), nl,
-    waitForKey, clearConsole.
+    getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF).
 
 %bot will make a calculated move
 pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF):-
@@ -31,9 +29,7 @@ pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF):-
     if1(BestValue>=0,applyMove(Board, BestMove, FinalBoard),
     	if1(moveNode(Board,Bot,FinalBoard), write(''), applyMove(Board, BestMove, FinalBoard))),
     displayBoard(FinalBoard), 
-    getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF),
-    write('Press enter to continue'), nl,
-    waitForKey, clearConsole.
+    getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF).
 
 
 /*

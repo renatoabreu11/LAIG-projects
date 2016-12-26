@@ -34,7 +34,7 @@ function Nodes(scene) {
 
     this.mode = Nodes.mode.NONE;
     this.difficulty = Nodes.difficulty.NONE;
-    this.state = Nodes.gameState.PIECE_SELECTION;
+    this.state = Nodes.gameState.MENU;
 
     this.gameSequence = new Sequence();
     this.currentMove = new Move(this.scene, null, null, null)
@@ -77,6 +77,22 @@ Nodes.prototype.tryMovement = function (dstTile) {
     this.currentMove.makeMove(this.board, this.currentPlayer, this.client, this);
 }
 
+Nodes.prototype.moveAI = function () {
+    var difficulty;
+    var board = this.board.toPrologStruct();
+    if(this.difficulty == Nodes.difficulty.EASY)
+        difficulty = "easy";
+    else difficulty = "medium";
+
+    var request = "pickMove(" + difficulty + ", " + board + ", FinalBoard, " + this.currentPlayer.getTeam() + ", NodeRowI-NodeColI, NodeRowF-NodeColF)";
+    console.log(request);
+
+    this.client.makeRequest(request, function(data) {
+        var response = data.target.response;
+        console.log(response);
+    });
+}
+
 Nodes.prototype.switchPlayer = function () {
     if(this.currentPlayer == this.player1)
         this.currentPlayer = this.player2;
@@ -105,6 +121,7 @@ Nodes.prototype.startGame = function (mode, difficulty) {
     if (mode == "pvp") {
         this.mode = Nodes.mode.PvP;
         this.difficulty = Nodes.difficulty.NONE;
+        this.state = Nodes.gameState.PIECE_SELECTION;
     } else if (mode == "pvc") {
         this.mode = Nodes.mode.PvC;
         if (difficulty == "easy")
@@ -114,6 +131,7 @@ Nodes.prototype.startGame = function (mode, difficulty) {
 
     } else if (mode == "cvc") {
         this.mode = Nodes.mode.CvC;
+        this.state = Nodes.gameState.AI_TURN;
         if (difficulty == "easy")
             this.difficulty = Nodes.difficulty.EASY;
         else
@@ -218,5 +236,7 @@ Nodes.prototype.update = function(currTime) {
         }
     }
 
-    console.log(this.state)
+    if(this.mode == Nodes.mode.CvC && this.state == Nodes.gameState.AI_TURN){
+        this.moveAI();
+    }
 }
