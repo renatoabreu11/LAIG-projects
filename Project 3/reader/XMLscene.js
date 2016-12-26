@@ -42,7 +42,6 @@ XMLscene.prototype.init = function (application) {
 
     this.transitionCam=null;
 
-    this.selectedPiece = null;
     this.nodes = new Nodes(this);
     this.nodes.initializeGame("pvp", "none");
 };
@@ -209,15 +208,23 @@ XMLscene.prototype.logPicking = function ()
                 if (obj)
                 {
                     var customId = this.pickResults[i][1];
-                    console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
-                    this.nodes.deselectPieces();
-                    if (this.selectedPiece!=null && obj instanceof Tile){
-                    	var move = new Move(this,this.selectedPiece,this.selectedPiece.getTile(),obj);
-                    	move.makeMove(this.nodes.getBoard(),this.nodes.getPlayer(),this.nodes.getClient());
-					} else if (!(obj instanceof Tile)) {
-						this.selectedPiece=obj;
-						obj.select();
-					}
+
+                    var currentPiece = this.nodes.getCurrentMove().getPiece();
+                    if(currentPiece == null){
+                        obj.select();
+                        this.nodes.getCurrentMove().setPiece(obj);
+                        console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
+                    } else {
+                        if (obj instanceof Piece && obj != currentPiece){
+                            console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
+                            currentPiece.deselect();
+                            obj.select();
+                            this.nodes.getCurrentMove().setPiece(obj);
+                        } else if (obj instanceof Tile) {
+                            console.log("Picked object: Tile, Location: (" + obj.row + "," + obj.col + "), with pick id " + customId);
+                            this.nodes.tryMovement(obj);
+                        }
+                    }
                 }
             }
             this.pickResults.splice(0,this.pickResults.length);

@@ -10,8 +10,6 @@ function Tile(scene, element, row, col) {
     this.element = element; // space, empty or unit name
     this.row = row;
     this.col = col;
-    this.type="Tile";
-    this.tile=this;
 
     this.object = new Circle(this.scene, 0.4, 12);
 }
@@ -31,23 +29,26 @@ Tile.prototype.getPiece = function () {
     return this.piece;
 }
 
-Tile.prototype.display = function () {
+Tile.prototype.display = function (currentPlayer, currentMove) {
     this.scene.pushMatrix();
     this.scene.translate(-this.row, 0.03, this.col);
 
-    if(this.piece != null){
-        this.scene.registerForPick(this.scene.pickObjectID,  this.piece);
-        this.scene.pickObjectID++;
+    if(this.piece != null) {
+        if(currentPlayer == this.piece.getColour()){
+            this.scene.registerForPick(this.scene.pickObjectID, this.piece);
+            this.scene.pickObjectID++;
+        }
         this.piece.display();
-    } else {
+    }
+
+    if(currentMove.getPiece() != null && this.piece == null && this.element != "empty"){
         this.scene.registerForPick(this.scene.pickObjectID, this);
         this.scene.pickObjectID++;
     }
-
     this.scene.setDefaultAppearance();
     this.scene.rotate(-90 * Math.PI / 180, 0, 1, 0);
     this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);
     this.object.display();
-        this.scene.clearPickRegistration();
+    this.scene.clearPickRegistration();
     this.scene.popMatrix();
 }

@@ -3,12 +3,13 @@
  * @constructor
  */
 
-function Piece(scene, unit, type, tile) {
+function Piece(scene, unit, type, colour) {
     CGFobject.call(this,scene);
     this.scene = scene;
     this.unit = unit;
     this.type = type;
-    this.tile = tile;
+    this.tile = null;
+    this.colour = colour;
 
     if(this.type == "Node")
         this.object = new Node(scene);
@@ -32,6 +33,10 @@ Piece.prototype.setTile = function (tile) {
 
 Piece.prototype.getTile = function () {
     return this.tile;
+}
+
+Piece.prototype.getColour = function () {
+    return this.colour;
 }
 
 Piece.prototype.display = function () {

@@ -20,10 +20,8 @@ function Nodes(scene) {
     this.board = new Board(scene, []);
     this.mode = Nodes.mode.NONE;
 
-    this.player1 = null;
-    this.player2 = null;
-
     this.gameSequence = new Sequence();
+    this.currentMove = new Move(this.scene, null, null, null)
 
     var player1 = new Player("blue",0);
     var player2 = new Player("red",0);
@@ -48,8 +46,20 @@ Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
     this.client.makeRequest("getInitialBoard", function(data){
         nodes.initializeBoard(data);
-        nodes.startGame(mode, difficulty);
+        //nodes.startGame(mode, difficulty);
     });
+}
+
+Nodes.prototype.getCurrentMove = function () {
+    return this.currentMove;
+}
+
+Nodes.prototype.tryMovement = function (dstTile) {
+    this.currentMove.setDstTile(dstTile);
+    this.currentMove.makeMove(this.board, this.currentPlayer, this.client);
+    this.gameSequence.addMove(this.currentMove);
+    this.currentMove.getPiece().deselect();
+    this.currentMove = new Move(this.scene, null, null, null);
 }
 
 Nodes.prototype.startGame = function (mode, difficulty) {
@@ -78,7 +88,6 @@ Nodes.prototype.startGame = function (mode, difficulty) {
             request = "game(cvc, " + board + ", blue, medium)";
         }
     }
-    console.log(request);
     this.client.makeRequest(request, function(data){
         console.log(data);
     });}
@@ -108,10 +117,16 @@ Nodes.prototype.initializeBoard = function (data) {
                     type = 'Unit';
                 else type = 'Node';
 
+                var colour;
+                if(element.match(/blue/g))
+                    colour = 'blue';
+                else colour = 'red';
+
                 var tile = new Tile(this.scene, element, i, j);
                 this.tiles.push(tile);
 
-                piece = new Piece(this.scene, element, type);
+                console.log(colour)
+                piece = new Piece(this.scene, element, type, colour);
                 this.pieces.push(piece);
                 tile.setPiece(piece);
                 piece.setTile(tile);
@@ -150,7 +165,7 @@ Nodes.prototype.display= function(){
     this.scene.translate(4, 0, -4);
     for(var i = 0; i < this.tiles.length; i++){
         this.cellAppearance.apply();
-        this.tiles[i].display();
+        this.tiles[i].display(this.currentPlayer.getTeam(), this.currentMove);
     }
 
     this.scene.popMatrix();

@@ -18,6 +18,19 @@ function Move(scene,piece,src,dest) {
 Move.prototype = Object.create(CGFobject.prototype);
 Move.prototype.constructor = Move;
 
+Move.prototype.setPiece = function (piece) {
+    this.piece = piece;
+    this.srcTile = piece.getTile();
+}
+
+Move.prototype.getPiece = function () {
+    return this.piece;
+}
+
+Move.prototype.setDstTile = function (dest) {
+    this.dstTile = dest;
+}
+
 Move.prototype.makeMove = function (board, player, client) {
     if(this.dstTile.getPiece() != null || this.srcTile.getPiece() == null)
         return;
