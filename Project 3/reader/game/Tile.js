@@ -10,6 +10,8 @@ function Tile(scene, element, row, col) {
     this.element = element; // space, empty or unit name
     this.row = row;
     this.col = col;
+    this.type="Tile";
+    this.tile=this;
 
     this.object = new Circle(this.scene, 0.4, 12);
 }
@@ -37,12 +39,15 @@ Tile.prototype.display = function () {
         this.scene.registerForPick(this.scene.pickObjectID,  this.piece);
         this.scene.pickObjectID++;
         this.piece.display();
-        this.scene.clearPickRegistration();
+    } else {
+        this.scene.registerForPick(this.scene.pickObjectID, this);
+        this.scene.pickObjectID++;
     }
 
     this.scene.setDefaultAppearance();
     this.scene.rotate(-90 * Math.PI / 180, 0, 1, 0);
     this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);
     this.object.display();
+        this.scene.clearPickRegistration();
     this.scene.popMatrix();
 }
