@@ -38,6 +38,7 @@ Move.prototype.makeMove = function (board, player, client) {
         board.setBoard(response);
         own.srcTile.setPiece(null);
         own.dstTile.setPiece(own.piece);
+        own.piece.setTile(own.dstTile);
     });
 }
 
