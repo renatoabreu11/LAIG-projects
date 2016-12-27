@@ -29,6 +29,10 @@ Tile.prototype.getPiece = function () {
     return this.piece;
 }
 
+Tile.prototype.getCoordinatesAsString = function () {
+    return (this.row + "-" + this.col);
+}
+
 Tile.prototype.display = function (currentPlayer, currentMove, pickingMode) {
     this.scene.pushMatrix();
     this.scene.translate(-this.row, 0.03, this.col);

@@ -118,8 +118,8 @@ parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColum
 parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), false).
 
 %attempt to move piece
-parse_input(pickMove(Difficulty, Board, FinalBoard, Player, NodeRowI-NodeColI, NodeRowF-NodeColF), [FinalBoard, NodeRowI-NodeColI, NodeRowF-NodeColF]) :-
-	pickMove(Difficulty, Board, FinalBoard, Player, NodeRowI-NodeColI, NodeRowF-NodeColF).
+parse_input(pickMove(Difficulty, Board, Player), {FinalBoard; [NodeRowI-NodeColI, NodeRowF-NodeColF]; BestMove}) :-
+	pickMove(Difficulty, Board, FinalBoard, Player, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove).
 
 %check gameOver
 parse_input(endGame(Board, Player), gameOver) :- endGame(Board, Player).

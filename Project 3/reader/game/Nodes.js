@@ -37,7 +37,7 @@ function Nodes(scene) {
     this.state = Nodes.gameState.MENU;
 
     this.gameSequence = new Sequence();
-    this.currentMove = new Move(this.scene, null, null, null)
+    this.currentMove = new Move(this.scene, null, null, null);
 
     this.player1 = new Player("blue",0, false);
     this.player2 = new Player("red",0, false);
@@ -77,6 +77,32 @@ Nodes.prototype.tryMovement = function (dstTile) {
     this.currentMove.makeMove(this.board, this.currentPlayer, this.client, this);
 }
 
+Nodes.prototype.getTileFromCoords = function (coords) {
+    for(var i = 0; i < this.tiles.length; i++){
+        if(this.tiles[i].getCoordinatesAsString() == coords)
+            return this.tiles[i];
+    }
+}
+
+Nodes.prototype.parseMoveFromAI = function (info) {
+    this.board.setBoard(info[0]);
+
+    var nodesCoords = info[1].substr(1, info[1].length - 2);
+    var tileCoords = info[2].substr(1, info[2].length - 2);
+
+    var aux = tileCoords.split(",");
+    var srcCoords = aux[0];
+    var dstCoords = aux[1];
+
+    var srcTile = this.getTileFromCoords(srcCoords);
+    var dstTile = this.getTileFromCoords(dstCoords);
+    var piece = srcTile.getPiece();
+    piece.select();
+
+    this.currentMove = new Move(this.scene, piece, srcTile, dstTile);
+    this.currentMove.animateMove(this);
+};
+
 Nodes.prototype.moveAI = function () {
     var difficulty;
     var board = this.board.toPrologStruct();
@@ -84,13 +110,17 @@ Nodes.prototype.moveAI = function () {
         difficulty = "easy";
     else difficulty = "medium";
 
-    var request = "pickMove(" + difficulty + "," + board + ",FinalBoard," + this.currentPlayer.getTeam() + ",NodeRowI-NodeColI,NodeRowF-NodeColF)";
-    console.log(request);
+    var request = "pickMove(" + difficulty + "," + board + "," + this.currentPlayer.getTeam() + ")";
 
+    var own = this;
     this.client.makeRequest(request, function(data) {
         var response = data.target.response;
-        console.log(response);
+        response = response.substr(1, response.length - 2);
+        var info = response.split(";");
+        own.parseMoveFromAI(info);
     });
+
+    this.state = Nodes.gameState.END_TURN;
 }
 
 Nodes.prototype.switchPlayer = function () {
@@ -249,7 +279,6 @@ Nodes.prototype.update = function(currTime) {
     }
 
     if(this.mode == Nodes.mode.CvC && this.state == Nodes.gameState.AI_TURN){
-        console.log(this);
         this.moveAI();
     }
 }

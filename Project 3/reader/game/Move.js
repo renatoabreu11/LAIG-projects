@@ -37,6 +37,13 @@ Move.prototype.setDstTile = function (dest) {
     this.dstTile = dest;
 }
 
+Move.prototype.animateMove = function (nodes) {
+    this.chooseAnimation();
+    this.piece.setAnimation(this.animation);
+    nodes.state = Nodes.gameState.MOVE_ANIMATION;
+    this.timer = nodes.elapsedTime;
+}
+
 Move.prototype.makeMove = function (board, player, client, nodes) {
     if(this.dstTile.getPiece() != null || this.srcTile.getPiece() == null)
         return;
@@ -57,10 +64,7 @@ Move.prototype.makeMove = function (board, player, client, nodes) {
         own.piece.deselect();
         board.setBoard(response);
 
-        own.chooseAnimation();
-        own.piece.setAnimation(own.animation);
-        nodes.state = Nodes.gameState.MOVE_ANIMATION;
-        own.timer = nodes.elapsedTime;
+        own.animateMove(nodes);
     });
 }
 

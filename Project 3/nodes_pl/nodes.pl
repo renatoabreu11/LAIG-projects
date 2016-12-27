@@ -38,7 +38,7 @@ game(cvc, Board, Bot, Difficulty):-
         endGame(Board, Bot),
         (getOtherPlayer(Bot, Winner), write(Winner), write(' bot is the winner!!! Congratz.')),
 		(	
-			pickMove(Difficulty, Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF),
+			pickMove(Difficulty, Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, _),
 			endTurn(NodeRowI-NodeColI, NodeRowF-NodeColF, FinalBoard, Bot, Difficulty, cvc)
 		)
     ).
@@ -55,7 +55,7 @@ game(pvc, Board, Player, Difficulty):-
 			Player == blue,
 			(move(Board, Player, Piece, FinalBoard), endTurn(Piece, FinalBoard, Player, pvc, Difficulty)),
 			(
-				pickMove(Difficulty, Board, FinalBoard, Player, NodeRowI-NodeColI, NodeRowF-NodeColF),
+				pickMove(Difficulty, Board, FinalBoard, Player, NodeRowI-NodeColI, NodeRowF-NodeColF, _),
 				endTurn(NodeRowI-NodeColI, NodeRowF-NodeColF, FinalBoard, Player, Difficulty, pvc)
 			)
 		)

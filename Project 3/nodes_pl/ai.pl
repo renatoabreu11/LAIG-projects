@@ -3,32 +3,31 @@
 */
 
 %Selects a move accordingly to the difficulty
-pickMove(Difficulty, Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF):-
+pickMove(Difficulty, Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove):-
     Difficulty == easy,
-    pickRandomMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF).
+    pickRandomMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove).
 
-pickMove(Difficulty, Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF):-
+pickMove(Difficulty, Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove):-
     Difficulty == medium,
-    pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF).
+    pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove).
 
 %bot will randomly make a move
-pickRandomMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF):-
+pickRandomMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove):-
     getNodeCoordinates(Board, Bot, NodeRowI-NodeColI),
-    getValidBoards(Board, Bot, ValidMoves),
+    getValidCoords(Board, Bot, ValidMoves),
     listLength(ValidMoves, 0, Length),
     random(0, Length, Value),
-    getRowElement(ValidMoves, Value, FinalBoard),
-    displayBoard(FinalBoard), 
+    nth1(Value, ValidMoves, BestMove),
+    applyMove(Board, BestMove, FinalBoard),
     getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF).
 
 %bot will make a calculated move
-pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF):-
+pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove):-
     getNodeCoordinates(Board, Bot, NodeRowI-NodeColI),
     getValidCoords(Board, Bot, ValidMoves), !,
     bestMove(Board, Bot, ValidMoves, _,  -500, BestMove,BestValue),
     if1(BestValue>=0,applyMove(Board, BestMove, FinalBoard),
     	if1(moveNode(Board,Bot,FinalBoard), write(''), applyMove(Board, BestMove, FinalBoard))),
-    displayBoard(FinalBoard), 
     getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF).
 
 
