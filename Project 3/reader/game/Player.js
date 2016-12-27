@@ -6,7 +6,7 @@
 function Player(team, score, isBot) {
     this.team = team;
     this.score = score; // Tempo total das jogadas, número de vitorias, ou algo do género
-    this.isBot = false;
+    this.isBot = isBot;
 }
 
 /**

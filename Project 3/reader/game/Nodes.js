@@ -18,6 +18,7 @@ Nodes.gameState = {
     END_TURN: 3,
     END_GAME: 4,
     AI_TURN: 5,
+    REQUEST: 6,
 }
 
 /**
@@ -39,9 +40,9 @@ function Nodes(scene) {
     this.gameSequence = new Sequence();
     this.currentMove = new Move(this.scene, null, null, null);
 
-    this.player1 = new Player("blue",0, false);
-    this.player2 = new Player("red",0, false);
-    this.currentPlayer = this.player1;
+    this.player1 = null;
+    this.player2 = null;
+    this.currentPlayer = null;
 
     this.elapsedTime = 0;
     this.initialTime = 0;
@@ -99,8 +100,9 @@ Nodes.prototype.parseMoveFromAI = function (info) {
     var piece = srcTile.getPiece();
     piece.select();
 
-    this.currentMove = new Move(this.scene, piece, srcTile, dstTile);
-    this.currentMove.animateMove(this);
+    this.currentMove.setPiece(piece);
+    this.currentMove.setDstTile(dstTile);
+    this.currentMove.setMoveAnimation(this);
 };
 
 Nodes.prototype.moveAI = function () {
@@ -112,6 +114,7 @@ Nodes.prototype.moveAI = function () {
 
     var request = "pickMove(" + difficulty + "," + board + "," + this.currentPlayer.getTeam() + ")";
 
+    this.state = Nodes.gameState.REQUEST;
     var own = this;
     this.client.makeRequest(request, function(data) {
         var response = data.target.response;
@@ -119,8 +122,6 @@ Nodes.prototype.moveAI = function () {
         var info = response.split(";");
         own.parseMoveFromAI(info);
     });
-
-    this.state = Nodes.gameState.END_TURN;
 }
 
 Nodes.prototype.switchPlayer = function () {
@@ -152,14 +153,17 @@ Nodes.prototype.nextMove = function () {
         else this.state = Nodes.gameState.PIECE_SELECTION;
     }
     this.gameSequence.addMove(this.currentMove);
+    this.currentMove.getPiece().deselect();
     this.currentMove = new Move(this.scene, null, null, null);
 }
 
-Nodes.prototype.startGame = function (mode, difficulty) {console.log(mode);
+Nodes.prototype.startGame = function (mode, difficulty) {
     if (mode == "pvp") {
         this.mode = Nodes.mode.PvP;
         this.difficulty = Nodes.difficulty.NONE;
         this.state = Nodes.gameState.PIECE_SELECTION;
+        this.player1 = new Player("blue",0, false);
+        this.player2 = new Player("red",0, false);
     } else if (mode == "pvc") {
         this.mode = Nodes.mode.PvC;
         if (difficulty == "easy")
@@ -167,6 +171,8 @@ Nodes.prototype.startGame = function (mode, difficulty) {console.log(mode);
         else
             this.difficulty = Nodes.difficulty.MEDIUM;
 
+        this.player1 = new Player("blue",0, false);
+        this.player2 = new Player("red",0, true);
     } else if (mode == "cvc") {
         this.mode = Nodes.mode.CvC;
         this.state = Nodes.gameState.AI_TURN;
@@ -174,7 +180,12 @@ Nodes.prototype.startGame = function (mode, difficulty) {console.log(mode);
             this.difficulty = Nodes.difficulty.EASY;
         else
             this.difficulty = Nodes.difficulty.MEDIUM;
+
+        this.player1 = new Player("blue",0, true);
+        this.player2 = new Player("red",0, true);
     }
+
+    this.currentPlayer = this.player1;
 }
 
 /**

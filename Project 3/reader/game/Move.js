@@ -37,7 +37,7 @@ Move.prototype.setDstTile = function (dest) {
     this.dstTile = dest;
 }
 
-Move.prototype.animateMove = function (nodes) {
+Move.prototype.setMoveAnimation = function (nodes) {
     this.chooseAnimation();
     this.piece.setAnimation(this.animation);
     nodes.state = Nodes.gameState.MOVE_ANIMATION;
@@ -61,10 +61,8 @@ Move.prototype.makeMove = function (board, player, client, nodes) {
             console.log("Move.js says: Move failed!");
             return false;
         }
-        own.piece.deselect();
         board.setBoard(response);
-
-        own.animateMove(nodes);
+        own.setMoveAnimation(nodes);
     });
 }
 
