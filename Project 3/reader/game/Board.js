@@ -66,6 +66,11 @@ Board.prototype.setBoard = function (encoded_board) {
     this.length = this.board.length;
 }
 
+Board.prototype.undoPieceMove = function (srcRow, srcCol, dstRow, dstCol, element) {
+    this.setElementAt(srcRow, srcCol, "space");
+    this.setElementAt(dstRow, dstCol, element);
+}
+
 /**
  *
  * @returns {Number|*}
@@ -84,6 +89,12 @@ Board.prototype.getElementAt = function (Row, Col) {
     if(!this.validPosition(Row, Col))
         return "Invalid Position";
     return this.board[Row][Col];
+}
+
+Board.prototype.setElementAt = function (Row, Col, element) {
+    if(!this.validPosition(Row, Col))
+        return "Invalid Position";
+    this.board[Row][Col] = element;
 }
 
 /**

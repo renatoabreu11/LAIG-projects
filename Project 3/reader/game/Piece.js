@@ -45,6 +45,10 @@ Piece.prototype.getType = function () {
     return this.type;
 }
 
+Piece.prototype.getUnit = function () {
+    return this.unit;
+}
+
 Piece.prototype.display = function () {
     this.scene.pushMatrix();
     if(this.isSelected)

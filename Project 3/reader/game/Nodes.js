@@ -19,6 +19,7 @@ Nodes.gameState = {
     END_GAME: 4,
     AI_TURN: 5,
     REQUEST: 6,
+    UNDO: 7,
 }
 
 /**
@@ -140,7 +141,6 @@ Nodes.prototype.switchPlayer = function () {
         this.currentPlayer = this.player2;
     else this.currentPlayer = this.player1;
 
-    console.log(this.currentPlayer)
     if(this.currentPlayer.getIsBot())
         this.state = Nodes.gameState.AI_TURN;
     else this.state = Nodes.gameState.PIECE_SELECTION;
@@ -154,11 +154,15 @@ Nodes.prototype.nextMove = function () {
     } else{
         if(this.currentPlayer.getIsBot())
             this.state = Nodes.gameState.AI_TURN;
-        else this.state = Nodes.gameState.PIECE_SELECTION;
+        else
+            this.state = Nodes.gameState.PIECE_SELECTION;
+
     }
-    this.gameSequence.addMove(this.currentMove);
     this.currentMove.getPiece().deselect();
-    this.currentMove = new Move(this.scene, null, null, null);
+    this.gameSequence.addMove(this.currentMove);
+    if(this.gameSequence.getUndoLastMove())
+        this.undoLastMove();
+    else this.currentMove = new Move(this.scene, null, null, null);
 }
 
 Nodes.prototype.startGame = function (mode, difficulty) {
@@ -232,6 +236,28 @@ Nodes.prototype.initializeBoard = function (data) {
                 piece.setTile(tile);
             }
         }
+    }
+}
+
+Nodes.prototype.undoLastMove = function () {
+
+    if(this.state == Nodes.gameState.PIECE_SELECTION)
+    {
+        var player = this.currentPlayer.getTeam();
+        if(this.gameSequence.canUndo(player))
+        {
+            this.gameSequence.setUndoLastMove(false);
+            this.deselectPieces();
+            this.currentMove = this.gameSequence.undoMove();
+            this.currentMove.switchTiles();
+            this.currentMove.setMoveAnimation(this);
+            var srcTile = this.currentMove.getSrcTile();
+            var dstTile = this.currentMove.getDstTile();
+            var piece = this.currentMove.getPiece();
+            this.board.undoPieceMove(srcTile.getRow(), srcTile.getCol(), dstTile.getRow(), dstTile.getCol(), piece.getUnit());
+        }
+    } else if(this.state == Nodes.gameState.MOVE_ANIMATION && !this.currentPlayer.getIsBot()){
+        this.gameSequence.setUndoLastMove(true);
     }
 }
 

@@ -29,6 +29,14 @@ Tile.prototype.getPiece = function () {
     return this.piece;
 }
 
+Tile.prototype.getRow = function () {
+    return this.row;
+}
+
+Tile.prototype.getCol = function () {
+    return this.col;
+}
+
 Tile.prototype.getCoordinatesAsString = function () {
     return (this.row + "-" + this.col);
 }

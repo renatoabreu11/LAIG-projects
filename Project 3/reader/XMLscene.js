@@ -32,6 +32,8 @@ XMLscene.prototype.init = function (application) {
 
 	this.axis=new CGFaxis(this);
 	this.lightStatus = [];
+	this.undo = false;
+	this.resetMoves = false;
 	
     this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
     this.setUpdatePeriod(this.updatePeriod);
@@ -43,7 +45,22 @@ XMLscene.prototype.init = function (application) {
     this.transitionCam=null;
 
     this.nodes = new Nodes(this);
-    this.nodes.initializeGame("cvc", "easy");
+    this.nodes.initializeGame("pvp", "easy");
+};
+
+XMLscene.prototype.Undo = function (){
+    if(!this.undo){
+    	this.nodes.undoLastMove();
+        this.undo = false;
+	}
+};
+
+XMLscene.prototype.ResetMoves = function (){
+    if(this.resetMoves)
+        this.resetMoves = false;
+    else
+        this.resetMoves = true;
+
 };
 
 /**

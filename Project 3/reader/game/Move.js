@@ -29,12 +29,27 @@ Move.prototype.getPiece = function () {
     return this.piece;
 }
 
+Move.prototype.getSrcTile = function () {
+    return this.srcTile;
+}
+
+Move.prototype.getDstTile = function () {
+    return this.dstTile;
+}
+
 Move.prototype.getAnimation = function () {
     return this.animation;
 }
 
 Move.prototype.setDstTile = function (dest) {
     this.dstTile = dest;
+}
+
+Move.prototype.switchTiles = function () {
+    var aux = this.srcTile;
+    this.srcTile = this.dstTile;
+    this.dstTile = aux;
+    this.piece.select();
 }
 
 Move.prototype.setMoveAnimation = function (nodes) {
