@@ -151,11 +151,6 @@
     </transformations>
 
    <animations>
-        <animation id="pause" span="2" type="linear">
-            <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="0.00001" zz="0" />
-        </animation>
-
         <animation id="camTransition2" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="0" yy="5" zz="22" />

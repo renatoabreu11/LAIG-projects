@@ -239,8 +239,11 @@ Nodes.prototype.update = function(currTime) {
 
     if(this.state == Nodes.gameState.MOVE_ANIMATION){
         var diff = this.elapsedTime - this.currentMove.getInitialTime();
-        if(diff > 3) {
+        if(diff > this.currentMove.getAnimation().getSpan()) {
+            this.currentMove.getPiece().setAnimation(null);
             this.nextMove();
+        } else {
+            this.currentMove.display(diff); // TO DO
         }
     }
 

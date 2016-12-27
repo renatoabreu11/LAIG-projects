@@ -60,7 +60,8 @@ Move.prototype.makeMove = function (board, player, client, nodes) {
         own.dstTile.setPiece(own.piece);
         own.piece.setTile(own.dstTile);
 
-        own.animation = own.chooseAnimation();
+        own.chooseAnimation();
+        own.piece.setAnimation(own.animation);
         nodes.state = Nodes.gameState.MOVE_ANIMATION;
         own.timer = nodes.elapsedTime;
     });
@@ -91,10 +92,13 @@ Move.prototype.chooseAnimation = function(){
     if (index == -1) {
         console.log("No animation found for this movement!");
     } else this.animation=this.scene.graph.animations[index];
+
 }
 
-Move.prototype.display = function () {
-    //display da transição da peça
+Move.prototype.display = function (currTime) {
+    this.scene.pushMatrix();
+    this.piece.timer=currTime;
+    this.scene.popMatrix();
 }
 
 Move.prototype.getInitialTime = function () {

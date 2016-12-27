@@ -10,6 +10,8 @@ function Piece(scene, unit, type, colour) {
     this.type = type;
     this.tile = null;
     this.colour = colour;
+    this.animation = null;
+    this.timer = null;
 
     if(this.type == "Node")
         this.object = new Node(scene);
@@ -47,6 +49,9 @@ Piece.prototype.display = function () {
     this.scene.pushMatrix();
     if(this.isSelected)
         this.selected.apply();
+    if(this.animation != null){
+        this.scene.multMatrix(this.animation.getMatrix(this.timer));
+    }
     this.object.display();
     this.scene.popMatrix();
 }
@@ -57,4 +62,10 @@ Piece.prototype.select = function () {
 
 Piece.prototype.deselect = function () {
     this.isSelected=false;
+}
+
+Piece.prototype.setAnimation = function(animation) {
+    this.animation = animation;
+    if (animation==null)
+        this.timer=null;
 }
