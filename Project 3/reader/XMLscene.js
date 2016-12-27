@@ -43,7 +43,7 @@ XMLscene.prototype.init = function (application) {
     this.transitionCam=null;
 
     this.nodes = new Nodes(this);
-    this.nodes.initializeGame("cvc", "easy");
+    this.nodes.initializeGame("pvc", "easy");
 };
 
 /**
@@ -123,7 +123,7 @@ XMLscene.prototype.animateCameraTransition = function () {
 	position["y"] = view["from"]["y"] + offset[1];
 	position["z"] = view["from"]["z"] + offset[2];
 	var target = view["to"];
-	this.camera = this.camera = new CGFcamera(fov, near, far, vec3.fromValues(position["x"], position["y"], position["z"]), 
+	this.camera = new CGFcamera(fov, near, far, vec3.fromValues(position["x"], position["y"], position["z"]),
 									vec3.fromValues(target["x"], target["y"], target["z"]));
 }
 

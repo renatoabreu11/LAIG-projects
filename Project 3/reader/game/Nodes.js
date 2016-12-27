@@ -137,6 +137,7 @@ Nodes.prototype.switchPlayer = function () {
         this.currentPlayer = this.player2;
     else this.currentPlayer = this.player1;
 
+    console.log(this.currentPlayer)
     if(this.currentPlayer.getIsBot())
         this.state = Nodes.gameState.AI_TURN;
     else this.state = Nodes.gameState.PIECE_SELECTION;
@@ -173,6 +174,7 @@ Nodes.prototype.startGame = function (mode, difficulty) {
 
         this.player1 = new Player("blue",0, false);
         this.player2 = new Player("red",0, true);
+        this.state = Nodes.gameState.PIECE_SELECTION;
     } else if (mode == "cvc") {
         this.mode = Nodes.mode.CvC;
         this.state = Nodes.gameState.AI_TURN;
@@ -289,7 +291,7 @@ Nodes.prototype.update = function(currTime) {
         }
     }
 
-    if(this.mode == Nodes.mode.CvC && this.state == Nodes.gameState.AI_TURN){
+    if((this.mode == Nodes.mode.CvC || this.mode == Nodes.mode.PvC) && this.state == Nodes.gameState.AI_TURN){
         this.moveAI();
     }
 }
