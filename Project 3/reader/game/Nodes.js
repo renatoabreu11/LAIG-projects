@@ -91,9 +91,6 @@ Nodes.prototype.parseMoveFromAI = function (info) {
     var nodesCoords = info[1].substr(1, info[1].length - 2);
     var tileCoords = info[2].substr(1, info[2].length - 2);
 
-    console.log(tileCoords);
-    console.log(nodesCoords)
-
     var aux = tileCoords.split(",");
     var srcCoords = aux[0];
     var dstCoords = aux[1];
@@ -154,6 +151,8 @@ Nodes.prototype.nextMove = function () {
     var movedPiece = this.currentMove.getPiece();
     if(movedPiece.getType() == "Node"){
         this.state = Nodes.gameState.END_TURN;
+        this.gameSequence.setUndo(false);
+        this.gameSequence.setUndoOnQueue(false);
         this.switchPlayer();
     } else{
         if(this.currentPlayer.getIsBot())
