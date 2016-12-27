@@ -43,6 +43,7 @@ server_loop(Socket) :-
 		handle_request(Request, MyReply, Status),
 		format('Request: ~q~n',[Request]),
 		format('Reply: ~q~n', [MyReply]),
+		nl,write('-----------------------------------'),nl,
 		
 		% Output Response
 		format(Stream, 'HTTP/1.0 ~p~n', [Status]),
@@ -113,11 +114,17 @@ parse_input(getInitialBoard, Board):-initialBoard(Board).
 parse_input(getFinalBoard, Board):-finalBoard(Board).
 
 %attempt to move piece
-parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), [FinalBoard,GameOver]) :-
+parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), [FinalBoard,GameOver]) :-write(ulala),nl,nl,
 	move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn),
 	if1(endGame(FinalBoard, Player),
 		GameOver = t,
 		GameOver = f).
+parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn),false).
+
+%checks if gameOver
+parse_input(endGame(FinalBoard, Player),t):-
+	endGame(FinalBoard,Player).
+parse_input(endGame(FinalBoard, Player),f).
 
 %attempt to move piece
 parse_input(pickMove(Difficulty, Board, Player), {FinalBoard; [NodeRowI-NodeColI, NodeRowF-NodeColF]; BestMove}) :-

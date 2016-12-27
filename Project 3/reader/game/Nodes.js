@@ -63,7 +63,7 @@ Nodes.prototype.constructor = Nodes;
  */
 Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
-    this.client.makeRequest("getInitialBoard", function(data){
+    this.client.makeRequest("getFinalBoard", function(data){
         nodes.initializeBoard(data);
         nodes.startGame(mode, difficulty);
     });
@@ -137,14 +137,28 @@ Nodes.prototype.switchPlayer = function () {
         this.currentPlayer = this.player2;
     else this.currentPlayer = this.player1;
 
-    if(this.currentPlayer.getIsBot())
-        this.state = Nodes.gameState.AI_TURN;
-    else this.state = Nodes.gameState.PIECE_SELECTION;
+    //check if new user is in gameOver
+    var own = this;
+    var request = "endGame("+this.board.toPrologStruct()+","+this.currentPlayer.getTeam()+")";
+
+    this.client.makeRequest(request, function(data) {
+        var response = data.target.response;
+        if(response=="f"){
+            if(own.currentPlayer.getIsBot())
+                own.state = Nodes.gameState.AI_TURN;
+            else own.state = Nodes.gameState.PIECE_SELECTION;
+        } else {
+            own.state = Nodes.gameState.END_GAME;
+            own.client.makeRequest("quit");
+            console.log("GAME OVER: "+own.currentPlayer.getTeam()+" player lost...");
+        }
+    });
 };
 
 Nodes.prototype.nextMove = function () {
     if(this.currentMove.isGameOver()){
         this.state = Nodes.gameState.END_GAME;
+        this.client.makeRequest("quit");
         console.log("GAME OVER: "+this.currentPlayer.getTeam()+" player lost...");
         return;
     }
