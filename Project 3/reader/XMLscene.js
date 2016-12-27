@@ -43,7 +43,7 @@ XMLscene.prototype.init = function (application) {
     this.transitionCam=null;
 
     this.nodes = new Nodes(this);
-    this.nodes.initializeGame("cvc", "easy");
+    this.nodes.initializeGame("pvp", "easy");
 };
 
 /**
@@ -206,25 +206,25 @@ XMLscene.prototype.logPicking = function ()
         if (this.pickResults != null && this.pickResults.length > 0) {
             for (var i=0; i< this.pickResults.length; i++) {
                 var obj = this.pickResults[i][0];
-                if (obj)
-                {
+                if (obj) {
                     var customId = this.pickResults[i][1];
-
                     var currentPiece = this.nodes.getCurrentMove().getPiece();
+
+                    //select a piece when no piece is selected
                     if(currentPiece == null){
                         obj.select();
                         this.nodes.getCurrentMove().setPiece(obj);
                         console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
-                    } else {
-                        if (obj instanceof Piece && obj != currentPiece){
-                            console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
-                            currentPiece.deselect();
-                            obj.select();
-                            this.nodes.getCurrentMove().setPiece(obj);
-                        } else if (obj instanceof Tile) {
-                            console.log("Picked object: Tile, Location: (" + obj.row + "," + obj.col + "), with pick id " + customId);
-                            this.nodes.tryMovement(obj);
-                        }
+                    
+                    } else if (obj instanceof Piece && obj != currentPiece){ //select a new piece
+                        console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
+                        currentPiece.deselect();
+                        obj.select();
+                        this.nodes.getCurrentMove().setPiece(obj);
+                    
+                    } else if (obj instanceof Tile) { //select a destination
+                        console.log("Picked object: Tile, Location: (" + obj.row + "," + obj.col + "), with pick id " + customId);
+                        this.nodes.tryMovement(obj);
                     }
                 }
             }

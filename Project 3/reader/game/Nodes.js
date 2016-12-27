@@ -94,6 +94,14 @@ Nodes.prototype.moveAI = function () {
 }
 
 Nodes.prototype.switchPlayer = function () {
+    if(this.scene.transitionCam != null) //caso a transicao nao tenha acabado, nao permite iniciar uma nova
+        return;
+    transitionCam=[];
+    transitionCam["newCam"]=this.scene.graph.getNextView();
+    transitionCam["animation"]=this.scene.graph.animations[this.scene.graph.checkIfExists(this.scene.graph.animations, transitionCam["newCam"]["id"]=="player1" ? "camTransition1" : "camTransition2")];
+    transitionCam["finishTime"]=this.scene.elapsedTime+transitionCam["animation"].span;
+    this.scene.transitionCam=transitionCam;
+
     if(this.currentPlayer == this.player1)
         this.currentPlayer = this.player2;
     else this.currentPlayer = this.player1;
@@ -117,7 +125,7 @@ Nodes.prototype.nextMove = function () {
     this.currentMove = new Move(this.scene, null, null, null);
 }
 
-Nodes.prototype.startGame = function (mode, difficulty) {
+Nodes.prototype.startGame = function (mode, difficulty) {console.log(mode);
     if (mode == "pvp") {
         this.mode = Nodes.mode.PvP;
         this.difficulty = Nodes.difficulty.NONE;
@@ -237,6 +245,7 @@ Nodes.prototype.update = function(currTime) {
     }
 
     if(this.mode == Nodes.mode.CvC && this.state == Nodes.gameState.AI_TURN){
+        console.log(this);
         this.moveAI();
     }
 }

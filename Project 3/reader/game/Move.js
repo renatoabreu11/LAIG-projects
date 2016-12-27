@@ -29,6 +29,10 @@ Move.prototype.getPiece = function () {
     return this.piece;
 }
 
+Move.prototype.getAnimation = function () {
+    return this.animation;
+}
+
 Move.prototype.setDstTile = function (dest) {
     this.dstTile = dest;
 }

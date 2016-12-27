@@ -2,13 +2,13 @@
     <scene root="root" axis_length="30.0" />
     
     <views default="player1" >
-        <perspective id="player1" near="0.1" far="500.0" angle="60.0">
-            <from x="-15" y="25" z="-7" />
+        <perspective id="player2" near="0.1" far="500.0" angle="60.0">
+            <from x="-15" y="15" z="-7" />
             <to x="0" y="5" z="0" />
         </perspective>
 
-        <perspective id="player2" near="0.1" far="500.0" angle="60.0">
-            <from x="15" y="25" z="7" />
+        <perspective id="player1" near="0.1" far="500.0" angle="60.0">
+            <from x="15" y="15" z="7" />
             <to x="0" y="5" z="0" />
         </perspective>
     </views>
@@ -156,14 +156,14 @@
             <controlpoint xx="0" yy="0.00001" zz="0" />
         </animation>
 
-        <animation id="camTransition1" span="1" type="keyframe">
+        <animation id="camTransition2" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="0" yy="5" zz="22" />
             <controlpoint xx="25" yy="5" zz="27" />
             <controlpoint xx="30" yy="0" zz="14" />
         </animation>
 
-        <animation id="camTransition2" span="1" type="keyframe">
+        <animation id="camTransition1" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="0" yy="5" zz="-22" />
             <controlpoint xx="-25" yy="5" zz="-27" />
