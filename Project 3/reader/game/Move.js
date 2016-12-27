@@ -56,9 +56,6 @@ Move.prototype.makeMove = function (board, player, client, nodes) {
         }
         own.piece.deselect();
         board.setBoard(response);
-        own.srcTile.setPiece(null);
-        own.dstTile.setPiece(own.piece);
-        own.piece.setTile(own.dstTile);
 
         own.chooseAnimation();
         own.piece.setAnimation(own.animation);
@@ -105,3 +102,8 @@ Move.prototype.getInitialTime = function () {
     return this.timer;
 }
 
+Move.prototype.movePiece = function() {
+    this.srcTile.setPiece(null);
+    this.dstTile.setPiece(this.piece);
+    this.piece.setTile(this.dstTile);
+};

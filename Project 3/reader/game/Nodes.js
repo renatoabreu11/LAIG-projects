@@ -241,6 +241,7 @@ Nodes.prototype.update = function(currTime) {
         var diff = this.elapsedTime - this.currentMove.getInitialTime();
         if(diff > this.currentMove.getAnimation().getSpan()) {
             this.currentMove.getPiece().setAnimation(null);
+            this.currentMove.movePiece();
             this.nextMove();
         } else {
             this.currentMove.display(diff); // TO DO
