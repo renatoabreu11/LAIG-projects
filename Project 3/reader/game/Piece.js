@@ -18,6 +18,8 @@ function Piece(scene, unit, type, colour) {
     else this.object = new Unit(scene);
 
     this.isSelected = false;
+    this.texture = new CGFappearance(this.scene);
+    this.texture.loadTexture('../res/'+(this.colour=="blue"?'blue':'red')+'.jpg');
     this.selected = new CGFappearance(this.scene);
     this.selected.loadTexture('../res/sand.jpg');
 }
@@ -53,6 +55,7 @@ Piece.prototype.display = function () {
     this.scene.pushMatrix();
     if(this.isSelected)
         this.selected.apply();
+    else this.texture.apply();
     if(this.animation != null){
         this.scene.multMatrix(this.animation.getMatrix(this.timer));
     }

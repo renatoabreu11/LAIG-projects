@@ -113,15 +113,12 @@ parse_input(getInitialBoard, Board):-initialBoard(Board).
 parse_input(getFinalBoard, Board):-finalBoard(Board).
 
 %attempt to move piece
-parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), FinalBoard) :-
-	move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn).
-parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), false).
+parse_input(move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn), [FinalBoard,GameOver]) :-
+	move(Board, Player, Piece, FinalBoard, Row-Column, DestRow-DestColumn),
+	if1(endGame(FinalBoard, Player),
+		GameOver = t,
+		GameOver = f).
 
 %attempt to move piece
 parse_input(pickMove(Difficulty, Board, Player), {FinalBoard; [NodeRowI-NodeColI, NodeRowF-NodeColF]; BestMove}) :-
 	pickMove(Difficulty, Board, FinalBoard, Player, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove).
-
-%check gameOver
-parse_input(endGame(Board, Player), gameOver) :- endGame(Board, Player).
-parse_input(endGame(_, _),false).
-

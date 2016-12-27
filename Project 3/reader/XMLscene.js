@@ -34,7 +34,7 @@ XMLscene.prototype.init = function (application) {
 	this.lightStatus = [];
 	this.undo = false;
 	this.resetMoves = false;
-	
+
     this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
     this.setUpdatePeriod(this.updatePeriod);
     this.initialTime = 0;

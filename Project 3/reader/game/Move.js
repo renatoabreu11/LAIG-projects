@@ -11,6 +11,7 @@ function Move(scene,piece,src,dest) {
     this.dstTile = dest;
     this.animation = null;
     this.timer = 0;
+    this.gameOver=false;
 }
 
 /**
@@ -19,6 +20,10 @@ function Move(scene,piece,src,dest) {
  */
 Move.prototype = Object.create(CGFobject.prototype);
 Move.prototype.constructor = Move;
+
+Move.prototype.isGameOver = function() {
+    return this.gameOver;
+}
 
 Move.prototype.setPiece = function (piece) {
     this.piece = piece;
@@ -76,7 +81,13 @@ Move.prototype.makeMove = function (board, player, client, nodes) {
             console.log("Move.js says: Move failed!");
             return false;
         }
-        board.setBoard(response);
+        
+        var gameOver = response.slice(-2,-1);
+        var plBoard = response.slice(1,-3);
+        if(gameOver=="t"){
+            own.gameOver=true;
+        }
+        board.setBoard(plBoard);
         own.setMoveAnimation(nodes);
     });
 }

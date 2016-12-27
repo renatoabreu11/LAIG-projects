@@ -64,7 +64,7 @@ Nodes.prototype.constructor = Nodes;
  */
 Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
-    this.client.makeRequest("getInitialBoard", function(data){
+    this.client.makeRequest("getFinalBoard", function(data){
         nodes.initializeBoard(data);
         nodes.startGame(mode, difficulty);
     });
@@ -147,6 +147,11 @@ Nodes.prototype.switchPlayer = function () {
 };
 
 Nodes.prototype.nextMove = function () {
+    if(this.currentMove.isGameOver()){
+        this.state = Nodes.gameState.END_GAME;
+        console.log("GAME OVER: "+this.currentPlayer.getTeam()+" player lost...");
+        return;
+    }
     var movedPiece = this.currentMove.getPiece();
     if(movedPiece.getType() == "Node"){
         this.state = Nodes.gameState.END_TURN;
@@ -316,7 +321,7 @@ Nodes.prototype.update = function(currTime) {
             this.currentMove.movePiece();
             this.nextMove();
         } else {
-            this.currentMove.display(diff); // TO DO
+            this.currentMove.display(diff);
         }
     }
 
