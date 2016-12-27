@@ -27,7 +27,7 @@ pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, BestM
     getValidCoords(Board, Bot, ValidMoves), !,
     bestMove(Board, Bot, ValidMoves, _,  -500, BestMove,BestValue),
     if1(BestValue>=0,applyMove(Board, BestMove, FinalBoard),
-    	if1(moveNode(Board,Bot,FinalBoard), write(''), applyMove(Board, BestMove, FinalBoard))),
+    	if1(moveNode(Board,Bot,FinalBoard, BestMove), write(''), applyMove(Board, BestMove, FinalBoard))),
     getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF).
 
 
@@ -263,7 +263,7 @@ checkUnit(DestRow, DestCol, NodeRowE, NodeColE, IncRow, IncCol, Row, Col):-
            
            
 %Gets all the possible moves to a node, and randomly selects one
-moveNode(Board, Bot, FinalBoard):-
+moveNode(Board, Bot, FinalBoard, [NodeRow-NodeCol, Move]):-
 	getNodeCoordinates(Board, Bot, NodeRow-NodeCol),
         North is (NodeRow-1),
         South is (NodeRow+1),
@@ -275,6 +275,7 @@ moveNode(Board, Bot, FinalBoard):-
         Moves),
         listLength(Moves, 0, Length),
         random(0, Length, Value),
+        nth1(Value, Moves, Move),
         getRowElement(Moves, Value, Coords),
         applyMove(Board, Coords, FinalBoard), !.
         
