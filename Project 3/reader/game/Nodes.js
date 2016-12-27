@@ -19,7 +19,6 @@ Nodes.gameState = {
     END_GAME: 4,
     AI_TURN: 5,
     REQUEST: 6,
-    UNDO: 7,
 }
 
 /**
@@ -64,7 +63,7 @@ Nodes.prototype.constructor = Nodes;
  */
 Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
-    this.client.makeRequest("getFinalBoard", function(data){
+    this.client.makeRequest("getInitialBoard", function(data){
         nodes.initializeBoard(data);
         nodes.startGame(mode, difficulty);
     });
@@ -161,12 +160,18 @@ Nodes.prototype.nextMove = function () {
             this.state = Nodes.gameState.AI_TURN;
         else
             this.state = Nodes.gameState.PIECE_SELECTION;
-
     }
+
     this.currentMove.getPiece().deselect();
-    this.gameSequence.addMove(this.currentMove);
-    if(this.gameSequence.getUndoLastMove())
+
+    if(!this.gameSequence.getUndo())
+        this.gameSequence.addMove(this.currentMove);
+    else this.gameSequence.setUndo(false);
+
+    if(this.gameSequence.getUndoOnQueue()){
+        this.gameSequence.setUndoOnQueue(false);
         this.undoLastMove();
+    }
     else this.currentMove = new Move(this.scene, null, null, null);
 }
 
@@ -245,13 +250,12 @@ Nodes.prototype.initializeBoard = function (data) {
 }
 
 Nodes.prototype.undoLastMove = function () {
-
     if(this.state == Nodes.gameState.PIECE_SELECTION)
     {
         var player = this.currentPlayer.getTeam();
         if(this.gameSequence.canUndo(player))
         {
-            this.gameSequence.setUndoLastMove(false);
+            this.gameSequence.setUndo(true);
             this.deselectPieces();
             this.currentMove = this.gameSequence.undoMove();
             this.currentMove.switchTiles();
@@ -262,7 +266,7 @@ Nodes.prototype.undoLastMove = function () {
             this.board.undoPieceMove(srcTile.getRow(), srcTile.getCol(), dstTile.getRow(), dstTile.getCol(), piece.getUnit());
         }
     } else if(this.state == Nodes.gameState.MOVE_ANIMATION && !this.currentPlayer.getIsBot()){
-        this.gameSequence.setUndoLastMove(true);
+        this.gameSequence.setUndoOnQueue(true);
     }
 }
 

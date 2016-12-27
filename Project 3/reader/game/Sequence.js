@@ -5,7 +5,8 @@
 
 function Sequence() {
     this.gameMoves = [];
-    this.undoLastMove = false;
+    this.undo = false;
+    this.undoOnQueue = false;
     this.numberOfPlays = 0;
 }
 
@@ -38,12 +39,20 @@ Sequence.prototype.undoMove = function () {
     return this.gameMoves.pop();
 }
 
-Sequence.prototype.getUndoLastMove = function () {
-    return this.undoLastMove;
+Sequence.prototype.getUndoOnQueue = function () {
+    return this.undoOnQueue;
 }
 
-Sequence.prototype.setUndoLastMove = function (value) {
-    this.undoLastMove = value;
+Sequence.prototype.setUndoOnQueue = function (value) {
+    this.undoOnQueue = value;
+}
+
+Sequence.prototype.getUndo = function () {
+    return this.undo;
+}
+
+Sequence.prototype.setUndo = function (value) {
+    this.undo = value;
 }
 
 Sequence.prototype.getSequence = function () {
