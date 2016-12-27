@@ -56,10 +56,11 @@ XMLscene.prototype.Undo = function (){
 };
 
 XMLscene.prototype.ResetMoves = function (){
-    if(this.resetMoves)
+    if(!this.resetMoves){
+        this.nodes.resetPlayerMoves();
         this.resetMoves = false;
-    else
-        this.resetMoves = true;
+	}
+
 
 };
 

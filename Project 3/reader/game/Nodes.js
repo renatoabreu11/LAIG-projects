@@ -63,7 +63,7 @@ Nodes.prototype.constructor = Nodes;
  */
 Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
-    this.client.makeRequest("getFinalBoard", function(data){
+    this.client.makeRequest("getInitialBoard", function(data){
         nodes.initializeBoard(data);
         nodes.startGame(mode, difficulty);
     });
@@ -167,6 +167,7 @@ Nodes.prototype.nextMove = function () {
         this.state = Nodes.gameState.END_TURN;
         this.gameSequence.setUndo(false);
         this.gameSequence.setUndoOnQueue(false);
+        this.gameSequence.setUndoPlayerMoves(false);
         this.switchPlayer();
     } else{
         if(this.currentPlayer.getIsBot())
@@ -184,8 +185,10 @@ Nodes.prototype.nextMove = function () {
     if(this.gameSequence.getUndoOnQueue()){
         this.gameSequence.setUndoOnQueue(false);
         this.undoLastMove();
-    }
-    else this.currentMove = new Move(this.scene, null, null, null);
+    } else if(this.gameSequence.getUndoPlayerMoves())
+        this.resetPlayerMoves();
+    else
+        this.currentMove = new Move(this.scene, null, null, null);
 }
 
 Nodes.prototype.startGame = function (mode, difficulty) {
@@ -269,18 +272,39 @@ Nodes.prototype.undoLastMove = function () {
         if(this.gameSequence.canUndo(player))
         {
             this.gameSequence.setUndo(true);
-            this.deselectPieces();
-            this.currentMove = this.gameSequence.undoMove();
-            this.currentMove.switchTiles();
-            this.currentMove.setMoveAnimation(this);
-            var srcTile = this.currentMove.getSrcTile();
-            var dstTile = this.currentMove.getDstTile();
-            var piece = this.currentMove.getPiece();
-            this.board.undoPieceMove(srcTile.getRow(), srcTile.getCol(), dstTile.getRow(), dstTile.getCol(), piece.getUnit());
+            this.resetMove();
         }
     } else if(this.state == Nodes.gameState.MOVE_ANIMATION && !this.currentPlayer.getIsBot()){
         this.gameSequence.setUndoOnQueue(true);
     }
+}
+
+Nodes.prototype.resetPlayerMoves = function () {
+    if(this.state == Nodes.gameState.PIECE_SELECTION)
+    {
+        var player = this.currentPlayer.getTeam();
+        if(this.gameSequence.canUndo(player))
+        {
+            this.gameSequence.setUndoPlayerMoves(true);
+            this.gameSequence.setUndo(true);
+            this.resetMove();
+        }else{
+            this.gameSequence.setUndoPlayerMoves(false);
+            this.currentMove = new Move(this.scene, null, null, null);
+            this.state = Nodes.gameState.PIECE_SELECTION;
+        }
+    }
+}
+
+Nodes.prototype.resetMove = function () {
+    this.deselectPieces();
+    this.currentMove = this.gameSequence.undoMove();
+    this.currentMove.switchTiles();
+    this.currentMove.setMoveAnimation(this);
+    var srcTile = this.currentMove.getSrcTile();
+    var dstTile = this.currentMove.getDstTile();
+    var piece = this.currentMove.getPiece();
+    this.board.undoPieceMove(srcTile.getRow(), srcTile.getCol(), dstTile.getRow(), dstTile.getCol(), piece.getUnit());
 }
 
 Nodes.prototype.deselectPieces = function () {

@@ -23,7 +23,7 @@ MyInterface.prototype.init = function(application) {
 	this.lightGroup=this.gui.addFolder('Lights');	
 	this.lightGroup.open();
 
-    this.undoGroup=this.gui.addFolder("UndoMoves");
+    this.undoGroup=this.gui.addFolder("Undo Options");
     this.undoGroup.open();
     this.undoGroup.add(this.scene, "Undo");
     this.undoGroup.add(this.scene, "ResetMoves");

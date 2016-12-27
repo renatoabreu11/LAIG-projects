@@ -7,6 +7,7 @@ function Sequence() {
     this.gameMoves = [];
     this.undo = false;
     this.undoOnQueue = false;
+    this.undoPlayerMoves = false;
     this.numberOfPlays = 0;
 }
 
@@ -41,6 +42,14 @@ Sequence.prototype.undoMove = function () {
 
 Sequence.prototype.getUndoOnQueue = function () {
     return this.undoOnQueue;
+}
+
+Sequence.prototype.getUndoPlayerMoves = function () {
+    return this.undoPlayerMoves;
+}
+
+Sequence.prototype.setUndoPlayerMoves = function (value) {
+    this.undoPlayerMoves = value;
 }
 
 Sequence.prototype.setUndoOnQueue = function (value) {
