@@ -20,16 +20,33 @@ MyInterface.prototype.init = function(application) {
 
 	this.gui = new dat.GUI();
 
-	this.lightGroup=this.gui.addFolder('Lights');	
-	this.lightGroup.open();
+    this.gameGroup=this.gui.addFolder('Game Options');
+    this.gameGroup.add(this.scene, 'Mode', [ 'Player vs Player', 'Player vs Bot', 'Bot vs Bot' ] );
+    this.gameGroup.add(this.scene, 'Difficulty', [ 'Easy', 'Medium', 'None' ] );
+    this.gameGroup.add(this.scene, "StartGame");
+    this.gameGroup.open();
 
     this.undoGroup=this.gui.addFolder("Undo Options");
-    this.undoGroup.open();
+    this.undoGroup.close();
     this.undoGroup.add(this.scene, "Undo");
     this.undoGroup.add(this.scene, "ResetMoves");
 
+	this.lightGroup=this.gui.addFolder('Lights');	
+	this.lightGroup.close();
+
 	return true;
 };
+
+MyInterface.prototype.removeFolder = function(name) {
+    var folder = this.gui.__folders[name];
+    if (!folder) {
+        return;
+    }
+    folder.close();
+    this.gui.__ul.removeChild(folder.domElement.parentNode);
+    delete this.gui.__folders[name];
+    this.gui.onResize();
+}
 
 /**
  * AddLight to folder lightGroup
@@ -38,6 +55,13 @@ MyInterface.prototype.init = function(application) {
  */
 MyInterface.prototype.addLight = function(i, id){
 	this.lightGroup.add(this.scene.lightStatus, i, this.scene.lightStatus[i]).name(id);
+}
+
+MyInterface.prototype.addMovie = function(movies){
+    this.moviesGroup=this.gui.addFolder('Game Movies');
+    this.moviesGroup.add(this.scene, "Movie", movies);
+    this.moviesGroup.close();
+    this.moviesGroup.add(this.scene, "StartMovie");
 }
 
 /**

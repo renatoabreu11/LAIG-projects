@@ -22,6 +22,10 @@ Sequence.prototype.addMove = function (move) {
     this.numberOfPlays++;
 }
 
+Sequence.prototype.getMove = function (index) {
+    return this.gameMoves[index];
+}
+
 Sequence.prototype.canUndo = function (player) {
     if(this.numberOfPlays == 0)
         return false;
@@ -33,6 +37,10 @@ Sequence.prototype.canUndo = function (player) {
         return false;
 
     return true;
+}
+
+Sequence.prototype.getNumberOfPlays = function () {
+    return this.numberOfPlays;
 }
 
 Sequence.prototype.undoMove = function () {

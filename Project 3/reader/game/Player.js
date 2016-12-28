@@ -27,3 +27,7 @@ Player.prototype.getScore = function () {
 Player.prototype.getIsBot = function () {
     return this.isBot;
 }
+
+Player.prototype.setIsBot = function (value) {
+    this.isBot = value;
+}

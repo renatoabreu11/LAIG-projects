@@ -46,17 +46,18 @@ Tile.prototype.display = function (currentPlayer, currentMove, pickingMode) {
     this.scene.translate(-this.row, 0.03, this.col);
 
     if(this.piece != null) {
-        if(currentPlayer == this.piece.getColour() && pickingMode){
+        if(currentPlayer != null && currentPlayer.getTeam() == this.piece.getColour() && pickingMode){
             this.scene.registerForPick(this.scene.pickObjectID, this.piece);
             this.scene.pickObjectID++;
         }
         this.piece.display();
     }
 
-    if(currentMove.getPiece() != null && this.piece == null && this.element != "empty" && pickingMode){
-        this.scene.registerForPick(this.scene.pickObjectID, this);
-        this.scene.pickObjectID++;
-    }
+    if(currentMove != null)
+        if(currentMove.getPiece() != null && this.piece == null && this.element != "empty" && pickingMode){
+            this.scene.registerForPick(this.scene.pickObjectID, this);
+            this.scene.pickObjectID++;
+        }
     this.scene.setDefaultAppearance();
     this.scene.rotate(-90 * Math.PI / 180, 0, 1, 0);
     this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);

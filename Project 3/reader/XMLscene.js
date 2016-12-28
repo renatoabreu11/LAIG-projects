@@ -34,6 +34,11 @@ XMLscene.prototype.init = function (application) {
 	this.lightStatus = [];
 	this.undo = false;
 	this.resetMoves = false;
+	this.Mode = "Player vs Player";
+	this.Difficulty = "None";
+	this.startGame = false;
+    this.startMovie = false;
+    this.Movie = null;
 
     this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
     this.setUpdatePeriod(this.updatePeriod);
@@ -45,8 +50,50 @@ XMLscene.prototype.init = function (application) {
     this.transitionCam=null;
 
     this.nodes = new Nodes(this);
-    this.nodes.initializeGame("pvp", "easy");
 };
+
+XMLscene.prototype.addMovie = function (){
+
+    var movies = this.nodes.getSavedGames();
+    var nrMovies = movies.length;
+	this.interface.removeFolder("Game Movies")
+
+    var moviesNames = [];
+    for(var i = 0; i < movies.length; i++){
+		var name = movies[i].getName();
+		moviesNames.push(name);
+	}
+
+	this.Movie = moviesNames[nrMovies - 1];
+
+    this.interface.addMovie(moviesNames);
+}
+
+XMLscene.prototype.StartMovie = function (){
+    if(!this.startMovie && this.nodes.getState() == 0){
+    	this.nodes.initializeMovie(this.Movie);
+        this.startMovie = true;
+    }
+}
+
+XMLscene.prototype.StartGame = function (){
+    if(!this.startGame && this.nodes.getState() == 0){
+    	var mode;
+    	var difficulty;
+    	switch(this.Mode){
+			case "Player vs Player": mode = "pvp"; break;
+            case "Player vs Bot": mode = "pvc"; break;
+            case "Bot vs Bot": mode = "cvc"; break;
+		}
+        switch(this.Difficulty){
+            case "Easy": difficulty = "easy"; break;
+            case "Medium": difficulty = "medium"; break;
+            case "None": difficulty = "none"; break;
+        }
+        this.nodes.initializeGame(mode, difficulty);
+        this.startGame = false;
+    }
+}
 
 XMLscene.prototype.Undo = function (){
     if(!this.undo){
@@ -60,8 +107,6 @@ XMLscene.prototype.ResetMoves = function (){
         this.nodes.resetPlayerMoves();
         this.resetMoves = false;
 	}
-
-
 };
 
 /**
@@ -210,8 +255,9 @@ XMLscene.prototype.updateMaterials = function () {
 }
 
 XMLscene.prototype.update = function(currTime){
-    if(this.initialTime == 0)
+    if(this.initialTime == 0){
         this.initialTime = currTime;
+	}
 
     this.elapsedTime = (currTime - this.initialTime)/1000;
     this.nodes.update(currTime);
