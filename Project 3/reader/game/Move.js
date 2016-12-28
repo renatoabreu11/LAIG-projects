@@ -34,6 +34,11 @@ Move.prototype.getPiece = function () {
     return this.piece;
 }
 
+Move.prototype.setSrcTile = function (srcTile) {
+    this.srcTile = srcTile;
+    this.piece = this.srcTile.getPiece();
+}
+
 Move.prototype.getSrcTile = function () {
     return this.srcTile;
 }
@@ -48,11 +53,6 @@ Move.prototype.getAnimation = function () {
 
 Move.prototype.setDstTile = function (dest) {
     this.dstTile = dest;
-}
-
-Move.prototype.getCopy = function() {
-    var copy = new Move(this.scene,this.piece,this.src,this.dest);
-    return copy;
 }
 
 Move.prototype.switchTiles = function () {

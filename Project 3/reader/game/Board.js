@@ -66,7 +66,7 @@ Board.prototype.setBoard = function (encoded_board) {
     this.length = this.board.length;
 }
 
-Board.prototype.undoPieceMove = function (srcRow, srcCol, dstRow, dstCol, element) {
+Board.prototype.updatePiecePosition = function (srcRow, srcCol, dstRow, dstCol, element) {
     this.setElementAt(srcRow, srcCol, "space");
     this.setElementAt(dstRow, dstCol, element);
 }

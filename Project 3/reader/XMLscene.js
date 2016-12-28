@@ -72,7 +72,7 @@ XMLscene.prototype.addMovie = function (){
 XMLscene.prototype.StartMovie = function (){
     if(!this.startMovie && this.nodes.getState() == 0){
     	this.nodes.initializeMovie(this.Movie);
-        this.startMovie = true;
+        this.startMovie = false;
     }
 }
 

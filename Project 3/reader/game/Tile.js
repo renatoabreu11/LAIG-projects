@@ -23,6 +23,9 @@ Tile.prototype.constructor = Tile;
 
 Tile.prototype.setPiece = function (piece) {
     this.piece = piece;
+    if(this.piece != null)
+        this.element = this.piece.getUnit();
+    else this.element = "space";
 }
 
 Tile.prototype.getPiece = function () {

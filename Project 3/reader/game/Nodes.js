@@ -83,7 +83,7 @@ Nodes.prototype.initializeMovie = function (movieName) {
     for(var i = 0; i < this.savedGames.length; i++){
         if(this.savedGames[i].getName() == movieName){
             this.actualMovie = i;
-            this.savedGames.setMoveIndex(-1);
+            this.savedGames[i].setMoveIndex(-1);
             break;
         }
     }
@@ -196,9 +196,19 @@ Nodes.prototype.updateMovie = function () {
     }
 
     this.currentMove = movie.getCurrentMove();
+    var src = this.currentMove.getSrcTile();
+    var dst = this.currentMove.getDstTile();
+    var srcCoords = src.getCoordinatesAsString();
+    var dstCoords = dst.getCoordinatesAsString();
+    var newSrc = this.getTileFromCoords(srcCoords);
+    var newDst = this.getTileFromCoords(dstCoords);
+    this.currentMove.setSrcTile(newSrc);
+    this.currentMove.setDstTile(newDst);
     this.currentMove.chooseAnimation();
     this.currentMove.piece.setAnimation(this.currentMove.animation);
     this.currentMove.timer = this.elapsedTime;
+
+    this.board.updatePiecePosition(newSrc.getRow(), newSrc.getCol(), newDst.getRow(), newDst.getCol(), newSrc.getPiece().getUnit());
 }
 
 /**
@@ -279,7 +289,6 @@ Nodes.prototype.switchPlayer = function () {
 };
 
 Nodes.prototype.nextMove = function () {
-    this.currentMove.movePiece();
     if(this.currentMove.isGameOver()){
         this.state = Nodes.gameState.END_GAME;
         return;
@@ -351,7 +360,7 @@ Nodes.prototype.resetMove = function () {
     var srcTile = this.currentMove.getSrcTile();
     var dstTile = this.currentMove.getDstTile();
     var piece = this.currentMove.getPiece();
-    this.board.undoPieceMove(srcTile.getRow(), srcTile.getCol(), dstTile.getRow(), dstTile.getCol(), piece.getUnit());
+    this.board.updatePiecePosition(srcTile.getRow(), srcTile.getCol(), dstTile.getRow(), dstTile.getCol(), piece.getUnit());
 }
 
 Nodes.prototype.deselectPieces = function () {
@@ -427,12 +436,9 @@ Nodes.prototype.update = function(currTime) {
         if(diff > this.currentMove.getAnimation().getSpan()) {
             this.currentMove.getPiece().setAnimation(null);
             if(!this.gameSequence.getUndo()) {
-                //aqui é passado como referência e por isso alterações futuras vão mudar isto, é necessário passar um clone do objeto.
-                //ao mudar isso também deve ser preciso atualizar umas coisas no undo e reset move
-                //Vê isto e depois termina a parte do movie, penso que esteja quase feita.
-                this.gameSequence.addMove(this.currentMove.getCopy());
-                console.log(this.gameSequence.getMove(0))
+                this.gameSequence.addMove(this.currentMove);
             }
+            this.currentMove.movePiece();
             this.nextMove();
         } else {
             this.currentMove.display(diff);
