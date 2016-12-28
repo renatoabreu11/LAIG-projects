@@ -393,7 +393,7 @@ Nodes.prototype.display= function(){
 
 Nodes.prototype.saveGame = function () {
     var index = this.savedGames.length + 1;
-    var saveGame = new Save(this.gameSequence, null, this.player1, this.player2, this.mode, this.difficulty, index);
+    var saveGame = new Save(this.gameSequence, null, this.mode, this.difficulty, index);
     this.savedGames.push(saveGame);
     this.scene.addMovie();
     this.pieces = [];

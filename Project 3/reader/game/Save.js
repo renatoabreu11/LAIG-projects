@@ -3,12 +3,10 @@
  * @constructor
  */
 
-function Save(gameSequence, winner, player1, player2, mode, diff, index) {
+function Save(gameSequence, winner, mode, diff, index) {
     this.name = "movie" + index;
     this.sequence = gameSequence;
     this.moveIndex = -1;
-    this.player1 = player1;
-    this.player2 = player2;
     this.winner = winner;
     this.mode = mode;
     this.difficulty = diff;
@@ -26,6 +24,10 @@ Save.prototype.getName = function () {
 
 Save.prototype.getCurrentMove = function () {
     return this.sequence.getMove(this.moveIndex);
+}
+
+Save.prototype.getWinner = function () {
+    return this.winner;
 }
 
 Save.prototype.getMoveSequence = function () {
