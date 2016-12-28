@@ -39,6 +39,8 @@ XMLscene.prototype.init = function (application) {
 	this.startGame = false;
     this.startMovie = false;
     this.Movie = null;
+	this.player1 = [ 0, 128, 255, 0.3 ];
+	this.player2 = [ 0, 128, 255, 0.3 ];
 
     this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
     this.setUpdatePeriod(this.updatePeriod);
@@ -260,7 +262,7 @@ XMLscene.prototype.update = function(currTime){
 	}
 
     this.elapsedTime = (currTime - this.initialTime)/1000;
-    this.nodes.update(currTime);
+    this.nodes.update(currTime, this.player1, this.player2);
 }
 
 XMLscene.prototype.logPicking = function ()

@@ -44,8 +44,8 @@ function Nodes(scene) {
     this.gameSequence = null;
     this.currentMove = null;
 
-    this.player1 = new Player("blue",0, false);
-    this.player2 = new Player("red",0, false);
+    this.player1 = new Player("blue",0, false, scene);
+    this.player2 = new Player("red",0, false, scene);
     this.currentPlayer = null;
 
     this.elapsedTime = 0;
@@ -384,7 +384,7 @@ Nodes.prototype.display= function(){
         var pickingMode = false;
         if(this.state == Nodes.gameState.PIECE_SELECTION)
             pickingMode = true;
-
+        this.player1.getAppear().apply();
         this.tiles[i].display(this.currentPlayer, this.currentMove, pickingMode);
     }
 
@@ -410,11 +410,14 @@ Nodes.prototype.saveGame = function () {
 };
 
 
-Nodes.prototype.update = function(currTime) {
+Nodes.prototype.update = function(currTime, player1, player2) {
     if (this.initialTime == 0) {
         this.initialTime = currTime;
     }
     this.elapsedTime = (currTime - this.initialTime)/1000;
+
+    this.player1.updateAppear(player1);
+    this.player2.updateAppear(player2);
 
     if(this.state == Nodes.gameState.END_GAME){
         this.saveGame();
