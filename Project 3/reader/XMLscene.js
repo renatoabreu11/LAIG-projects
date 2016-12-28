@@ -53,6 +53,8 @@ XMLscene.prototype.init = function (application) {
     this.transitionCam=null;
 
     this.nodes = new Nodes(this);
+
+    this.marker = new InfoMarker(this);
 };
 
 XMLscene.prototype.updateTurnTime = function () {
@@ -329,7 +331,9 @@ XMLscene.prototype.display = function () {
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
-    this.nodes.display();
+    //this.nodes.display();
+    this.marker.updateTime(this.elapsedTime);
+    this.marker.display();
 /*
     if (this.graph.loadedOk){
 		this.updateLights();
