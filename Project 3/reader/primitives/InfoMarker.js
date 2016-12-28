@@ -2,6 +2,7 @@ function InfoMarker(scene){
 	CGFobject.call(this,scene);
 
 	this.rect = new Rectangle(scene,-3,3,3,-3);
+	this.circle = new Circle (scene,.5,8);
 	this.time = {hours : 0, minutes : 0, seconds : 0 };
 	this.numbersTextures = [];
 
@@ -59,18 +60,31 @@ InfoMarker.prototype.display = function () {
 	this.scene.rotate(Math.PI,0,1,0);
 	this.rect.display();
 	this.scene.popMatrix();
-
 	
 	// ------------------ time (on z+) ------------------
+	var offset=0;
 	for(i=0; i<6; i++){
 		this.scene.pushMatrix(); //hours 1
-		this.scene.scale(1/2,1,1);
-		this.scene.translate(-15+i*6,0,3);
+		this.scene.scale(2/5,1,1);
+		this.scene.translate(-19.5+offset,0,3);
 		this.scene.rotate(Math.PI,0,1,0);
 		this.applyNumber(i);
 		this.rect.display();
 		this.scene.popMatrix();
+		offset+=6;
+		if(i%2 == 1)
+			offset+=4.5;
 	}
+
+	// ------------------ time points (on z+) ------------------
+	this.boxAppearance.apply();
+	for(i=-1; i<=1; i+=2)
+		for(j=-1; j<=1; j+=2){
+			this.scene.pushMatrix();
+			this.scene.translate(j*3.2,i*1.8,3);
+			this.circle.display();
+			this.scene.popMatrix();
+		}
 }
 
 InfoMarker.prototype.updateTime = function(time) {

@@ -116,6 +116,10 @@ XMLscene.prototype.ResetMoves = function (){
 	}
 };
 
+XMLscene.prototype.getElapsedTime = function() {
+	return this.elapsedTime;
+}
+
 /**
  * Sets scene appearance to default
  */
