@@ -109,8 +109,8 @@ Move.prototype.chooseAnimation = function(){
     var direction;
     if(xDif==0){ //move Z
         if(zDif<0)
-            direction="Z-";
-        else direction="Z+";
+            direction="Z+";
+        else direction="Z-";
     } else { //move X
         if(xDif<0)
             direction="X+";

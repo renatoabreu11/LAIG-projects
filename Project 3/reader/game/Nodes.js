@@ -377,7 +377,7 @@ Nodes.prototype.display= function(){
         this.board.display();
 
     this.scene.pushMatrix();
-    this.scene.translate(4, 0, -4);
+    this.scene.translate(4, 0, 4);
     for(var i = 0; i < this.tiles.length; i++){
         this.cellAppearance.apply();
 

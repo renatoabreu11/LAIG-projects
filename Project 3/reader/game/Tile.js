@@ -46,7 +46,7 @@ Tile.prototype.getCoordinatesAsString = function () {
 
 Tile.prototype.display = function (currentPlayer, currentMove, pickingMode, player1, player2) {
     this.scene.pushMatrix();
-    this.scene.translate(-this.row, 0.03, this.col);
+    this.scene.translate(-this.row, 0.03, -this.col);
 
     if(this.piece != null) {
         if(currentPlayer != null && currentPlayer.getTeam() == this.piece.getColour() && pickingMode){
