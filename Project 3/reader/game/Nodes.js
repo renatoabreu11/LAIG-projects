@@ -430,7 +430,7 @@ Nodes.prototype.update = function(currTime) {
                 //aqui é passado como referência e por isso alterações futuras vão mudar isto, é necessário passar um clone do objeto.
                 //ao mudar isso também deve ser preciso atualizar umas coisas no undo e reset move
                 //Vê isto e depois termina a parte do movie, penso que esteja quase feita.
-                this.gameSequence.addMove(this.currentMove);
+                this.gameSequence.addMove(this.currentMove.getCopy());
                 console.log(this.gameSequence.getMove(0))
             }
             this.nextMove();

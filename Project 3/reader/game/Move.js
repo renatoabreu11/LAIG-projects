@@ -50,6 +50,11 @@ Move.prototype.setDstTile = function (dest) {
     this.dstTile = dest;
 }
 
+Move.prototype.getCopy = function() {
+    var copy = new Move(this.scene,this.piece,this.src,this.dest);
+    return copy;
+}
+
 Move.prototype.switchTiles = function () {
     var aux = this.srcTile;
     this.srcTile = this.dstTile;
