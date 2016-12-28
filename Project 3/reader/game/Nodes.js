@@ -55,7 +55,7 @@ function Nodes(scene) {
     this.cellAppearance.loadTexture('../res/transparent.png');
 
     this.highlightAppearance = new CGFappearance(this.scene);
-    this.highlightAppearance.loadTexture('../res/ice.png');
+    this.highlightAppearance.loadTexture('../res/ice.jpg');
 }
 
 /**
