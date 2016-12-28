@@ -16,7 +16,11 @@ uniform float sv;
 
 void main() {
     vec4 resultantColour;
+    vec4 color = texture2D(uSampler, vTextureCoord);
 
-	vec4 color = texture2D(uSampler, vTextureCoord);
-	gl_FragColor = color;
+    if(isSelected == 0.00)
+        resultantColour = cs;
+    else resultantColour = color;
+
+	gl_FragColor = color * resultantColour;
 }

@@ -52,7 +52,7 @@ function Nodes(scene) {
     this.initialTime = 0;
 
     this.cellAppearance = new CGFappearance(this.scene);
-    this.cellAppearance.loadTexture('../res/ice.jpg');
+    this.cellAppearance.loadTexture('../res/transparent.png');
 }
 
 /**
