@@ -19,11 +19,19 @@ uniform float du;
 uniform float dv;
 uniform float su;
 uniform float sv;
+uniform float radius;
 
 uniform float normScale;
 
 void main() {
-    vec3 offset = vec3(0.0, 0.0, 0.0);
-    vTextureCoord = aTextureCoord;
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+offset, 1.0);
+        vTextureCoord = aTextureCoord;
+        coords = vec2(aTextureCoord.x*du, aTextureCoord.y*dv);
+        vec2 indexCoords = coords;
+        if(su != -1.0 && sv != -1.0){
+                if(indexCoords.x >= (su - 0.55) && indexCoords.x <= (su + 0.55) && indexCoords.y >= (sv - 0.55) && indexCoords.y <= (sv + 0.55)){
+                    isSelected = 0.0;
+                }
+                else isSelected = 1.0;
+        } else isSelected = 1.0;
+    	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 }

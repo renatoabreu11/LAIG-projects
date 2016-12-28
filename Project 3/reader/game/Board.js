@@ -17,8 +17,8 @@ function Board(scene, encoded_board) {
     du=10;
     dv=10;
 
-    su=-1;
-    sv=-1;
+    su=7;
+    sv=5;
 
     this.nodesAppearance = new CGFappearance(this.scene);
     this.nodesAppearance.loadTexture('../res/nodesboard.png');
@@ -30,7 +30,7 @@ function Board(scene, encoded_board) {
         du: du,
         dv: dv,
         su: su,
-        sv: sv
+        sv: sv,
     });
 }
 

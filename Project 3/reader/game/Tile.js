@@ -64,7 +64,8 @@ Tile.prototype.display = function (currentPlayer, currentMove, pickingMode, play
             this.scene.registerForPick(this.scene.pickObjectID, this);
             this.scene.pickObjectID++;
         }
-    this.scene.setDefaultAppearance();
+
+    this.scene.nodes.cellAppearance.apply();
     this.scene.rotate(-90 * Math.PI / 180, 0, 1, 0);
     this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);
     this.object.display();
