@@ -41,6 +41,7 @@ XMLscene.prototype.init = function (application) {
     this.Movie = null;
 	this.player1 = "#00BFFF";
 	this.player2 = "#32CD32";
+	this.TurnTime = 60;
 
     this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
     this.setUpdatePeriod(this.updatePeriod);
@@ -53,6 +54,10 @@ XMLscene.prototype.init = function (application) {
 
     this.nodes = new Nodes(this);
 };
+
+XMLscene.prototype.updateTurnTime = function () {
+	//update using this.TurnTime
+}
 
 XMLscene.prototype.addMovie = function (){
 

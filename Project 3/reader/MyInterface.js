@@ -24,6 +24,7 @@ MyInterface.prototype.init = function(application) {
     this.gameGroup.add(this.scene, 'Mode', [ 'Player vs Player', 'Player vs Bot', 'Bot vs Bot' ] );
     this.gameGroup.add(this.scene, 'Difficulty', [ 'Easy', 'Medium', 'None' ] );
     this.gameGroup.add(this.scene, "StartGame");
+    var controller = this.gameGroup.add(this.scene, 'TurnTime', 30, 120);
     this.gameGroup.addColor(this.scene, 'player1');
     this.gameGroup.addColor(this.scene, 'player2');
     this.gameGroup.open();
@@ -35,6 +36,10 @@ MyInterface.prototype.init = function(application) {
 
 	this.lightGroup=this.gui.addFolder('Lights');	
 	this.lightGroup.close();
+
+    controller.onFinishChange(function() {
+        this.scene.updateTurnTime();
+    });
 
 	return true;
 };
