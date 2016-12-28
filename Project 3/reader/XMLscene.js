@@ -57,8 +57,8 @@ XMLscene.prototype.init = function (application) {
     this.marker = new InfoMarker(this);
 };
 
-XMLscene.prototype.updateTurnTime = function () {
-	//update using this.TurnTime
+XMLscene.prototype.updateTurnTime = function (turntime) {
+	this.TurnTime=turntime;
 }
 
 XMLscene.prototype.addMovie = function (){

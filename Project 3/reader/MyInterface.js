@@ -37,8 +37,8 @@ MyInterface.prototype.init = function(application) {
 	this.lightGroup=this.gui.addFolder('Lights');	
 	this.lightGroup.close();
 
-    controller.onFinishChange(function() {
-        this.scene.updateTurnTime();
+    controller.onFinishChange(function(n) {
+        this.scene.updateTurnTime(Math.round(n));
     });
 
 	return true;
