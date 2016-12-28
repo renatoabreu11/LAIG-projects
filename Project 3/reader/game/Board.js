@@ -11,26 +11,12 @@ function Board(scene, encoded_board) {
     this.plBoardParser(encoded_board);
     this.length = this.board.length;
 
-    colourS = vec4.create();
-    vec4.set(colourS, 1, 0, 0, 1);
-
-    du=10;
-    dv=10;
-
-    su=7;
-    sv=5;
-
     this.nodesAppearance = new CGFappearance(this.scene);
     this.nodesAppearance.loadTexture('../res/nodesboard.png');
-    this.nodesBoard = new Plane(this.scene, du, dv, 31, 31);
+    this.nodesBoard = new Plane(this.scene, 10, 10, 31, 31);
     this.boardShader = new CGFshader(this.scene.gl, "shaders/nodesboard.vert", "shaders/nodesboard.frag");
     this.boardShader.setUniformsValues({
         uSampler2: 1,
-        cs: colourS,
-        du: du,
-        dv: dv,
-        su: su,
-        sv: sv,
     });
 }
 

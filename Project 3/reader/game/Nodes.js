@@ -53,6 +53,9 @@ function Nodes(scene) {
 
     this.cellAppearance = new CGFappearance(this.scene);
     this.cellAppearance.loadTexture('../res/transparent.png');
+
+    this.highlightAppearance = new CGFappearance(this.scene);
+    this.highlightAppearance.loadTexture('../res/ice.png');
 }
 
 /**
@@ -352,7 +355,17 @@ Nodes.prototype.selectPiece = function (obj) {
 }
 
 Nodes.prototype.highlightTiles = function (validMoves) {
-    console.log(validMoves);
+    var tiles = [];
+    for(var i = 0; i < validMoves.length; i++){
+        var tile = this.getTileFromCoords(validMoves[i]);
+        if(tile != false)
+            tiles.push(tile);
+    }
+
+    console.log(validMoves)
+    for(tile of tiles){
+       tile.setHighlight(true);
+    }
 }
 
 Nodes.prototype.undoLastMove = function () {
@@ -413,11 +426,11 @@ Nodes.prototype.display= function(){
     this.scene.pushMatrix();
     this.scene.translate(4, 0, 4);
     for(var i = 0; i < this.tiles.length; i++){
-        this.cellAppearance.apply();
 
         var pickingMode = false;
         if(this.state == Nodes.gameState.PIECE_SELECTION)
             pickingMode = true;
+
         this.tiles[i].display(this.currentPlayer, this.currentMove, pickingMode, this.player1, this.player2);
     }
 
@@ -548,4 +561,5 @@ Nodes.prototype.getTileFromCoords = function (coords) {
         if(this.tiles[i].getCoordinatesAsString() == coords)
             return this.tiles[i];
     }
+    return false;
 }

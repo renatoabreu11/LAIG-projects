@@ -10,6 +10,7 @@ function Tile(scene, element, row, col) {
     this.element = element; // space, empty or unit name
     this.row = row;
     this.col = col;
+    this.highlight = false;
 
     this.object = new Circle(this.scene, 0.4, 12);
 }
@@ -34,6 +35,14 @@ Tile.prototype.getPiece = function () {
 
 Tile.prototype.getRow = function () {
     return this.row;
+}
+
+Tile.prototype.getHighlight = function () {
+    return this.highlight;
+}
+
+Tile.prototype.setHighlight = function (value) {
+    this.highlight = value;
 }
 
 Tile.prototype.getCol = function () {
@@ -65,7 +74,9 @@ Tile.prototype.display = function (currentPlayer, currentMove, pickingMode, play
             this.scene.pickObjectID++;
         }
 
-    this.scene.nodes.cellAppearance.apply();
+    if(this.highlight)
+        this.scene.nodes.highlightAppearance.apply();
+    else this.scene.nodes.cellAppearance.apply();
     this.scene.rotate(-90 * Math.PI / 180, 0, 1, 0);
     this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);
     this.object.display();
