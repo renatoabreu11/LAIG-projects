@@ -129,3 +129,7 @@ parse_input(endGame(FinalBoard, Player),f).
 %attempt to move piece
 parse_input(pickMove(Difficulty, Board, Player), {FinalBoard; [NodeRowI-NodeColI, NodeRowF-NodeColF]; BestMove}) :-
 	pickMove(Difficulty, Board, FinalBoard, Player, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove).
+
+%get valid movements
+parse_input(getPieceMoves(Board, PieceRow, PieceCol), Moves) :-
+	getPieceMoves(Board, PieceRow, PieceCol, Moves).

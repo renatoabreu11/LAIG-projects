@@ -321,6 +321,40 @@ Nodes.prototype.nextMove = function () {
         this.currentMove = new Move(this.scene, null, null, null);
 }
 
+Nodes.prototype.selectPiece = function (obj) {
+    var currentPiece = this.currentMove.getPiece();
+
+    var pieceSelection = false;
+
+    if(currentPiece == null){
+        pieceSelection = true;
+    } else if(obj != currentPiece){
+        currentPiece.deselect();
+        pieceSelection = true;
+    }
+
+    if(pieceSelection)
+    {
+        obj.select();
+        this.currentMove.setPiece(obj);
+        console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + ")");
+
+        var tile = this.currentMove.getSrcTile();
+        var request = "getPieceMoves(" + this.board.toPrologStruct() + "," + tile.getRow() + "," + tile.getCol() + ")";
+        var own = this;
+        this.client.makeRequest(request, function(data) {
+            var response = data.target.response;
+            response = response.substr(1, response.length - 2);
+            var info = response.split(",");
+            own.highlightTiles(info);
+        });
+    }
+}
+
+Nodes.prototype.highlightTiles = function (validMoves) {
+    console.log(validMoves);
+}
+
 Nodes.prototype.undoLastMove = function () {
     if(this.state == Nodes.gameState.PIECE_SELECTION)
     {

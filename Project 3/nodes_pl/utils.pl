@@ -54,6 +54,11 @@ listLength([_|Tail], Counter, Length):-
     NewLength is Counter + 1,
     listLength(Tail, NewLength, Length).
 
+flatten([],[]).
+flatten([L|Ls], Flat) :-
+    flatten(Ls,FlatTmp),
+    append(L,FlatTmp,Flat).
+
 % Gives the list with the matrix elements that satisfies the belongsTo rule accordingly to it's owner
 getMatrixElements([], [], _, _).
 getMatrixElements([Head|Tail], Units, Owner, Row) :-

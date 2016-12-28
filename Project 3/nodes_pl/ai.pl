@@ -31,6 +31,28 @@ pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, BestM
     getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF).
 
 
+getPieceMoves(Board, PieceRow, PieceCol, Moves):-
+    getNodeCoordinates(Board, blue, BlueNodeRow-BlueNodeCol), 
+    getNodeCoordinates(Board, red, RedNodeRow-RedNodeCol),
+    getMatrixElements(Board, Cells, space, 0),
+    findall(Coords, (
+        tryMove(Board, Cells, BlueNodeRow-BlueNodeCol, RedNodeRow-RedNodeCol, PieceRow-PieceCol, DestRow-DestCol, _),
+        appendCoordinates(DestRow-DestCol, Coords)),
+    ValidMoves),
+    flatten(ValidMoves, Moves).
+
+
+
+%Validates a movement
+tryMove(Board, Cells, BlueNodeRow-BlueNodeCol, RedNodeRow-RedNodeCol, Row-Col, DestRow-DestCol, Piece):-
+    getMatrixElement(Board, Row, Col, Piece),
+    getElement(Cells, DestRow, DestCol),
+    checkCommunicationLines(Row, Col, BlueNodeRow, BlueNodeCol, RedNodeRow, RedNodeCol, Board),
+    if1(
+        isJump(Row, Col, DestRow, DestCol, Board),
+        true,
+        validateMovement(Row,Col,DestRow,DestCol)).
+
 /*
 *************************** OTHER PREDICATES ***************************
 */
@@ -68,6 +90,7 @@ tryMove(Board, Units, Cells, BlueNodeRow-BlueNodeCol, RedNodeRow-RedNodeCol, Row
 		validateMovement(Row,Col,DestRow,DestCol)).
 
 appendCoordinates(Row-Col, DestRow-DestCol, [Row-Col, DestRow-DestCol]).
+appendCoordinates(DestRow-DestCol, [DestRow-DestCol]).
 
 %To the move passed [SrcRow-SrcCol, DestRow-DestCol], applies the move and updates de board
 applyMove(Board, [SrcRow-SrcCol, DestRow-DestCol], FinalBoard):-
