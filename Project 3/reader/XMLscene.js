@@ -279,20 +279,9 @@ XMLscene.prototype.logPicking = function ()
                 var obj = this.pickResults[i][0];
                 if (obj) {
                     var customId = this.pickResults[i][1];
-                    var currentPiece = this.nodes.getCurrentMove().getPiece();
 
-                    //select a piece when no piece is selected
-                    if(currentPiece == null){
-                        obj.select();
-                        this.nodes.getCurrentMove().setPiece(obj);
-                        console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
-                    
-                    } else if (obj instanceof Piece && obj != currentPiece){ //select a new piece
-                        console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + "), with pick id " + customId);
-                        currentPiece.deselect();
-                        obj.select();
-                        this.nodes.getCurrentMove().setPiece(obj);
-                    
+                    if (obj instanceof Piece){
+                        this.nodes.selectPiece(obj);
                     } else if (obj instanceof Tile) { //select a destination
                         console.log("Picked object: Tile, Location: (" + obj.row + "," + obj.col + "), with pick id " + customId);
                         this.nodes.tryMovement(obj);

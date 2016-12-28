@@ -3,6 +3,7 @@
 :- include('display.pl').
 :- include('menu.pl').
 :- include('ai.pl').
+:- use_module(library(lists)).
 :- use_module(library(random)).
 
 player(blue).
