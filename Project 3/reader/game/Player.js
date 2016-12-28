@@ -10,10 +10,7 @@ function Player(team, score, isBot, scene) {
 
     var currAppear = null;
     this.playerAppear = new CGFappearance(scene);
-    this.playerAppear.setAmbient(0.3, 0.3, 0.3, 1);
-    this.playerAppear.setDiffuse(0.3, 0.3, 0.3, 1);
-    this.playerAppear.setSpecular(0.6, 0.6, 0.6, 1);
-    this.playerAppear.setShininess(10);
+    this.playerAppear.setShininess(50);
 }
 
 /**
@@ -31,6 +28,16 @@ Player.prototype.getAppear = function () {
     return this.playerAppear;
 }
 
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+}
+
+
 Player.prototype.updateAppear = function (appear) {
     var equal = true;
     if(this.currAppear == null){7
@@ -38,21 +45,18 @@ Player.prototype.updateAppear = function (appear) {
         equal = false;
     }
     else{
-        for(var i = 0; i < this.currAppear.length; i++){
-            if(this.currAppear[i] != appear[i]){
-                equal = false;
-                break;
-            }
-        }
+        if(this.currAppear != appear)
+            equal = false;
     }
     if(!equal){
-        var r = appear[0] /  255 ;
-        var g = appear[1] /  255 ;
-        var b = appear[2] /  255 ;
-        var a = appear[3] /  255 ;
-        this.playerAppear.setAmbient(r, g, b, a);
-        this.playerAppear.setDiffuse(r, g, b, a);
-        this.playerAppear.setSpecular(r, g, b, a);
+        this.currAppear = appear;
+        var rgb = hexToRgb(appear);
+        var r = rgb.r /  255 ;
+        var g = rgb.g /  255 ;
+        var b = rgb.b /  255 ;
+        this.playerAppear.setAmbient(r, g, b, 0.2);
+        this.playerAppear.setDiffuse(r, g, b, 0.2);
+        this.playerAppear.setSpecular(r, g, b, 0.2);
     }
 }
 

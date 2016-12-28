@@ -39,8 +39,8 @@ XMLscene.prototype.init = function (application) {
 	this.startGame = false;
     this.startMovie = false;
     this.Movie = null;
-	this.player1 = [ 0, 128, 255, 0.3 ];
-	this.player2 = [ 0, 128, 255, 0.3 ];
+	this.player1 = "#00BFFF";
+	this.player2 = "#32CD32";
 
     this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
     this.setUpdatePeriod(this.updatePeriod);

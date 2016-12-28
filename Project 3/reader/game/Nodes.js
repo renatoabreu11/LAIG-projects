@@ -384,8 +384,7 @@ Nodes.prototype.display= function(){
         var pickingMode = false;
         if(this.state == Nodes.gameState.PIECE_SELECTION)
             pickingMode = true;
-        this.player1.getAppear().apply();
-        this.tiles[i].display(this.currentPlayer, this.currentMove, pickingMode);
+        this.tiles[i].display(this.currentPlayer, this.currentMove, pickingMode, this.player1, this.player2);
     }
 
     this.scene.popMatrix();
@@ -416,8 +415,10 @@ Nodes.prototype.update = function(currTime, player1, player2) {
     }
     this.elapsedTime = (currTime - this.initialTime)/1000;
 
-    this.player1.updateAppear(player1);
-    this.player2.updateAppear(player2);
+    if(this.state != Nodes.gameState.MOVIE){
+        this.player1.updateAppear(player1);
+        this.player2.updateAppear(player2);
+    }
 
     if(this.state == Nodes.gameState.END_GAME){
         this.saveGame();
