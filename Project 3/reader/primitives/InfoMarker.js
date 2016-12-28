@@ -165,16 +165,22 @@ InfoMarker.prototype.displayScore = function(player){
 }
 
 InfoMarker.prototype.updateTime = function() {
+	//check if should display timer or not
 	var nodes = this.scene.nodes;
 	if(nodes.getState() == Nodes.gameState.END_GAME || nodes.getState() == Nodes.gameState.END_TURN || nodes.getState() == Nodes.gameState.MENU || nodes.getState() == Nodes.gameState.MOVIE)
 		this.startTime=-1;
 	else if(this.startTime==-1)
 		this.startTime=this.scene.getElapsedTime() + this.scene.getTurnTime();
 
+	//set time
 	var time;
 	if(this.startTime==-1)
 		time=0;
 	else time =  this.startTime - this.scene.getElapsedTime();
+
+	//check for when timer is out
+	if(time<0)
+		time=0;
 
 
 	var timeS = Math.trunc(time);
