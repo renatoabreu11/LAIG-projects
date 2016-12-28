@@ -61,6 +61,10 @@ XMLscene.prototype.updateTurnTime = function (turntime) {
 	this.TurnTime=turntime;
 }
 
+XMLscene.prototype.getTurnTime = function (turntime) {
+	return this.TurnTime;
+}
+
 XMLscene.prototype.addMovie = function (){
 
     var movies = this.nodes.getSavedGames();
@@ -334,7 +338,6 @@ XMLscene.prototype.display = function () {
     this.nodes.display();
     this.translate(-5,5,5);
     this.rotate(3*Math.PI/4,0,1,0);
-    this.marker.updateTime(this.elapsedTime);
     this.marker.display();
     this.rotate(Math.PI,0,1,0);
 /*

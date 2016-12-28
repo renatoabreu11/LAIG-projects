@@ -3,6 +3,7 @@ function InfoMarker(scene){
 
 	this.rect = new Rectangle(scene,-3,3,3,-3);
 	this.time = {hours : 0, minutes : 0, seconds : 0 };
+	this.startTime=-1;
 
 	this.boxAppearance = new CGFappearance(this.scene);
 	this.boxAppearance.loadTexture('../res/ice.jpg');
@@ -26,6 +27,9 @@ InfoMarker.prototype = Object.create(CGFobject.prototype);
 InfoMarker.prototype.constructor=InfoMarker;
 
 InfoMarker.prototype.display = function () {
+	this.updateTime();
+
+
 	this.scene.pushMatrix();
 	this.scene.scale(.25,.25,.25);
 	
@@ -160,7 +164,19 @@ InfoMarker.prototype.displayScore = function(player){
 	this.scene.popMatrix();
 }
 
-InfoMarker.prototype.updateTime = function(time) {
+InfoMarker.prototype.updateTime = function() {
+	var nodes = this.scene.nodes;
+	if(nodes.getState() == Nodes.gameState.END_GAME || nodes.getState() == Nodes.gameState.END_TURN || nodes.getState() == Nodes.gameState.MENU || nodes.getState() == Nodes.gameState.MOVIE)
+		this.startTime=-1;
+	else if(this.startTime==-1)
+		this.startTime=this.scene.getElapsedTime() + this.scene.getTurnTime();
+
+	var time;
+	if(this.startTime==-1)
+		time=0;
+	else time =  this.startTime - this.scene.getElapsedTime();
+
+
 	var timeS = Math.trunc(time);
 	this.time.seconds = timeS % 60;
 
