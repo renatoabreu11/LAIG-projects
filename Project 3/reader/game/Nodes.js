@@ -71,10 +71,6 @@ function Nodes(scene) {
     });
 }
 
-/**
- *
- * @type {Nodes}
- */
 Nodes.prototype = Object.create(CGFobject.prototype);
 Nodes.prototype.constructor = Nodes;
 
@@ -85,7 +81,7 @@ Nodes.prototype.constructor = Nodes;
  */
 Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
-    this.client.makeRequest("getInitialBoard", function(data){
+    this.client.makeRequest("getFinalBoard", function(data){
         nodes.initializeBoard(data);
         nodes.startGame(mode, difficulty);
     });
@@ -106,7 +102,8 @@ Nodes.prototype.initializeMovie = function (movieName) {
     var nodes = this;
 
     this.client.makeRequest("getFinalBoard", function(data){
-        nodes.state = Nodes.gameState.MOVIE;
+        nodes.playState = Nodes.playState.NONE;
+        nodes.gameState = Nodes.gameState.MOVIE;
         nodes.initializeBoard(data);
         nodes.updateMovie();
     });
@@ -163,7 +160,8 @@ Nodes.prototype.startGame = function (mode, difficulty) {
     if (mode == "pvp") {
         this.mode = Nodes.mode.PvP;
         this.difficulty = Nodes.difficulty.NONE;
-        this.state = Nodes.gameState.PIECE_SELECTION;
+        this.playState = Nodes.playState.PIECE_SELECTION;
+        this.gameState = Nodes.gameState.PLAY;
         this.player1.setIsBot(false);
         this.player2.setIsBot(false);
     } else if (mode == "pvc") {
@@ -175,10 +173,12 @@ Nodes.prototype.startGame = function (mode, difficulty) {
 
         this.player1.setIsBot(false);
         this.player2.setIsBot(true);
-        this.state = Nodes.gameState.PIECE_SELECTION;
+        this.playState = Nodes.playState.PIECE_SELECTION;
+        this.gameState = Nodes.gameState.PLAY;
     } else if (mode == "cvc") {
         this.mode = Nodes.mode.CvC;
-        this.state = Nodes.gameState.AI_TURN;
+        this.playState = Nodes.playState.AI_TURN;
+        this.gameState = Nodes.gameState.PLAY;
         if (difficulty == "easy")
             this.difficulty = Nodes.difficulty.EASY;
         else
@@ -203,12 +203,7 @@ Nodes.prototype.updateMovie = function () {
 
     var movieSequence = movie.getMoveSequence();
     if(movieSequence.getNumberOfPlays() == movie.getMoveIndex()){
-        this.state = Nodes.gameState.MENU;
-        this.actualMovie = null;
-        this.gameSequence = null;
-        this.currentMove = null;
-        this.pieces = [];
-        this.tiles = [];
+        this.resetMovie();
         return;
     }
 
@@ -229,119 +224,9 @@ Nodes.prototype.updateMovie = function () {
 }
 
 /**
- * Updates current move destiny tile, and then calls the function makeMove
- * @param dstTile
+ * Accordingly to the picking, selects a piece
+ * @param obj
  */
-Nodes.prototype.tryMovement = function (dstTile) {
-    this.currentMove.setDstTile(dstTile);
-    this.currentMove.makeMove(this.board, this.currentPlayer, this.client, this);
-}
-
-Nodes.prototype.parseMoveFromAI = function (info) {
-    this.board.setBoard(info[0]);
-
-    var nodesCoords = info[1].substr(1, info[1].length - 2);
-    var tileCoords = info[2].substr(1, info[2].length - 2);
-
-    var aux = tileCoords.split(",");
-    var srcCoords = aux[0];
-    var dstCoords = aux[1];
-
-    var srcTile = this.getTileFromCoords(srcCoords);
-    var dstTile = this.getTileFromCoords(dstCoords);
-    var piece = srcTile.getPiece();
-    piece.select();
-
-    this.currentMove.setPiece(piece);
-    this.currentMove.setDstTile(dstTile);
-    this.currentMove.setMoveAnimation(this);
-};
-
-Nodes.prototype.moveAI = function () {
-    var difficulty;
-    var board = this.board.toPrologStruct();
-    if(this.difficulty == Nodes.difficulty.EASY)
-        difficulty = "easy";
-    else difficulty = "medium";
-
-    var request = "pickMove(" + difficulty + "," + board + "," + this.currentPlayer.getTeam() + ")";
-
-    this.state = Nodes.gameState.REQUEST;
-    var own = this;
-    this.client.makeRequest(request, function(data) {
-        var response = data.target.response;
-        response = response.substr(1, response.length - 2);
-        var info = response.split(";");
-        own.parseMoveFromAI(info);
-    });
-}
-
-Nodes.prototype.switchPlayer = function () {
-    if(this.scene.transitionCam != null) //caso a transicao nao tenha acabado, nao permite iniciar uma nova
-        return;
-    transitionCam=[];
-    transitionCam["newCam"]=this.scene.graph.getNextView();
-    transitionCam["animation"]=this.scene.graph.animations[this.scene.graph.checkIfExists(this.scene.graph.animations, transitionCam["newCam"]["id"]=="player1" ? "camTransition1" : "camTransition2")];
-    transitionCam["finishTime"]=this.scene.elapsedTime+transitionCam["animation"].span;
-    this.scene.transitionCam=transitionCam;
-
-    if(this.currentPlayer == this.player1)
-        this.currentPlayer = this.player2;
-    else this.currentPlayer = this.player1;
-
-    //check if new user is in gameOver
-    var own = this;
-    var request = "endGame("+this.board.toPrologStruct()+","+this.currentPlayer.getTeam()+")";
-
-    this.client.makeRequest(request, function(data) {
-        var response = data.target.response;
-        if(response=="f"){
-            own.turnFinishingTime=own.elapsedTime+own.scene.getTurnTime();
-            if(own.currentPlayer.getIsBot())
-                own.state = Nodes.gameState.AI_TURN;
-            else own.state = Nodes.gameState.PIECE_SELECTION;
-        } else {
-            own.state = Nodes.gameState.END_GAME;
-        }
-    });
-};
-
-Nodes.prototype.nextMove = function () {
-    this.resetHighlights();
-
-    if(this.currentMove.isGameOver()){
-        this.state = Nodes.gameState.END_GAME;
-        return;
-    }
-    var movedPiece = this.currentMove.getPiece();
-    if(movedPiece.getType() == "Node"){
-        this.state = Nodes.gameState.END_TURN;
-        this.turnFinishingTime=-1;
-        this.gameSequence.setUndo(false);
-        this.gameSequence.setUndoOnQueue(false);
-        this.gameSequence.setUndoPlayerMoves(false);
-        this.switchPlayer();
-    } else{
-        if(this.currentPlayer.getIsBot())
-            this.state = Nodes.gameState.AI_TURN;
-        else
-            this.state = Nodes.gameState.PIECE_SELECTION;
-    }
-
-    this.currentMove.getPiece().setSelected(false);
-
-    if(this.gameSequence.getUndo())
-       this.gameSequence.setUndo(false);
-
-    if(this.gameSequence.getUndoOnQueue()){
-        this.gameSequence.setUndoOnQueue(false);
-        this.undoLastMove();
-    } else if(this.gameSequence.getUndoPlayerMoves())
-        this.resetPlayerMoves();
-    else
-        this.currentMove = new Move(this.scene, null, null, null);
-}
-
 Nodes.prototype.selectPiece = function (obj) {
     var currentPiece = this.currentMove.getPiece();
 
@@ -356,9 +241,8 @@ Nodes.prototype.selectPiece = function (obj) {
 
     if(pieceSelection)
     {
-        obj.select();
+        obj.setSelected(true);
         this.currentMove.setPiece(obj);
-        console.log("Picked object: " + obj.type + ", Location: (" + obj.tile.row + "," + obj.tile.col + ")");
 
         var tile = this.currentMove.getSrcTile();
         var request = "getPieceMoves(" + this.board.toPrologStruct() + "," + tile.getRow() + "," + tile.getCol() + ")";
@@ -372,6 +256,232 @@ Nodes.prototype.selectPiece = function (obj) {
     }
 }
 
+/**
+ * Updates current move destiny tile, and then calls the function makeMove
+ * @param dstTile
+ */
+Nodes.prototype.tryMovement = function (dstTile) {
+    this.currentMove.setDstTile(dstTile);
+    this.currentMove.makeMove(this.board, this.currentPlayer, this.client, this);
+}
+
+/**
+ * Adds current move to the game sequence and then creates a new Move
+ */
+Nodes.prototype.nextMove = function () {
+    this.resetHighlights();
+
+    if(this.currentMove.isGameOver()){
+        this.playState = Nodes.playState.END_GAME;
+        return;
+    }
+
+    var movedPiece = this.currentMove.getPiece();
+    if(movedPiece.getType() == "Node"){
+        this.playState = Nodes.playState.END_TURN;
+        this.turnFinishingTime=-1;
+        this.gameSequence.setUndo(false);
+        this.gameSequence.setUndoOnQueue(false);
+        this.gameSequence.setUndoPlayerMoves(false);
+        this.switchPlayer();
+    } else{
+        if(this.currentPlayer.getIsBot())
+            this.playState = Nodes.playState.AI_TURN;
+        else
+            this.playState = Nodes.playState.PIECE_SELECTION;
+    }
+
+    this.currentMove.getPiece().setSelected(false);
+
+    if(this.gameSequence.getUndo())
+        this.gameSequence.setUndo(false);
+
+    if(this.gameSequence.getUndoOnQueue()){
+        this.gameSequence.setUndoOnQueue(false);
+        this.undoLastMove();
+    } else if(this.gameSequence.getUndoPlayerMoves())
+        this.resetPlayerMoves();
+    else
+        this.currentMove = new Move(this.scene, null, null, null);
+}
+
+/**
+ * Requests pl server for a new bot move
+ */
+Nodes.prototype.moveAI = function () {
+    var difficulty;
+    var board = this.board.toPrologStruct();
+    if(this.difficulty == Nodes.difficulty.EASY)
+        difficulty = "easy";
+    else difficulty = "medium";
+
+    var request = "pickMove(" + difficulty + "," + board + "," + this.currentPlayer.getTeam() + ")";
+
+    this.playState = Nodes.playState.REQUEST;
+    var own = this;
+    this.client.makeRequest(request, function(data) {
+        var response = data.target.response;
+        response = response.substr(1, response.length - 2);
+        var info = response.split(";");
+        own.parseMoveFromAI(info);
+    });
+}
+
+/**
+ * Parses the responde given by prolog when asking for a bot move
+ * @param info
+ */
+Nodes.prototype.parseMoveFromAI = function (info) {
+    this.board.setBoard(info[0]);
+
+    var nodesCoords = info[1].substr(1, info[1].length - 2);
+    var tileCoords = info[2].substr(1, info[2].length - 2);
+
+    var aux = tileCoords.split(",");
+    var srcCoords = aux[0];
+    var dstCoords = aux[1];
+
+    var srcTile = this.getTileFromCoords(srcCoords);
+    var dstTile = this.getTileFromCoords(dstCoords);
+    var piece = srcTile.getPiece();
+    piece.setSelected(true);
+
+    this.currentMove.setPiece(piece);
+    this.currentMove.setDstTile(dstTile);
+    this.currentMove.setMoveAnimation(this);
+};
+
+/**
+ * After the player terminates its turn, this function switches the current player
+ */
+Nodes.prototype.switchPlayer = function () {
+    if(this.scene.transitionCam != null) //caso a transicao nao tenha acabado, nao permite iniciar uma nova
+        return;
+    transitionCam=[];
+    transitionCam["newCam"]=this.scene.graph.getNextView();
+    transitionCam["animation"]=this.scene.graph.animations[this.scene.graph.checkIfExists(this.scene.graph.animations, transitionCam["newCam"]["id"]=="player1" ? "camTransition1" : "camTransition2")];
+    transitionCam["finishTime"]=this.scene.elapsedTime+transitionCam["animation"].span;
+    this.scene.transitionCam=transitionCam;
+
+    if(this.currentPlayer == this.player1)
+        this.currentPlayer = this.player2;
+    else this.currentPlayer = this.player1;
+
+    var own = this;
+    var request = "endGame("+this.board.toPrologStruct()+","+this.currentPlayer.getTeam()+")";
+
+    this.client.makeRequest(request, function(data) {
+        var response = data.target.response;
+        if(response=="f"){
+            own.turnFinishingTime=own.elapsedTime+own.scene.getTurnTime();
+            if(own.currentPlayer.getIsBot())
+                own.playState = Nodes.playState.AI_TURN;
+            else own.playState = Nodes.playState.PIECE_SELECTION;
+        } else {
+            own.playState = Nodes.playState.END_GAME;
+        }
+    });
+};
+
+/**
+ * Saves a nodes game after its end, adds the save to savedGames array and updates the movie folder interface
+ */
+Nodes.prototype.saveGame = function () {
+    var index = this.savedGames.length + 1;
+    var winner = this.currentPlayer==this.player1?this.player2:this.player1;
+    winner.score++;
+    var saveGame = new Save(this.gameSequence, winner, this.mode, this.difficulty, index);
+    this.savedGames.push(saveGame);
+    this.scene.addMovie();
+    this.resetGame();
+};
+
+/**
+ * Resets variables used in a nodes game
+ */
+Nodes.prototype.resetGame = function () {
+    this.pieces = [];
+    this.tiles = [];
+    this.resetHighlights();
+
+    this.mode = Nodes.mode.NONE;
+    this.difficulty = Nodes.difficulty.NONE;
+    this.playState = Nodes.playState.NONE;
+    this.gameState = Nodes.gameState.MENU;
+
+    this.gameSequence = null;
+    this.currentMove = null;
+    this.currentPlayer = null;
+}
+
+/**
+ * Resets variables used in a movie sequence
+ */
+Nodes.prototype.resetMovie = function () {
+    this.playState = Nodes.playState.NONE;
+    this.gameState = Nodes.gameState.MENU;
+    this.actualMovie = null;
+    this.gameSequence = null;
+    this.currentMove = null;
+    this.pieces = [];
+    this.tiles = [];
+}
+
+/**
+ * Undo last move if it possible and the current state is PieceSelection
+ */
+Nodes.prototype.undoLastMove = function () {
+    if(this.playState == Nodes.playState.PIECE_SELECTION)
+    {
+        var player = this.currentPlayer.getTeam();
+        if(this.gameSequence.canUndo(player))
+        {
+            this.gameSequence.setUndo(true);
+            this.resetMove();
+        }
+    } else if(this.playState == Nodes.playState.MOVE_ANIMATION && !this.currentPlayer.getIsBot()){
+        this.gameSequence.setUndoOnQueue(true);
+    }
+}
+
+/**
+ * Resets all player moves in the current turn
+ */
+Nodes.prototype.resetPlayerMoves = function () {
+    if(this.playState == Nodes.playState.PIECE_SELECTION)
+    {
+        var player = this.currentPlayer.getTeam();
+        if(this.gameSequence.canUndo(player))
+        {
+            this.gameSequence.setUndoPlayerMoves(true);
+            this.gameSequence.setUndo(true);
+            this.resetMove();
+        }else{
+            this.gameSequence.setUndoPlayerMoves(false);
+            this.currentMove = new Move(this.scene, null, null, null);
+            this.playState = Nodes.playState.PIECE_SELECTION;
+        }
+    }
+}
+
+/**
+ * Resets a move
+ */
+Nodes.prototype.resetMove = function () {
+    this.deselectPieces();
+    this.currentMove = this.gameSequence.undoMove();
+    this.currentMove.switchTiles();
+    this.currentMove.setMoveAnimation(this);
+    var srcTile = this.currentMove.getSrcTile();
+    var dstTile = this.currentMove.getDstTile();
+    var piece = this.currentMove.getPiece();
+    this.board.updatePiecePosition(srcTile.getRow(), srcTile.getCol(), dstTile.getRow(), dstTile.getCol(), piece.getUnit());
+}
+
+/**
+ * Highlights tiles where it is possible to move the current selected piece
+ * @param validMoves
+ */
 Nodes.prototype.highlightTiles = function (validMoves) {
     this.resetHighlights();
 
@@ -384,100 +494,9 @@ Nodes.prototype.highlightTiles = function (validMoves) {
     }
 }
 
-Nodes.prototype.undoLastMove = function () {
-    if(this.state == Nodes.gameState.PIECE_SELECTION)
-    {
-        var player = this.currentPlayer.getTeam();
-        if(this.gameSequence.canUndo(player))
-        {
-            this.gameSequence.setUndo(true);
-            this.resetMove();
-        }
-    } else if(this.state == Nodes.gameState.MOVE_ANIMATION && !this.currentPlayer.getIsBot()){
-        this.gameSequence.setUndoOnQueue(true);
-    }
-}
-
-Nodes.prototype.resetPlayerMoves = function () {
-    if(this.state == Nodes.gameState.PIECE_SELECTION)
-    {
-        var player = this.currentPlayer.getTeam();
-        if(this.gameSequence.canUndo(player))
-        {
-            this.gameSequence.setUndoPlayerMoves(true);
-            this.gameSequence.setUndo(true);
-            this.resetMove();
-        }else{
-            this.gameSequence.setUndoPlayerMoves(false);
-            this.currentMove = new Move(this.scene, null, null, null);
-            this.state = Nodes.gameState.PIECE_SELECTION;
-        }
-    }
-}
-
-Nodes.prototype.resetMove = function () {
-    this.deselectPieces();
-    this.currentMove = this.gameSequence.undoMove();
-    this.currentMove.switchTiles();
-    this.currentMove.setMoveAnimation(this);
-    var srcTile = this.currentMove.getSrcTile();
-    var dstTile = this.currentMove.getDstTile();
-    var piece = this.currentMove.getPiece();
-    this.board.updatePiecePosition(srcTile.getRow(), srcTile.getCol(), dstTile.getRow(), dstTile.getCol(), piece.getUnit());
-}
-
-Nodes.prototype.deselectPieces = function () {
-    for(var i = 0; i < this.pieces.length; i++){
-        this.pieces[i].setSelected(false);
-    }
-}
 /**
- *
+ * Removes all highlights
  */
-Nodes.prototype.display= function(){
-    this.scene.pushMatrix();
-    if(this.board != null)
-        this.board.display();
-
-    this.scene.pushMatrix();
-    this.scene.translate(4, 0, 4);
-    for(var i = 0; i < this.tiles.length; i++){
-
-        var pickingMode = false;
-        if(this.state == Nodes.gameState.PIECE_SELECTION)
-            pickingMode = true;
-
-        this.tiles[i].display(this.currentPlayer, this.currentMove, pickingMode, this.player1, this.player2);
-    }
-
-    this.scene.popMatrix();
-    this.scene.popMatrix();
-}
-
-Nodes.prototype.saveGame = function () {
-    var index = this.savedGames.length + 1;
-    var winner = this.currentPlayer==this.player1?this.player2:this.player1;
-    winner.score++;
-    var saveGame = new Save(this.gameSequence, winner, this.mode, this.difficulty, index);
-    this.savedGames.push(saveGame);
-    this.scene.addMovie();
-    this.resetGame();
-};
-
-Nodes.prototype.resetGame = function () {
-    this.pieces = [];
-    this.tiles = [];
-    this.resetHighlights();
-
-    this.mode = Nodes.mode.NONE;
-    this.difficulty = Nodes.difficulty.NONE;
-    this.state = Nodes.gameState.MENU;
-
-    this.gameSequence = null;
-    this.currentMove = null;
-    this.currentPlayer = null;
-}
-
 Nodes.prototype.resetHighlights = function () {
     for(tile of this.highlightedTiles){
         tile.setHighlight(false);
@@ -485,27 +504,57 @@ Nodes.prototype.resetHighlights = function () {
     this.highlightedTiles = [];
 }
 
+/**
+ * Displays nodes and all its elements
+ */
+Nodes.prototype.display= function(){
+    if(this.gameState != Nodes.gameState.MENU){
+        this.scene.pushMatrix();
+        if(this.board != null)
+            this.board.display();
 
+        this.scene.pushMatrix();
+        this.scene.translate(4, 0, 4);
+        for(var i = 0; i < this.tiles.length; i++){
+
+            var pickingMode = false;
+            if(this.playState == Nodes.playState.PIECE_SELECTION)
+                pickingMode = true;
+
+            this.tiles[i].display(this.currentPlayer, this.currentMove, pickingMode, this.player1, this.player2);
+        }
+
+        this.scene.popMatrix();
+        this.scene.popMatrix();
+    }
+}
+
+/**
+ * Updates nodes accordingly to the current state
+ * @param currTime
+ * @param player1
+ * @param player2
+ */
 Nodes.prototype.update = function(currTime, player1, player2) {
     if (this.initialTime == 0) {
         this.initialTime = currTime;
     }
     this.elapsedTime = (currTime - this.initialTime)/1000;
 
-    if(this.elapsedTime>this.turnFinishingTime && (this.state == Nodes.gameState.PIECE_SELECTION || this.state == Nodes.gameState.AI_TURN)){
-        this.state=Nodes.gameState.END_GAME;
+    if(this.elapsedTime > this.turnFinishingTime && (this.playState == Nodes.playState.PIECE_SELECTION || this.playState == Nodes.playState.AI_TURN)){
+        this.playState = Nodes.playState.END_GAME;
     }
 
-    if(this.state != Nodes.gameState.MOVIE){
+    if(this.gameState == Nodes.gameState.PLAY){
         this.player1.updateAppear(player1);
         this.player2.updateAppear(player2);
     }
 
-    if(this.state == Nodes.gameState.END_GAME){
+    if(this.playState == Nodes.playState.END_GAME){
         this.saveGame();
     }
 
-    if(this.state == Nodes.gameState.MOVIE){
+    if(this.gameState == Nodes.gameState.MOVIE){
         var diff = this.elapsedTime - this.currentMove.getInitialTime();
         if(diff > this.currentMove.getAnimation().getSpan()) {
             this.currentMove.getPiece().setAnimation(null);
@@ -516,7 +565,7 @@ Nodes.prototype.update = function(currTime, player1, player2) {
         }
     }
 
-    if(this.state == Nodes.gameState.MOVE_ANIMATION){
+    if(this.playState == Nodes.playState.MOVE_ANIMATION){
         var diff = this.elapsedTime - this.currentMove.getInitialTime();
         if(diff > this.currentMove.getAnimation().getSpan()) {
             this.currentMove.getPiece().setAnimation(null);
@@ -530,7 +579,7 @@ Nodes.prototype.update = function(currTime, player1, player2) {
         }
     }
 
-    if((this.mode == Nodes.mode.CvC || this.mode == Nodes.mode.PvC) && this.state == Nodes.gameState.AI_TURN){
+    if((this.mode == Nodes.mode.CvC || this.mode == Nodes.mode.PvC) && this.playState == Nodes.playState.AI_TURN){
         this.moveAI();
     }
 }
@@ -604,4 +653,13 @@ Nodes.prototype.getTileFromCoords = function (coords) {
             return this.tiles[i];
     }
     return false;
+}
+
+/**
+ * This function removes the selection in all highlighted pieces
+ */
+Nodes.prototype.deselectPieces = function () {
+    for(var i = 0; i < this.pieces.length; i++){
+        this.pieces[i].setSelected(false);
+    }
 }

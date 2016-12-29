@@ -277,7 +277,9 @@ XMLscene.prototype.display = function () {
  */
 XMLscene.prototype.LoadScenario = function ()
 {
-    // This.Scene contains the scenario name
+    if(this.nodes.getGameState() == Nodes.gameState.MENU){
+        // change scene
+    }
 }
 
 /**
@@ -297,11 +299,10 @@ XMLscene.prototype.StartMovie = function ()
  */
 XMLscene.prototype.ExitMovie = function ()
 {
-    if(this.nodes.getGameState() == Nodes.gameState.Movie){
+    if(this.nodes.getGameState() == Nodes.gameState.MOVIE){
         var exitMovie = confirm("Do you really want to quit the current movie?");
-        if(exitMovie){
-            this.nodes.exitMovie();
-        }
+        if(exitMovie)
+            this.nodes.resetMovie();
     }
 }
 
@@ -355,10 +356,8 @@ XMLscene.prototype.StartGame = function ()
 XMLscene.prototype.ExitGame = function (){
     if(this.nodes.getGameState() == Nodes.gameState.PLAY){
         var newGame = confirm("Do you really want to quit the current game?");
-        if(newGame){
+        if(newGame)
             this.nodes.resetGame();
-            this.StartGame();
-        }
     }
 }
 

@@ -179,7 +179,7 @@ Move.prototype.getDstTile = function () {
 Move.prototype.setMoveAnimation = function (nodes) {
     this.chooseAnimation();
     this.piece.setAnimation(this.animation);
-    nodes.state = Nodes.gameState.MOVE_ANIMATION;
+    nodes.playState = Nodes.playState.MOVE_ANIMATION;
     this.timer = nodes.elapsedTime;
 }
 
