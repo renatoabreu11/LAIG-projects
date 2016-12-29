@@ -41,7 +41,7 @@ main=function()
     myInterface.setActiveCamera(myScene.camera);
     myScene.setInterface(myInterface);
 
-	var filename=getUrlVars()['file'] || "LAIG_TP1_DSX_T1_G05_v04.dsx";
+	var filename=getUrlVars()['file'] || "scene2.dsx";
 
 	var myGraph = new MySceneGraph(filename, myScene);
 	
