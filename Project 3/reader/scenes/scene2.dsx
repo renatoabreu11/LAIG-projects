@@ -1,14 +1,44 @@
 <dsx>
     <scene root="root" axis_length="30.0" />
     
-    <views default="player1" >
-        <perspective id="player2" near="0.1" far="500.0" angle="60.0">
+    <views default="menuView" >
+        <perspective id="menuView" near="0.1" far="500.0" angle="60.0">
+            <from x="0" y="15" z="-30" />
+            <to x="0" y="0" z="10" />
+        </perspective>
+
+        <perspective id="player1View1" near="0.1" far="500.0" angle="60.0">
+            <from x="15" y="15" z="7" />
+            <to x="0" y="5" z="0" />
+        </perspective>
+
+        <perspective id="player1View2" near="0.1" far="500.0" angle="60.0">
+            <from x="15" y="15" z="0" />
+            <to x="0" y="5" z="0" />
+        </perspective>
+
+        <perspective id="player1View3" near="0.1" far="500.0" angle="60.0">
+            <from x="15" y="15" z="-7" />
+            <to x="0" y="5" z="0" />
+        </perspective>
+
+        <perspective id="player2View1" near="0.1" far="500.0" angle="60.0">
+            <from x="-15" y="15" z="7" />
+            <to x="0" y="5" z="0" />
+        </perspective>
+
+        <perspective id="player2View2" near="0.1" far="500.0" angle="60.0">
+            <from x="-15" y="15" z="0" />
+            <to x="0" y="5" z="0" />
+        </perspective>
+
+        <perspective id="player2View3" near="0.1" far="500.0" angle="60.0">
             <from x="-15" y="15" z="-7" />
             <to x="0" y="5" z="0" />
         </perspective>
 
-        <perspective id="player1" near="0.1" far="500.0" angle="60.0">
-            <from x="15" y="15" z="7" />
+        <perspective id="lateralView" near="0.1" far="500.0" angle="60.0">
+            <from x="0" y="10" z="-15" />
             <to x="0" y="5" z="0" />
         </perspective>
     </views>

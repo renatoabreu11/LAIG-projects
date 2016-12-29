@@ -39,6 +39,7 @@ MyInterface.prototype.init = function(application) {
     this.scenarioGroup=this.gui.addFolder('Scenario');
     this.scenarioGroup.add(this.scene, "Scene", [ 'Tron', 'Citadella']);
     this.scenarioGroup.add(this.scene, "LoadScenario");
+    this.scenarioGroup.add(this.scene, "ChangeView");
     this.scenarioGroup.close();
 
 	return true;

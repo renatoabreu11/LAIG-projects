@@ -357,7 +357,7 @@ Nodes.prototype.parseMoveFromAI = function (info) {
  * After the player terminates its turn, this function switches the current player
  */
 Nodes.prototype.switchPlayer = function () {
-    if(this.scene.transitionCam != null) //caso a transicao nao tenha acabado, nao permite iniciar uma nova
+    if(this.scene.transitionCam != null)
         return;
     transitionCam=[];
     transitionCam["newCam"]=this.scene.graph.getNextView();

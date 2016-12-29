@@ -101,12 +101,9 @@ XMLscene.prototype.animateCameraTransition = function () {
     var camInfo=this.transitionCam;
 
     if(this.elapsedTime>=this.transitionCam["finishTime"]){
-        if(this.currPlayer=="blue")
-            this.currPlayer="red";
-        else this.currPlayer="blue";
-
         this.updateCamera();
         this.transitionCam=null;
+        this.interface.setActiveCamera(this.camera);
         return;
     }
 
@@ -270,6 +267,17 @@ XMLscene.prototype.display = function () {
     this.nodes.display();
     this.rotate(Math.PI,0,1,0);
 };
+
+/**
+ * Changes player current view
+ * @constructor
+ */
+XMLscene.prototype.ChangeView = function ()
+{
+    if(this.nodes.getGameState() == Nodes.gameState.PLAY){
+        //alternate between currentplayer View 1, 2, 3 or lateral view
+    }
+}
 
 /**
  * Loads a scenario accordingly to the user choice
