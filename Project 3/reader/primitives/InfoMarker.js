@@ -3,7 +3,6 @@ function InfoMarker(scene){
 
 	this.rect = new Rectangle(scene,-3,3,3,-3);
 	this.time = {hours : 0, minutes : 0, seconds : 0 };
-	this.startTime=-1;
 
 	this.boxAppearance = new CGFappearance(this.scene);
 	this.boxAppearance.loadTexture('../res/ice.jpg');
@@ -152,9 +151,11 @@ InfoMarker.prototype.displayScore = function(player){
 	// ------------------ score (on z+) ------------------
 	var score=0;
 	var savedGames=this.scene.nodes.getSavedGames();
-	for(save of savedGames)
-		if(save.getWinner().getTeam() == player)
+	for(save of savedGames) {
+		if(save.getWinner().getTeam() == player){
 			score++;
+		}
+	}
 	this.scene.pushMatrix();
 	this.scene.scale(.5,.5,1);
 	this.scene.translate(30,0,3.01);
@@ -165,18 +166,11 @@ InfoMarker.prototype.displayScore = function(player){
 }
 
 InfoMarker.prototype.updateTime = function() {
-	//check if should display timer or not
-	var nodes = this.scene.nodes;
-	if(nodes.getState() == Nodes.gameState.END_GAME || nodes.getState() == Nodes.gameState.END_TURN || nodes.getState() == Nodes.gameState.MENU || nodes.getState() == Nodes.gameState.MOVIE)
-		this.startTime=-1;
-	else if(this.startTime==-1)
-		this.startTime=this.scene.getElapsedTime() + this.scene.getTurnTime();
-
 	//set time
 	var time;
-	if(this.startTime==-1)
+	if(this.scene.nodes.turnFinishingTime==-1)
 		time=0;
-	else time =  this.startTime - this.scene.getElapsedTime();
+	else time = this.scene.nodes.turnFinishingTime - this.scene.getElapsedTime();
 
 	//check for when timer is out
 	if(time<0)
