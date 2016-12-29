@@ -13,13 +13,18 @@ Nodes.difficulty = {
 
 Nodes.gameState = {
     MENU: 0,
-    PIECE_SELECTION: 1,
-    MOVE_ANIMATION: 2,
-    END_TURN: 3,
-    END_GAME: 4,
-    AI_TURN: 5,
-    REQUEST: 6,
-    MOVIE: 7,
+    PLAY: 1,
+    MOVIE: 2,
+}
+
+Nodes.playState = {
+    PIECE_SELECTION: 0,
+    MOVE_ANIMATION: 1,
+    END_TURN: 2,
+    END_GAME: 3,
+    AI_TURN: 4,
+    REQUEST: 5,
+    NONE: 6,
 }
 
 /**
@@ -37,7 +42,8 @@ function Nodes(scene) {
 
     this.mode = Nodes.mode.NONE;
     this.difficulty = Nodes.difficulty.NONE;
-    this.state = Nodes.gameState.MENU;
+    this.playState = Nodes.playState.NONE;
+    this.gameState = Nodes.gameState.MENU;
 
     this.savedGames = [];
     this.actualMovie = null;
@@ -549,7 +555,7 @@ Nodes.prototype.getClient = function(){
  * Returns the player which is playing
  * @returns {null|Player|*}
  */
-Nodes.prototype.getPlayer = function(){
+Nodes.prototype.getCurrentPlayer = function(){
     return this.currentPlayer;
 }
 
@@ -570,11 +576,19 @@ Nodes.prototype.getCurrentMove = function () {
 }
 
 /**
- * Returns Nodes actual state
+ * Returns play state
  * @returns {number|*}
  */
-Nodes.prototype.getState = function () {
-    return this.state;
+Nodes.prototype.getPlayState = function () {
+    return this.playState;
+}
+
+/**
+ * Returns game state
+ * @returns {number|*}
+ */
+Nodes.prototype.getGameState = function () {
+    return this.gameState;
 }
 
 /**

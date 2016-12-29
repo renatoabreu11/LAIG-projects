@@ -3,7 +3,6 @@
  * @constructor
  */
 function MyInterface() {
-	//call CGFinterface constructor 
 	CGFinterface.call(this);
 };
 
@@ -15,7 +14,6 @@ MyInterface.prototype.constructor = MyInterface;
  * @param {CGFapplication} application
  */
 MyInterface.prototype.init = function(application) {
-	// call CGFinterface init
 	CGFinterface.prototype.init.call(this, application);
 
 	this.gui = new dat.GUI();
@@ -24,7 +22,7 @@ MyInterface.prototype.init = function(application) {
     this.gameGroup.add(this.scene, 'Mode', [ 'Player vs Player', 'Player vs Bot', 'Bot vs Bot' ] );
     this.gameGroup.add(this.scene, 'Difficulty', [ 'Easy', 'Medium', 'None' ] );
     this.gameGroup.add(this.scene, "StartGame");
-    this.gameGroup.add(this.scene, "RestartGame");
+    this.gameGroup.add(this.scene, "ExitGame");
     this.gameGroup.add(this.scene, 'TurnTime', 30, 120);
     this.gameGroup.addColor(this.scene, 'player1');
     this.gameGroup.addColor(this.scene, 'player2');
@@ -46,6 +44,10 @@ MyInterface.prototype.init = function(application) {
 	return true;
 };
 
+/**
+ * Function that removes a folder
+ * @param name
+ */
 MyInterface.prototype.removeFolder = function(name) {
     var folder = this.gui.__folders[name];
     if (!folder) {
@@ -66,11 +68,16 @@ MyInterface.prototype.addLight = function(i, id){
 	this.lightGroup.add(this.scene.lightStatus, i, this.scene.lightStatus[i]).name(id);
 }
 
+/**
+ * Updates the movie folder with the last one
+ * @param movies
+ */
 MyInterface.prototype.addMovie = function(movies){
     this.moviesGroup=this.gui.addFolder('Game Movies');
     this.moviesGroup.add(this.scene, "Movie", movies);
     this.moviesGroup.close();
     this.moviesGroup.add(this.scene, "StartMovie");
+    this.moviesGroup.add(this.scene, "ExitMovie");
 }
 
 /**
@@ -78,13 +85,8 @@ MyInterface.prototype.addMovie = function(movies){
  * @param event {Event}
  */
 MyInterface.prototype.processKeyboard = function(event) {
-	// call CGFinterface default code (omit if you want to override)
 	CGFinterface.prototype.processKeyboard.call(this,event);
-	
-	// Check key codes e.g. here: http://www.asciitable.com/
-	// or use String.fromCharCode(event.keyCode) to compare chars
-	
-	// for better cross-browser support, you may also check suggestions on using event.which in http://www.w3schools.com/jsref/event_key_keycode.asp
+
 	switch (event.keyCode)
 	{
 		case(86):
