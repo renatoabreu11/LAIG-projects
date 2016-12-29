@@ -335,14 +335,12 @@ XMLscene.prototype.display = function () {
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
-    this.nodes.display();
-    this.rotate(Math.PI,0,1,0);
-
     if (this.graph.loadedOk){
 		this.updateLights();
 		this.materialDefault.apply();
 		this.graph.getRootComponent().display(null, null, this.elapsedTime);
      }
-//*/
+    this.nodes.display();
+    this.rotate(Math.PI,0,1,0);
 };
 
