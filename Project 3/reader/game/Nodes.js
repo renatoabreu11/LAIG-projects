@@ -453,6 +453,10 @@ Nodes.prototype.saveGame = function () {
     var saveGame = new Save(this.gameSequence, this.currentPlayer==this.player1?this.player2:this.player1, this.mode, this.difficulty, index);
     this.savedGames.push(saveGame);
     this.scene.addMovie();
+    this.resetGame();
+};
+
+Nodes.prototype.resetGame = function () {
     this.pieces = [];
     this.tiles = [];
     this.resetHighlights();
@@ -464,7 +468,7 @@ Nodes.prototype.saveGame = function () {
     this.gameSequence = null;
     this.currentMove = null;
     this.currentPlayer = null;
-};
+}
 
 Nodes.prototype.resetHighlights = function () {
     for(tile of this.highlightedTiles){

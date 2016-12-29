@@ -42,6 +42,7 @@ XMLscene.prototype.init = function (application) {
 	this.player1 = "#00BFFF";
 	this.player2 = "#32CD32";
 	this.TurnTime = 60;
+	this.Scene = "Citadella";
 
     this.updatePeriod = 1 / 60 * 1000;	// update period in ms (1/60 * 1000 ms = 60 Hz)
     this.setUpdatePeriod(this.updatePeriod);
@@ -57,12 +58,12 @@ XMLscene.prototype.init = function (application) {
     this.marker = new InfoMarker(this);
 };
 
-XMLscene.prototype.updateTurnTime = function (turntime) {
-	this.TurnTime=turntime;
+XMLscene.prototype.getTurnTime = function () {
+	return this.TurnTime;
 }
 
-XMLscene.prototype.getTurnTime = function (turntime) {
-	return this.TurnTime;
+XMLscene.prototype.LoadScenario = function () {
+	
 }
 
 XMLscene.prototype.addMovie = function (){
@@ -106,6 +107,16 @@ XMLscene.prototype.StartGame = function (){
         this.nodes.initializeGame(mode, difficulty);
         this.startGame = false;
     }
+}
+
+XMLscene.prototype.RestartGame = function (){
+	if(this.nodes.state == Nodes.gameState.PIECE_SELECTION || this.nodes.state == Nodes.gameState.AI_TURN || this.nodes.state == Nodes.gameState.MOVE_ANIMATION){
+        var newGame = confirm("Do you really want to start a new game?");
+        if(newGame){
+            this.nodes.resetGame();
+            this.StartGame();
+        }
+	}
 }
 
 XMLscene.prototype.Undo = function (){

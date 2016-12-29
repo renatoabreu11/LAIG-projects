@@ -24,7 +24,8 @@ MyInterface.prototype.init = function(application) {
     this.gameGroup.add(this.scene, 'Mode', [ 'Player vs Player', 'Player vs Bot', 'Bot vs Bot' ] );
     this.gameGroup.add(this.scene, 'Difficulty', [ 'Easy', 'Medium', 'None' ] );
     this.gameGroup.add(this.scene, "StartGame");
-    var controller = this.gameGroup.add(this.scene, 'TurnTime', 30, 120);
+    this.gameGroup.add(this.scene, "RestartGame");
+    this.gameGroup.add(this.scene, 'TurnTime', 30, 120);
     this.gameGroup.addColor(this.scene, 'player1');
     this.gameGroup.addColor(this.scene, 'player2');
     this.gameGroup.open();
@@ -37,10 +38,10 @@ MyInterface.prototype.init = function(application) {
 	this.lightGroup=this.gui.addFolder('Lights');	
 	this.lightGroup.close();
 
-	var scene = this.scene;
-    controller.onFinishChange(function(n) {
-        scene.updateTurnTime(Math.round(n));
-    });
+    this.scenarioGroup=this.gui.addFolder('Scenario');
+    this.scenarioGroup.add(this.scene, "Scene", [ 'Tron', 'Citadella']);
+    this.scenarioGroup.add(this.scene, "LoadScenario");
+    this.scenarioGroup.close();
 
 	return true;
 };
