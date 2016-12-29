@@ -75,7 +75,7 @@ Tile.prototype.display = function (currentPlayer, currentMove, pickingMode, play
         }
 
     if(this.highlight){
-        this.scene.setActiveShader(this.scene.nodes.boardShader);
+        this.scene.setActiveShader(this.scene.nodes.cellShader);
         this.scene.nodes.highlightAppearance.apply();
     }
     else this.scene.nodes.cellAppearance.apply();

@@ -58,8 +58,8 @@ function Nodes(scene) {
     this.highlightAppearance = new CGFappearance(this.scene);
     this.highlightAppearance.loadTexture('../res/ice.jpg');
 
-    this.boardShader = new CGFshader(this.scene.gl, "shaders/transparent.vert", "shaders/transparent.frag");
-    this.boardShader.setUniformsValues({
+    this.cellShader = new CGFshader(this.scene.gl, "shaders/transparent.vert", "shaders/transparent.frag");
+    this.cellShader.setUniformsValues({
         uSampler2: 1,
     });
 }
