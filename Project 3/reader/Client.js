@@ -7,14 +7,10 @@ function Client(port) {
     this.request = null;
 }
 
-/**
- *
- * @type {Client}
- */
 Client.prototype.constructor = Client;
 
 /**
- *
+ * Makes a request to the prolog server
  * @param requestString
  */
 Client.prototype.makeRequest=function(requestString, handler)
@@ -44,7 +40,7 @@ Client.prototype.getPrologRequest = function(onSuccess, onError)
 }
 
 /**
- *
+ * Returns the server port
  * @returns {*|number}
  */
 Client.prototype.getPort=function () {
@@ -52,7 +48,7 @@ Client.prototype.getPort=function () {
 }
 
 /**
- *
+ * Returns last request
  * @returns {null|*}
  */
 Client.prototype.getRequest = function () {

@@ -5,7 +5,7 @@
 
 function Player(team, score, isBot, scene) {
     this.team = team;
-    this.score = score; // Tempo total das jogadas, número de vitorias, ou algo do género
+    this.score = score;
     this.isBot = isBot;
 
     this.currAppear = null;
@@ -13,31 +13,13 @@ function Player(team, score, isBot, scene) {
     this.playerAppear.setShininess(50);
 }
 
-/**
- *
- * @type {Player}
- */
 Player.prototype = Object.create(CGFobject.prototype);
 Player.prototype.constructor = Player;
 
-Player.prototype.getTeam = function () {
-    return this.team;
-}
-
-Player.prototype.getAppear = function () {
-    return this.playerAppear;
-}
-
-function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
-}
-
-
+/**
+ * Updates player pieces appear
+ * @param appear
+ */
 Player.prototype.updateAppear = function (appear) {
     var equal = true;
     if(this.currAppear == null){
@@ -60,14 +42,56 @@ Player.prototype.updateAppear = function (appear) {
     }
 }
 
+/**
+ * Returns player team -> blue or red
+ * @returns {*}
+ */
+Player.prototype.getTeam = function () {
+    return this.team;
+}
+
+/**
+ * Returns player appear
+ * @returns {CGFappearance}
+ */
+Player.prototype.getAppear = function () {
+    return this.playerAppear;
+}
+
+/**
+ * Returns player number of wins
+ * @returns {*}
+ */
 Player.prototype.getScore = function () {
     return this.score;
 }
 
+/**
+ * Returns isBot value that defines if the player is a bot or not
+ * @returns {*}
+ */
 Player.prototype.getIsBot = function () {
     return this.isBot;
 }
 
+/**
+ * Sets isBot value
+ * @param value
+ */
 Player.prototype.setIsBot = function (value) {
     this.isBot = value;
+}
+
+/**
+ * Auxiliar function that converts an hexadecimal color value to a rgb one
+ * @param hex
+ * @returns {*}
+ */
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
 }

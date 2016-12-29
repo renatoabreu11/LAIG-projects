@@ -14,61 +14,16 @@ function Move(scene,piece,src,dest) {
     this.gameOver=false;
 }
 
-/**
- *
- * @type {Move}
- */
 Move.prototype = Object.create(CGFobject.prototype);
 Move.prototype.constructor = Move;
 
-Move.prototype.isGameOver = function() {
-    return this.gameOver;
-}
-
-Move.prototype.setPiece = function (piece) {
-    this.piece = piece;
-    this.srcTile = piece.getTile();
-}
-
-Move.prototype.getPiece = function () {
-    return this.piece;
-}
-
-Move.prototype.setSrcTile = function (srcTile) {
-    this.srcTile = srcTile;
-    this.piece = this.srcTile.getPiece();
-}
-
-Move.prototype.getSrcTile = function () {
-    return this.srcTile;
-}
-
-Move.prototype.getDstTile = function () {
-    return this.dstTile;
-}
-
-Move.prototype.getAnimation = function () {
-    return this.animation;
-}
-
-Move.prototype.setDstTile = function (dest) {
-    this.dstTile = dest;
-}
-
-Move.prototype.switchTiles = function () {
-    var aux = this.srcTile;
-    this.srcTile = this.dstTile;
-    this.dstTile = aux;
-    this.piece.select();
-}
-
-Move.prototype.setMoveAnimation = function (nodes) {
-    this.chooseAnimation();
-    this.piece.setAnimation(this.animation);
-    nodes.state = Nodes.gameState.MOVE_ANIMATION;
-    this.timer = nodes.elapsedTime;
-}
-
+/**
+ * Tries to make a move by requesting prolog to check if it valid
+ * @param board
+ * @param player
+ * @param client
+ * @param nodes
+ */
 Move.prototype.makeMove = function (board, player, client, nodes) {
     if(this.dstTile.getPiece() != null || this.srcTile.getPiece() == null)
         return;
@@ -97,6 +52,9 @@ Move.prototype.makeMove = function (board, player, client, nodes) {
     });
 }
 
+/**
+ * Chooses an animation -> move or jump
+ */
 Move.prototype.chooseAnimation = function(){
     var xDif = this.dstTile.row - this.srcTile.row; //offset to move in X
     var zDif = this.dstTile.col - this.srcTile.col; //offset to move in Z
@@ -125,18 +83,118 @@ Move.prototype.chooseAnimation = function(){
 
 }
 
+/**
+ * displays the move animation
+ * @param currTime
+ */
 Move.prototype.display = function (currTime) {
     this.scene.pushMatrix();
     this.piece.timer=currTime;
     this.scene.popMatrix();
 }
 
-Move.prototype.getInitialTime = function () {
-    return this.timer;
-}
-
+/**
+ * Moves a piece from source tile to destiny tile
+ */
 Move.prototype.movePiece = function() {
     this.srcTile.setPiece(null);
     this.dstTile.setPiece(this.piece);
     this.piece.setTile(this.dstTile);
 };
+
+/**
+ * Switch source and destiny tiles
+ */
+Move.prototype.switchTiles = function () {
+    var aux = this.srcTile;
+    this.srcTile = this.dstTile;
+    this.dstTile = aux;
+    this.piece.setSelected(true);
+}
+
+/***************** Getters and Setters ***********************/
+
+/**
+ * Checks if occurred game over with this move
+ * @returns {boolean}
+ */
+Move.prototype.isGameOver = function() {
+    return this.gameOver;
+}
+
+/**
+ * Sets the piece to be moved
+ * @param piece
+ */
+Move.prototype.setPiece = function (piece) {
+    this.piece = piece;
+    this.srcTile = piece.getTile();
+}
+
+/**
+ * Returns the piece to be moved
+ * @returns {*|*|null}
+ */
+Move.prototype.getPiece = function () {
+    return this.piece;
+}
+
+/**
+ * Sets move source tile
+ * @param srcTile
+ */
+Move.prototype.setSrcTile = function (srcTile) {
+    this.srcTile = srcTile;
+    this.piece = this.srcTile.getPiece();
+}
+
+/**
+ * Returns source tile
+ * @returns {*|null|null|*}
+ */
+Move.prototype.getSrcTile = function () {
+    return this.srcTile;
+}
+
+/**
+ * Changes move destiny tile
+ * @param dest
+ */
+Move.prototype.setDstTile = function (dest) {
+    this.dstTile = dest;
+}
+
+/**
+ * Returns the destiny tile
+ * @returns {*|null}
+ */
+Move.prototype.getDstTile = function () {
+    return this.dstTile;
+}
+
+/**
+ * Sets move animation
+ * @param nodes
+ */
+Move.prototype.setMoveAnimation = function (nodes) {
+    this.chooseAnimation();
+    this.piece.setAnimation(this.animation);
+    nodes.state = Nodes.gameState.MOVE_ANIMATION;
+    this.timer = nodes.elapsedTime;
+}
+
+/**
+ * Returns the animation used in this move
+ * @returns {*|null}
+ */
+Move.prototype.getAnimation = function () {
+    return this.animation;
+}
+
+/**
+ * Returns initial animation time
+ * @returns {*|number}
+ */
+Move.prototype.getInitialTime = function () {
+    return this.timer;
+}

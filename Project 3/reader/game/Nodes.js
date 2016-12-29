@@ -328,7 +328,7 @@ Nodes.prototype.nextMove = function () {
             this.state = Nodes.gameState.PIECE_SELECTION;
     }
 
-    this.currentMove.getPiece().deselect();
+    this.currentMove.getPiece().setSelected(false);
 
     if(this.gameSequence.getUndo())
        this.gameSequence.setUndo(false);
@@ -350,7 +350,7 @@ Nodes.prototype.selectPiece = function (obj) {
     if(currentPiece == null){
         pieceSelection = true;
     } else if(obj != currentPiece){
-        currentPiece.deselect();
+        currentPiece.setSelected(false);
         pieceSelection = true;
     }
 
@@ -428,7 +428,7 @@ Nodes.prototype.resetMove = function () {
 
 Nodes.prototype.deselectPieces = function () {
     for(var i = 0; i < this.pieces.length; i++){
-        this.pieces[i].deselect();
+        this.pieces[i].setSelected(false);
     }
 }
 /**
@@ -456,7 +456,9 @@ Nodes.prototype.display= function(){
 
 Nodes.prototype.saveGame = function () {
     var index = this.savedGames.length + 1;
-    var saveGame = new Save(this.gameSequence, this.currentPlayer==this.player1?this.player2:this.player1, this.mode, this.difficulty, index);
+    var winner = this.currentPlayer==this.player1?this.player2:this.player1;
+    winner.score++;
+    var saveGame = new Save(this.gameSequence, winner, this.mode, this.difficulty, index);
     this.savedGames.push(saveGame);
     this.scene.addMovie();
     this.resetGame();

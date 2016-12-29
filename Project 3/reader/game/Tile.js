@@ -2,7 +2,6 @@
  * Tile
  * @constructor
  */
-
 function Tile(scene, element, row, col) {
     CGFobject.call(this,scene);
     this.scene = scene;
@@ -15,44 +14,18 @@ function Tile(scene, element, row, col) {
     this.object = new Circle(this.scene, 0.4, 12);
 }
 
-/**
- *
- * @type {Board}
- */
 Tile.prototype = Object.create(CGFobject.prototype);
 Tile.prototype.constructor = Tile;
 
-Tile.prototype.setPiece = function (piece) {
-    this.piece = piece;
-    if(this.piece != null)
-        this.element = this.piece.getUnit();
-    else this.element = "space";
-}
 
-Tile.prototype.getPiece = function () {
-    return this.piece;
-}
-
-Tile.prototype.getRow = function () {
-    return this.row;
-}
-
-Tile.prototype.getHighlight = function () {
-    return this.highlight;
-}
-
-Tile.prototype.setHighlight = function (value) {
-    this.highlight = value;
-}
-
-Tile.prototype.getCol = function () {
-    return this.col;
-}
-
-Tile.prototype.getCoordinatesAsString = function () {
-    return (this.row + "-" + this.col);
-}
-
+/**
+ * Displays tile and respective piece, if it exists
+ * @param currentPlayer
+ * @param currentMove
+ * @param pickingMode
+ * @param player1
+ * @param player2
+ */
 Tile.prototype.display = function (currentPlayer, currentMove, pickingMode, player1, player2) {
     this.scene.pushMatrix();
     this.scene.translate(-this.row, 0.03, -this.col);
@@ -86,4 +59,57 @@ Tile.prototype.display = function (currentPlayer, currentMove, pickingMode, play
         this.scene.setActiveShader(this.scene.defaultShader);
     this.scene.clearPickRegistration();
     this.scene.popMatrix();
+}
+
+/******************** Getters and Setters *****************************/
+
+/**
+ * Sets current piece
+ * @param piece
+ */
+Tile.prototype.setPiece = function (piece) {
+    this.piece = piece;
+    if(this.piece != null)
+        this.element = this.piece.getUnit();
+    else this.element = "space";
+}
+
+/**
+ * Returns piece
+ * @returns {*|null}
+ */
+Tile.prototype.getPiece = function () {
+    return this.piece;
+}
+
+/**
+ * Returns tile's row
+ * @returns {*}
+ */
+Tile.prototype.getRow = function () {
+    return this.row;
+}
+
+/**
+ * Returns tile's col
+ * @returns {*}
+ */
+Tile.prototype.getCol = function () {
+    return this.col;
+}
+
+/**
+ * Returns coordinates as string in format: Row-Col
+ * @returns {string}
+ */
+Tile.prototype.getCoordinatesAsString = function () {
+    return (this.row + "-" + this.col);
+}
+
+/**
+ * Sets the highlight value.
+ * @param value
+ */
+Tile.prototype.setHighlight = function (value) {
+    this.highlight = value;
 }

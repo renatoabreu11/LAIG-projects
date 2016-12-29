@@ -22,33 +22,12 @@ function Piece(scene, unit, type, colour) {
     this.selected.loadTexture('../res/sand.jpg');
 }
 
-/**
- *
- * @type {Board}
- */
 Piece.prototype = Object.create(CGFobject.prototype);
 Piece.prototype.constructor = Piece;
 
-Piece.prototype.setTile = function (tile) {
-    this.tile = tile;
-}
-
-Piece.prototype.getTile = function () {
-    return this.tile;
-}
-
-Piece.prototype.getColour = function () {
-    return this.colour;
-}
-
-Piece.prototype.getType = function () {
-    return this.type;
-}
-
-Piece.prototype.getUnit = function () {
-    return this.unit;
-}
-
+/**
+ * Displays a piece
+ */
 Piece.prototype.display = function () {
     this.scene.pushMatrix();
     if(this.isSelected)
@@ -60,14 +39,57 @@ Piece.prototype.display = function () {
     this.scene.popMatrix();
 }
 
-Piece.prototype.select = function () {
-    this.isSelected=true;
+/**
+ * Sets piece actual tile
+ * @param tile
+ */
+Piece.prototype.setTile = function (tile) {
+    this.tile = tile;
 }
 
-Piece.prototype.deselect = function () {
-    this.isSelected=false;
+/**
+ * Returns actual tile
+ * @returns {null|*}
+ */
+Piece.prototype.getTile = function () {
+    return this.tile;
 }
 
+/**
+ * Returns piece colour, blue or red
+ * @returns {*}
+ */
+Piece.prototype.getColour = function () {
+    return this.colour;
+}
+
+/**
+ * Returns piece type, Node or Unit
+ * @returns {*}
+ */
+Piece.prototype.getType = function () {
+    return this.type;
+}
+
+/**
+ * Returns piece name used in the board
+ * @returns {*}
+ */
+Piece.prototype.getUnit = function () {
+    return this.unit;
+}
+
+/**
+ * Sets the selected value
+ */
+Piece.prototype.setSelected = function (value) {
+    this.isSelected=value;
+}
+
+/**
+ * Sets piece animation
+ * @param animation
+ */
 Piece.prototype.setAnimation = function(animation) {
     this.animation = animation;
     if (animation==null)
