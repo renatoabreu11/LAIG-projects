@@ -4,9 +4,6 @@ function InfoMarker(scene){
 	this.rect = new Rectangle(scene,-3,3,3,-3);
 	this.time = {hours : 0, minutes : 0, seconds : 0 };
 
-	this.boxAppearance = new CGFappearance(this.scene);
-	this.boxAppearance.loadTexture('../res/ice.jpg');
-
 	this.timeAppearance = new CGFappearance(this.scene);
 	this.timeAppearance.loadTexture("../res/marker/time.png");
 	this.scoreAppearance = new CGFappearance(this.scene);
@@ -33,7 +30,6 @@ InfoMarker.prototype.display = function () {
 	this.scene.scale(.25,.25,.25);
 	
 	// ------------------ marker general structure ------------------
-	this.boxAppearance.apply();
 	this.scene.pushMatrix(); //x+
 	this.scene.scale(1,3,1);
 	this.scene.translate(18,0,0);

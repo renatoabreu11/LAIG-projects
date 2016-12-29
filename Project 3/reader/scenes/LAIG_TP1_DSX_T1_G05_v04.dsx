@@ -55,6 +55,8 @@
         <texture id="sand" file="../res/sand.jpg" length_s="20" length_t="20" />
         <texture id="wood" file="../res/wood.jpg" length_s="1" length_t="1" />
         <texture id="ice" file="../res/ice.jpg" length_s="1" length_t="1" />
+        <texture id="neon_circuit2" file="../res/neon_circuit2.png" length_s="1" length_t="1" />
+        <texture id="neon_circuit3" file="../res/neon_circuit3.jpg" length_s="1" length_t="1" />
 
         <!--<texture id="front" file="../res/SanFrancisco4/posz.jpg" length_s="1" length_t="1" />
         <texture id="left" file="../res/SanFrancisco4/negx.jpg" length_s="1" length_t="1" />
@@ -222,6 +224,9 @@
             <controlpoint xx="0" yy=".25" zz="-1" />
             <controlpoint xx="0" yy="0" zz="-1" />
         </animation>
+
+        <animation id="rotateSuperLong" span="1009" type="circular" centerx="0" centery="0" centerz="0"
+                    radius="0" startang="0" rotang="360000"/>
    </animations>
 
     <primitives>
@@ -262,11 +267,23 @@
     	</primitive>
 
         <primitive id="tableLeg">
-         <cylinder base=".5" top=".5" height="15" slices="5" stacks="8" />
+            <cylinder base=".5" top=".5" height="15" slices="5" stacks="8" />
         </primitive>
 
         <primitive id="tableTop">
-         <cylinder base="7.5" top="7.5" height=".5" slices="4" stacks="2" />
+            <cylinder base="7.5" top="7.5" height=".5" slices="4" stacks="2" />
+        </primitive>
+
+        <primitive id="wheel">
+            <torus inner="3" outer="10" slices="15" loops="8" />
+        </primitive>
+
+        <primitive id="innerWheel">
+            <torus inner=".25" outer="3" slices="10" loops="4" />
+        </primitive>
+
+        <primitive id="marker">
+            <marker/>
         </primitive>
 
     </primitives>
@@ -284,8 +301,65 @@
             <texture id="none" />
 
             <children>
+                <componentref id="marker" />
+                <componentref id="wheel1" />
                 <componentref id="table" />
                 <componentref id="skybox" />
+            </children>
+        </component>
+
+        <component id="marker">
+            <transformation>
+                <translate x="0" y="10" z="0" />
+                <rotate axis="y" angle="60" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="neon_circuit2" />
+
+            <children>
+                <primitiveref id="marker" />
+            </children>
+        </component>
+
+        <component id="wheel1">
+            <transformation>
+                <translate x="-5" y="-3" z="-25" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+
+            <animation>
+            <animationref id="rotateSuperLong" />
+            </animation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="neon_circuit3" />
+
+            <children>
+                <componentref id="wheel" />
+            </children>
+        </component>
+
+        <component id="wheel">
+            <transformation>
+                <rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="wheel" />
+                <primitiveref id="innerWheel" />
             </children>
         </component>
 

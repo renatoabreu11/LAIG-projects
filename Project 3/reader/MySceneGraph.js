@@ -793,16 +793,7 @@ MySceneGraph.prototype.parsePrimitives= function(primitivesBlock) {
 						else prim = aux;
 						break;
 
-					case 'vehicle':
-						break;
-
-                    case 'portal':
-                        break;
-					
-					case 'node':
-						break;
-
-					case 'unit':
+					case 'marker':
 						break;
 
 					default: break;
@@ -881,18 +872,9 @@ MySceneGraph.prototype.initPrimitives =function(){
             var values = primitive['chessboard'];
             primitive["object"] = new Chessboard(this.scene, values['du'], values['dv'], values['textureref'], values['su'], values['sv'], values['c1'], values['c2'], values['cs']);
             break;
-        case 'vehicle':
-            primitive["object"] = new Vehicle(this.scene);
+        case 'marker':
+            primitive["object"] = new InfoMarker(this.scene);
             break;
-        case 'portal':
-            primitive["object"] = new Portal(this.scene);
-            break;
-        case 'node':
-        	primitive["object"] = new Node(this.scene);
-        	break;
-        case 'unit':
-        	primitive["object"] = new Unit(this.scene);
-        	break;
     }
 };
 
