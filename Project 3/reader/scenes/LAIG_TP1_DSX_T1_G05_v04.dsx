@@ -231,26 +231,26 @@
 
         <primitive id="wall">
             <patch orderU="3" orderV="4" partsU="10" partsV="10" >
-                <controlpoint x="-60" y="-50" z="-10" />
-                <controlpoint x="-70" y="-30" z="-20" />
+                <controlpoint x="-80" y="-50" z="-30" />
+                <controlpoint x="-80" y="-30" z="-30" />
                 <controlpoint x="-100" y="20" z="-50" />
                 <controlpoint x="-80" y="40" z="-30" />
                 <controlpoint x="-50" y="50" z="0" />
 
-                <controlpoint x="-20" y="-50" z="-10" />
+                <controlpoint x="-27" y="-50" z="-30" />
                 <controlpoint x="-17" y="-30" z="-30" />
-                <controlpoint x="-17" y="20" z="-70" />
-                <controlpoint x="-17" y="40" z="-40" />
+                <controlpoint x="-17" y="20" z="-50" />
+                <controlpoint x="-17" y="40" z="-50" />
                 <controlpoint x="-17" y="50" z="0" />
 
-                <controlpoint x="20" y="-50" z="-10" />
+                <controlpoint x="27" y="-50" z="-30" />
                 <controlpoint x="17" y="-30" z="-30" />
-                <controlpoint x="17" y="20" z="-70" />
-                <controlpoint x="17" y="40" z="-40" />
+                <controlpoint x="17" y="20" z="-50" />
+                <controlpoint x="17" y="40" z="-50" />
                 <controlpoint x="17" y="50" z="0" />
 
-                <controlpoint x="60" y="-50" z="-10" />
-                <controlpoint x="70" y="-30" z="-20" />
+                <controlpoint x="80" y="-50" z="-30" />
+                <controlpoint x="80" y="-30" z="-30" />
                 <controlpoint x="100" y="20" z="-50" />
                 <controlpoint x="80" y="40" z="-30" />
                 <controlpoint x="50" y="50" z="0" />
@@ -269,83 +269,12 @@
          <cylinder base="7.5" top="7.5" height=".5" slices="4" stacks="2" />
         </primitive>
 
-        <primitive id="P1Node">
-            <node />
-        </primitive>
-
-        <primitive id="P2Node">
-            <node />
-        </primitive>
-
-        <primitive id="P1Unit1">
-            <unit />
-        </primitive>
-
-        <primitive id="P1Unit2">
-            <unit />
-        </primitive>
-
-        <primitive id="P1Unit3">
-            <unit />
-        </primitive>
-
-        <primitive id="P1Unit4">
-            <unit />
-        </primitive>
-
-        <primitive id="P1Unit5">
-            <unit />
-        </primitive>
-
-        <primitive id="P1Unit6">
-            <unit />
-        </primitive>
-
-        <primitive id="P1Unit7">
-            <unit />
-        </primitive>
-
-        <primitive id="P1Unit8">
-            <unit />
-        </primitive>
-
-        <primitive id="P2Unit1">
-            <unit />
-        </primitive>
-
-        <primitive id="P2Unit2">
-            <unit />
-        </primitive>
-
-        <primitive id="P2Unit3">
-            <unit />
-        </primitive>
-
-        <primitive id="P2Unit4">
-            <unit />
-        </primitive>
-
-        <primitive id="P2Unit5">
-            <unit />
-        </primitive>
-
-        <primitive id="P2Unit6">
-            <unit />
-        </primitive>
-
-        <primitive id="P2Unit7">
-            <unit />
-        </primitive>
-
-        <primitive id="P2Unit8">
-            <unit />
-        </primitive>
-
     </primitives>
 
     <components>
         <component id="root">
             <transformation>
+                <translate x="0" y="-2" z="0" />
             </transformation>
 
             <materials>
@@ -355,372 +284,15 @@
             <texture id="none" />
 
             <children>
-                <componentref id="piecesP1" />
-                <componentref id="piecesP2" />
                 <componentref id="table" />
                 <componentref id="skybox" />
             </children>
         </component>
 
-        <component id="piecesP1">
-            <transformation>
-                <translate x="-4" y="8" z="-4" />
-            </transformation>
-
-            <materials>
-                    <material id="ruby" />
-            </materials>
-
-            <texture id="none" />
-
-            <children>
-                <componentref id="P1Node" />
-                <componentref id="P1Unit1" />
-                <componentref id="P1Unit2" />
-                <componentref id="P1Unit3" />
-                <componentref id="P1Unit4" />
-                <componentref id="P1Unit5" />
-                <componentref id="P1Unit6" />
-                <componentref id="P1Unit7" />
-                <componentref id="P1Unit8" />
-             </children>
-        </component>
-
-
-        <component id="piecesP2">
-            <transformation>
-                <translate x="-4" y="8" z="-4" />
-            </transformation>
-
-            <materials>
-                    <material id="emerald" />
-            </materials>
-
-            <texture id="none" />
-
-            <children>
-                <componentref id="P2Node" />
-                <componentref id="P2Unit1" />
-                <componentref id="P2Unit2" />
-                <componentref id="P2Unit3" />
-                <componentref id="P2Unit4" />
-                <componentref id="P2Unit5" />
-                <componentref id="P2Unit6" />
-                <componentref id="P2Unit7" />
-                <componentref id="P2Unit8" />
-             </children>
-        </component>
-
-
-        <component id="P1Node">
-            <transformation>
-                <translate x="0" y="0" z="4" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P1Node" />
-             </children>
-        </component>
-
-
-        <component id="P1Unit1">
-            <transformation>
-                <translate x="0" y="0" z="2" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P1Unit1" />
-             </children>
-        </component>
-
-
-        <component id="P1Unit2">
-            <transformation>
-                <translate x="0" y="0" z="3" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P1Unit2" />
-             </children>
-        </component>
-
-
-        <component id="P1Unit3">
-            <transformation>
-                <translate x="0" y="0" z="5" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P1Unit3" />
-             </children>
-        </component>
-
-
-        <component id="P1Unit4">
-            <transformation>
-                <translate x="0" y="0" z="6" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P1Unit4" />
-             </children>
-        </component>
-
-
-        <component id="P1Unit5">
-            <transformation>
-                <translate x="1" y="0" z="3" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P1Unit5" />
-             </children>
-        </component>
-
-
-        <component id="P1Unit6">
-            <transformation>
-                <translate x="1" y="0" z="4" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P1Unit6" />
-             </children>
-        </component>
-
-
-        <component id="P1Unit7">
-            <transformation>
-                <translate x="1" y="0" z="5" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P1Unit7" />
-             </children>
-        </component>
-
-
-        <component id="P1Unit8">
-            <transformation>
-                <translate x="2" y="0" z="4" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P1Unit8" />
-             </children>
-        </component>
-
-
-        <component id="P2Node">
-            <transformation>
-                <translate x="8" y="0" z="4" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P2Node" />
-             </children>
-        </component>
-
-
-        <component id="P2Unit1">
-            <transformation>
-                <translate x="8" y="0" z="2" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P2Unit1" />
-             </children>
-        </component>
-
-
-        <component id="P2Unit2">
-            <transformation>
-                <translate x="8" y="0" z="3" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P2Unit2" />
-             </children>
-        </component>
-
-
-        <component id="P2Unit3">
-            <transformation>
-                <translate x="8" y="0" z="5" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P2Unit3" />
-             </children>
-        </component>
-
-
-        <component id="P2Unit4">
-            <transformation>
-                <translate x="8" y="0" z="6" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P2Unit4" />
-             </children>
-        </component>
-
-
-        <component id="P2Unit5">
-            <transformation>
-                <translate x="7" y="0" z="3" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P2Unit5" />
-             </children>
-        </component>
-
-
-        <component id="P2Unit6">
-            <transformation>
-                <translate x="7" y="0" z="4" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P2Unit6" />
-             </children>
-        </component>
-
-
-        <component id="P2Unit7">
-            <transformation>
-                <translate x="7" y="0" z="5" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P2Unit7" />
-             </children>
-        </component>
-
-
-        <component id="P2Unit8">
-            <transformation>
-                <translate x="6" y="0" z="4" />
-            </transformation>
-
-            <materials>
-                    <material id="inherit" />
-            </materials>
-
-            <texture id="inherit" />
-
-            <children>
-                <primitiveref id="P2Unit8" />
-             </children>
-        </component>
-
 
         <component id="table">
             <transformation>
-                <translate x="0" y="7.99" z="0" />
+                <translate x="0" y="1.99" z="0" />
                 <rotate axis="y" angle="45" />
                 <rotate axis="x" angle="90" />
             </transformation>
@@ -763,7 +335,7 @@
 
         <component id="top">
             <transformation>
-                <scale x="1.2" y="1" z="1.2" />
+                <scale x="1.6" y="1" z="1.6" />
                 <translate x="0" y="50" z="0" />
                 <rotate axis="x" angle="90" />
                 <rotate axis="z" angle="180" />

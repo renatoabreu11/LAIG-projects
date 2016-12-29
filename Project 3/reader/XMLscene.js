@@ -336,16 +336,13 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
     this.nodes.display();
-    this.translate(-5,5,5);
-    this.rotate(3*Math.PI/4,0,1,0);
-    this.marker.display();
     this.rotate(Math.PI,0,1,0);
-/*
+
     if (this.graph.loadedOk){
 		this.updateLights();
 		this.materialDefault.apply();
 		this.graph.getRootComponent().display(null, null, this.elapsedTime);
      }
-*/
+//*/
 };
 
