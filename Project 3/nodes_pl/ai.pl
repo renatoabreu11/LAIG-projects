@@ -22,14 +22,35 @@ pickRandomMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, Bes
     getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF).
 
 %bot will make a calculated move
-pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, BestMove):-
+pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, Move):-
     getNodeCoordinates(Board, Bot, NodeRowI-NodeColI),
     getValidCoords(Board, Bot, ValidMoves), !,
     bestMove(Board, Bot, ValidMoves, _,  -500, BestMove,BestValue),
-    if1(BestValue>=0,applyMove(Board, BestMove, FinalBoard),
-    	if1(moveNode(Board,Bot,FinalBoard, BestMove), write(''), applyMove(Board, BestMove, FinalBoard))),
+	if1(
+		(BestValue>=0, not(equalMove(BestMove))),
+		(applyMove(Board, BestMove, FinalBoard), assert(lastMove(BestMove, BestValue)), groundMove(BestMove, Move)),
+		if1(moveNode(Board,Bot,FinalBoard, Move), write(''),
+			(
+				listLength(ValidMoves, 0, Length),
+				random(0, Length, Value),
+				nth1(Value, ValidMoves, Aux),
+				assert(lastMove(Aux, 0)),
+				applyMove(Board, Aux, FinalBoard),
+                groundMove(Aux, Move)
+			)
+		)
+	),
     getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF).
 
+
+groundMove(FinalMove, FinalMove).
+
+equalMove([SrcRow-SrcCol, DestRow-DestCol]):-
+	retract(lastMove([LastSrcRow-LastSrcCol, LastDestRow-LastDestCol], _)),
+	SrcRow == LastDestRow,
+	SrcCol == LastDestCol,
+	DestRow == LastSrcRow,
+	DestCol == LastSrcCol.
 
 getPieceMoves(Board, PieceRow, PieceCol, Moves):-
     getNodeCoordinates(Board, blue, BlueNodeRow-BlueNodeCol), 
@@ -40,8 +61,6 @@ getPieceMoves(Board, PieceRow, PieceCol, Moves):-
         appendCoordinates(DestRow-DestCol, Coords)),
     ValidMoves),
     flatten(ValidMoves, Moves).
-
-
 
 %Validates a movement
 tryMove(Board, Cells, BlueNodeRow-BlueNodeCol, RedNodeRow-RedNodeCol, Row-Col, DestRow-DestCol, Piece):-
@@ -123,19 +142,21 @@ evaluateMove(Board, Bot, [SrcRow-SrcCol, DestRow-DestCol], MoveValue):-
     evaluateCI(Board, DestRow-DestCol, NodeCoords, CommunicationValue, Bot), !,
     %Evaluate adjacency to enemy Node
     evaluateNA(Board, Bot, [SrcRow-SrcCol, DestRow-DestCol], NodeRowE-NodeColE, AdjacentValue), !,
-    %Evaluate distance to enemy Node
+				%Evaluate adjacency to enemy Node
+				evaluateOwnNode(Board, [SrcRow-SrcCol, DestRow-DestCol], NodeRowP-NodeColP, OtherValue), !,
+	%Evaluate distance to enemy Node
     evaluateND([SrcRow-SrcCol, DestRow-DestCol], NodeCoords, DistanceValue), !,
     %Evaluate number of pieces between unit and node
     evaluatePB(Board, [SrcRow-SrcCol, DestRow-DestCol], NodeCoords, PiecesValue), !,
 
     %MoveValue is the sum of the 4 evaluations calculated above.
-    MoveValue is CommunicationValue + DistanceValue + AdjacentValue + PiecesValue.
+    MoveValue is CommunicationValue + DistanceValue + AdjacentValue + PiecesValue + OtherValue.
 
 /*
 *************************** Evaluate unit communication with nodes ***************************
 Values given to the move:
-14 if the new coords have communication with both nodes
-12 if only has communication with one node
+10 if the new coords have communication with both nodes
+8 if only has communication with one node
 0 if both cases mentioned fail.
 */
 
@@ -143,17 +164,17 @@ Values given to the move:
 evaluateCI(Board, DestRow-DestCol, [NodeRowP-NodeColP, NodeRowE-NodeColE], CommsValue, Bot):-
     or(checkCommunicationLines(DestRow, DestCol, NodeRowP, NodeColP, Board, Bot), 
     checkCommunicationLines(DestRow, DestCol, NodeRowE, NodeColE, Board, Bot)),
-    CommsValue is 14.
+    CommsValue is 10.
 
 % Has communication with the team node.
 evaluateCI(Board, DestRow-DestCol, [NodeRowP-NodeColP, _], CommsValue, Bot):-
     checkCommunicationLines(DestRow, DestCol, NodeRowP, NodeColP, Board, Bot),
-    CommsValue is 12.
+    CommsValue is 8.
 
 % Has communication only with the enemy node.
 evaluateCI(Board, DestRow-DestCol, [_, NodeRowE-NodeColE], CommsValue, Bot):-
     checkCommunicationLines(DestRow, DestCol, NodeRowE, NodeColE, Board, Bot),
-    CommsValue is 12.
+    CommsValue is 8.
 
 % Does not have communication with either node.
 evaluateCI(_, _, _, 0, _).
@@ -161,7 +182,7 @@ evaluateCI(_, _, _, 0, _).
 /*
 *************************** Evaluate adjacency to enemy Node ***************************
 Values given to the move:
-80*k, k being the number of units adjacent to enemy Node
+8*k, k being the number of units adjacent to enemy Node
 */
 
 % Gives a value for the amount of PlayerColor's pieces adjacent to the enemy' Node
@@ -184,8 +205,34 @@ evaluateNA(Board, PlayerColor, Coords, NodeRow-NodeCol, Value):-
     getMatrixElement(AuxBoard, NodeRow, East, Piece4),
     isAdjacent(Piece4, PlayerColor, Val4),
 
-    Multiplier is 80,
+    Multiplier is 8,
     Value is Multiplier*(Val1+Val2+Val3+Val4).
+
+evaluateOwnNode(Board, Coords, NodeRow-NodeCol, Value):-
+    applyMove(Board, Coords, AuxBoard),
+    North is (NodeRow-1),
+    South is (NodeRow+1),
+    East is (NodeCol+1),
+    West is (NodeCol-1),
+    getMatrixElement(AuxBoard, North, NodeCol, Piece1),
+    otherAdjacent(Piece1, Val1),
+
+    getMatrixElement(AuxBoard, South, NodeCol, Piece2),
+    otherAdjacent(Piece1, Val2),
+
+    getMatrixElement(AuxBoard, NodeRow, West, Piece3),
+    otherAdjacent(Piece1, Val3),
+
+    getMatrixElement(AuxBoard, NodeRow, East, Piece4),
+    otherAdjacent(Piece1, Val4),
+
+    Multiplier is -8,
+    Value is Multiplier*(Val1+Val2+Val3+Val4).
+
+otherAdjacent(Piece, 1):-
+    or(belongsTo(Piece, blue), belongsTo(Piece, red)).
+
+otherAdjacent(_, 0).
 
 isAdjacent(Piece, PlayerColor, 1):-
     belongsTo(Piece, PlayerColor).
@@ -195,7 +242,7 @@ isAdjacent(_, _, 0).
 /*
 *************************** Evaluate distance to enemy Node ***************************
 Values given to the move:
-12*k UNIT IS k STEPS CLOSER TO ENEMY NODE
+8*k UNIT IS k STEPS CLOSER TO ENEMY NODE
 */
         
 % Finds out the distance between a unit("UnitCol-UnitRow") and the enemy node.
@@ -208,7 +255,7 @@ evaluateND([SrcRow-SrcCol, DestRow-DestCol], [_, NodeRowE-NodeColE],  DistanceVa
     abs(DestCol-NodeColE,ColDiffDest), %intermediate calculations for new distance
     DistanceDest is ColDiffDest+RowDiffDest,
 
-    Multiplier is 12,
+    Multiplier is 8,
     DistanceValue is Multiplier*(DistanceOrigin-DistanceDest).
 
 /*
@@ -286,7 +333,7 @@ checkUnit(DestRow, DestCol, NodeRowE, NodeColE, IncRow, IncCol, Row, Col):-
            
            
 %Gets all the possible moves to a node, and randomly selects one
-moveNode(Board, Bot, FinalBoard, [NodeRow-NodeCol, Move]):-
+moveNode(Board, Bot, FinalBoard, Move):-
 	getNodeCoordinates(Board, Bot, NodeRow-NodeCol),
         North is (NodeRow-1),
         South is (NodeRow+1),

@@ -8,7 +8,7 @@ function Player(team, score, isBot, scene) {
     this.score = score; // Tempo total das jogadas, número de vitorias, ou algo do género
     this.isBot = isBot;
 
-    var currAppear = null;
+    this.currAppear = null;
     this.playerAppear = new CGFappearance(scene);
     this.playerAppear.setShininess(50);
 }
@@ -40,7 +40,7 @@ function hexToRgb(hex) {
 
 Player.prototype.updateAppear = function (appear) {
     var equal = true;
-    if(this.currAppear == null){7
+    if(this.currAppear == null){
         this.currAppear = appear;
         equal = false;
     }

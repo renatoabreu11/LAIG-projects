@@ -48,7 +48,7 @@ pvcDifficultyMenu:-
                                 write('Medium mode'), nl, nl, 
                                 write('Press enter to continue.'), nl,
                                 waitForKey,
-                                nl, initialBoard(Board), 
+                                nl, initialBoard(Board), assert(lastMove([0-0, 0-0], 0)),
                                 game(pvc, Board, blue, medium), !, waitForKey, 
                                 mainMenu;
                 X == '3' -> playMenu;
@@ -75,7 +75,7 @@ cvcDifficultyMenu:-
                                 write('Medium mode'), nl, nl, 
                                 write('Press enter to continue.'), nl,
                                 waitForKey,
-                                nl, initialBoard(Board), 
+                                nl, initialBoard(Board), assert(lastMove([0-0, 0-0], 0)),
                                 game(cvc, Board, blue, medium), !, waitForKey, 
                                 mainMenu;
                 X == '3' -> playMenu;
