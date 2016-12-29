@@ -32,6 +32,7 @@ function Nodes(scene) {
     this.client= new Client(8081);
     this.pieces = [];
     this.tiles = [];
+    this.highlightedTiles = [];
     this.board = new Board(scene, []);
 
     this.mode = Nodes.mode.NONE;
@@ -56,6 +57,11 @@ function Nodes(scene) {
 
     this.highlightAppearance = new CGFappearance(this.scene);
     this.highlightAppearance.loadTexture('../res/ice.jpg');
+
+    this.cellShader = new CGFshader(this.scene.gl, "shaders/transparent.vert", "shaders/transparent.frag");
+    this.cellShader.setUniformsValues({
+        uSampler2: 1,
+    });
 }
 
 /**
@@ -292,6 +298,8 @@ Nodes.prototype.switchPlayer = function () {
 };
 
 Nodes.prototype.nextMove = function () {
+    this.resetHighlights();
+
     if(this.currentMove.isGameOver()){
         this.state = Nodes.gameState.END_GAME;
         return;
@@ -355,16 +363,14 @@ Nodes.prototype.selectPiece = function (obj) {
 }
 
 Nodes.prototype.highlightTiles = function (validMoves) {
-    var tiles = [];
+    this.resetHighlights();
+
     for(var i = 0; i < validMoves.length; i++){
         var tile = this.getTileFromCoords(validMoves[i]);
-        if(tile != false)
-            tiles.push(tile);
-    }
-
-    console.log(validMoves)
-    for(tile of tiles){
-       tile.setHighlight(true);
+        if(tile != false){
+            tile.setHighlight(true);
+            this.highlightedTiles.push(tile);
+        }
     }
 }
 
@@ -445,6 +451,7 @@ Nodes.prototype.saveGame = function () {
     this.scene.addMovie();
     this.pieces = [];
     this.tiles = [];
+    this.resetHighlights();
 
     this.mode = Nodes.mode.NONE;
     this.difficulty = Nodes.difficulty.NONE;
@@ -454,6 +461,13 @@ Nodes.prototype.saveGame = function () {
     this.currentMove = null;
     this.currentPlayer = null;
 };
+
+Nodes.prototype.resetHighlights = function () {
+    for(tile of this.highlightedTiles){
+        tile.setHighlight(false);
+    }
+    this.highlightedTiles = [];
+}
 
 
 Nodes.prototype.update = function(currTime, player1, player2) {

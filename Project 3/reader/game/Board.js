@@ -14,10 +14,6 @@ function Board(scene, encoded_board) {
     this.nodesAppearance = new CGFappearance(this.scene);
     this.nodesAppearance.loadTexture('../res/nodesboard.png');
     this.nodesBoard = new Plane(this.scene, 10, 10, 31, 31);
-    this.boardShader = new CGFshader(this.scene.gl, "shaders/nodesboard.vert", "shaders/nodesboard.frag");
-    this.boardShader.setUniformsValues({
-        uSampler2: 1,
-    });
 }
 
 /**
@@ -108,12 +104,10 @@ Board.prototype.toPrologStruct = function () {
 Board.prototype.display = function () {
     this.scene.pushMatrix();
     this.nodesAppearance.apply();
-    this.scene.setActiveShader(this.boardShader);
     this.scene.scale(1.03, 1.03, 1.03);
     this.scene.rotate(-90*Math.PI/180, 0, 1, 0);
     this.scene.rotate(-90*Math.PI/180, 1, 0, 0);
     this.nodesBoard.display();
-    this.scene.setActiveShader(this.scene.defaultShader);
     this.scene.popMatrix();
 }
 
