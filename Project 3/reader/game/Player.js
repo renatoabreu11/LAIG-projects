@@ -9,6 +9,7 @@ function Player(team, score, isBot, scene) {
     this.isBot = isBot;
 
     this.currAppear = null;
+    this.appearAsRBG = null;
     this.playerAppear = new CGFappearance(scene);
     this.playerAppear.setShininess(50);
 }
@@ -36,10 +37,13 @@ Player.prototype.updateAppear = function (appear) {
         var r = rgb.r /  255 ;
         var g = rgb.g /  255 ;
         var b = rgb.b /  255 ;
+        this.appearAsRBG = [r, g, b];
         this.playerAppear.setAmbient(r, g, b, 0.2);
         this.playerAppear.setDiffuse(r, g, b, 0.2);
         this.playerAppear.setSpecular(r, g, b, 0.2);
+        return true;
     }
+    return false;
 }
 
 /**
@@ -48,6 +52,14 @@ Player.prototype.updateAppear = function (appear) {
  */
 Player.prototype.getTeam = function () {
     return this.team;
+}
+
+/**
+ * Returns player appear as rgb
+ * @returns {Array|[*,*,*]|null}
+ */
+Player.prototype.getAppearAsRGB = function () {
+    return this.appearAsRBG;
 }
 
 /**
@@ -83,10 +95,10 @@ Player.prototype.setIsBot = function (value) {
 }
 
 /**
- * Auxiliar function that converts an hexadecimal color value to a rgb one
- * @param hex
- * @returns {*}
- */
+* Auxiliar function that converts an hexadecimal color value to a rgb one
+* @param hex
+* @returns {*}
+*/
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {

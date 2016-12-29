@@ -47,11 +47,11 @@ Tile.prototype.display = function (currentPlayer, currentMove, pickingMode, play
             this.scene.pickObjectID++;
         }
 
-    if(this.highlight){
-        this.scene.setActiveShader(this.scene.nodes.cellShader);
-        this.scene.nodes.highlightAppearance.apply();
-    }
-    else this.scene.nodes.cellAppearance.apply();
+        if(this.highlight){
+            this.scene.setActiveShader(this.scene.nodes.cellShader);
+            this.scene.nodes.highlightAppearance.apply();
+        }
+        else this.scene.nodes.cellAppearance.apply();
     this.scene.rotate(-90 * Math.PI / 180, 0, 1, 0);
     this.scene.rotate(-90 * Math.PI / 180, 1, 0, 0);
     this.object.display();

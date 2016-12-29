@@ -18,8 +18,6 @@ function Piece(scene, unit, type, colour) {
     else this.object = new Unit(scene);
 
     this.isSelected = false;
-    this.selected = new CGFappearance(this.scene);
-    this.selected.loadTexture('../res/sand.jpg');
 }
 
 Piece.prototype = Object.create(CGFobject.prototype);
@@ -31,11 +29,13 @@ Piece.prototype.constructor = Piece;
 Piece.prototype.display = function () {
     this.scene.pushMatrix();
     if(this.isSelected)
-        this.selected.apply();
+        this.scene.setActiveShader(this.scene.nodes.selectedShader);
     if(this.animation != null){
         this.scene.multMatrix(this.animation.getMatrix(this.timer));
     }
     this.object.display();
+    if(this.isSelected)
+        this.scene.setActiveShader(this.scene.defaultShader);
     this.scene.popMatrix();
 }
 

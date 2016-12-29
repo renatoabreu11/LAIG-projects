@@ -69,6 +69,8 @@ function Nodes(scene) {
     this.cellShader.setUniformsValues({
         uSampler2: 1,
     });
+
+    this.selectedShader = new CGFshader(this.scene.gl, "shaders/selected.vert", "shaders/selected.frag");
 }
 
 Nodes.prototype = Object.create(CGFobject.prototype);
@@ -546,8 +548,21 @@ Nodes.prototype.update = function(currTime, player1, player2) {
     }
 
     if(this.gameState == Nodes.gameState.PLAY){
-        this.player1.updateAppear(player1);
-        this.player2.updateAppear(player2);
+        var appearChange1 = this.player1.updateAppear(player1);
+        var appearChange2 = this.player2.updateAppear(player2);
+
+        if(this.currentPlayer == this.player1 && appearChange1){
+            var colour = this.player1.getAppearAsRGB();
+            this.selectedShader.setUniformsValues({
+                colour: colour,
+            });
+
+        } else if(this.currentPlayer == this.player1 && appearChange2){
+            var colour = this.player2.getAppearAsRGB();
+            this.selectedShader.setUniformsValues({
+                colour: colour,
+            });
+        }
     }
 
     if(this.playState == Nodes.playState.END_GAME){
