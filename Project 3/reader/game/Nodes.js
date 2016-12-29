@@ -79,7 +79,7 @@ Nodes.prototype.constructor = Nodes;
  */
 Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
-    this.client.makeRequest("getFinalBoard", function(data){
+    this.client.makeRequest("getInitialBoard", function(data){
         nodes.initializeBoard(data);
         nodes.startGame(mode, difficulty);
     });

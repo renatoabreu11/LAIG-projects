@@ -345,7 +345,7 @@ moveNode(Board, Bot, FinalBoard, Move):-
         Moves),
         listLength(Moves, 0, Length),
         random(0, Length, Value),
-        nth1(Value, Moves, Move),
+        nth0(Value, Moves, Move),
         getRowElement(Moves, Value, Coords),
         applyMove(Board, Coords, FinalBoard), !.
         
