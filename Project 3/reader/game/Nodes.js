@@ -51,6 +51,7 @@ function Nodes(scene) {
 
     this.elapsedTime = 0;
     this.initialTime = 0;
+    this.turnFinishingTime=-1;
 
     this.cellAppearance = new CGFappearance(this.scene);
     this.cellAppearance.loadTexture('../res/transparent.png');
@@ -184,6 +185,7 @@ Nodes.prototype.startGame = function (mode, difficulty) {
     this.gameSequence = new Sequence();
     this.currentMove = new Move(this.scene, null, null, null);
     this.currentPlayer = this.player1;
+    this.turnFinishingTime=this.elapsedTime+this.scene.getTurnTime();
 }
 
 /**
@@ -288,6 +290,7 @@ Nodes.prototype.switchPlayer = function () {
     this.client.makeRequest(request, function(data) {
         var response = data.target.response;
         if(response=="f"){
+            own.turnFinishingTime=own.elapsedTime+own.scene.getTurnTime();
             if(own.currentPlayer.getIsBot())
                 own.state = Nodes.gameState.AI_TURN;
             else own.state = Nodes.gameState.PIECE_SELECTION;
@@ -307,6 +310,7 @@ Nodes.prototype.nextMove = function () {
     var movedPiece = this.currentMove.getPiece();
     if(movedPiece.getType() == "Node"){
         this.state = Nodes.gameState.END_TURN;
+        this.turnFinishingTime=-1;
         this.gameSequence.setUndo(false);
         this.gameSequence.setUndoOnQueue(false);
         this.gameSequence.setUndoPlayerMoves(false);
@@ -475,6 +479,10 @@ Nodes.prototype.update = function(currTime, player1, player2) {
         this.initialTime = currTime;
     }
     this.elapsedTime = (currTime - this.initialTime)/1000;
+
+    if(this.elapsedTime>this.turnFinishingTime && (this.state == Nodes.gameState.PIECE_SELECTION || this.state == Nodes.gameState.AI_TURN)){
+        this.state=Nodes.gameState.END_GAME;
+    }
 
     if(this.state != Nodes.gameState.MOVIE){
         this.player1.updateAppear(player1);
