@@ -55,6 +55,7 @@
         <texture id="sand" file="../res/sand.jpg" length_s="20" length_t="20" />
         <texture id="wood" file="../res/wood.jpg" length_s="1" length_t="1" />
         <texture id="ice" file="../res/ice.jpg" length_s="1" length_t="1" />
+        <texture id="neon_circuit1" file="../res/neon_circuit.jpg" length_s="1" length_t="1" />
         <texture id="neon_circuit2" file="../res/neon_circuit2.png" length_s="1" length_t="1" />
         <texture id="neon_circuit3" file="../res/neon_circuit3.jpg" length_s="1" length_t="1" />
 
@@ -225,8 +226,14 @@
             <controlpoint xx="0" yy="0" zz="-1" />
         </animation>
 
-        <animation id="rotateSuperLong" span="1009" type="circular" centerx="0" centery="0" centerz="0"
-                    radius="0" startang="0" rotang="360000"/>
+        <animation id="rotateSuperLong" span="10000" type="circular" centerx="0" centery="0" centerz="0"
+                    radius="0" startang="0" rotang="3600000"/>
+
+        <animation id="rotateAroundSuperLong" span="10000" type="circular" centerx="0" centery="0" centerz="0"
+                    radius="25" startang="0" rotang="360000"/>
+
+        <animation id="rotateAroundSuperLong2" span="10000" type="circular" centerx="0" centery="0" centerz="0"
+                    radius="25" startang="180" rotang="360180"/>
    </animations>
 
     <primitives>
@@ -282,6 +289,10 @@
             <torus inner=".25" outer="3" slices="10" loops="4" />
         </primitive>
 
+        <primitive id="globe">
+            <sphere radius="3" slices="8" stacks="8" />
+        </primitive>
+
         <primitive id="marker">
             <marker/>
         </primitive>
@@ -301,17 +312,38 @@
             <texture id="none" />
 
             <children>
-                <componentref id="marker" />
+                <componentref id="marker1" />
+                <componentref id="marker2" />
                 <componentref id="wheel1" />
+                <componentref id="wheel2" />
+                <componentref id="floatingGlobe1" />
+                <componentref id="floatingGlobe2" />
                 <componentref id="table" />
                 <componentref id="skybox" />
             </children>
         </component>
 
-        <component id="marker">
+        <component id="marker1">
             <transformation>
-                <translate x="0" y="10" z="0" />
-                <rotate axis="y" angle="60" />
+                <translate x="-20" y="10" z="0" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="neon_circuit2" />
+
+            <children>
+                <primitiveref id="marker" />
+            </children>
+        </component>
+
+        <component id="marker2">
+            <transformation>
+                <translate x="20" y="10" z="0" />
+                <rotate axis="y" angle="-90" />
             </transformation>
 
             <materials>
@@ -327,7 +359,28 @@
 
         <component id="wheel1">
             <transformation>
-                <translate x="-5" y="-3" z="-25" />
+                <translate x="-5" y="-3" z="-30" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+
+            <animation>
+            <animationref id="rotateSuperLong" />
+            </animation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="neon_circuit1" />
+
+            <children>
+                <componentref id="wheel" />
+            </children>
+        </component>
+
+        <component id="wheel2">
+            <transformation>
+                <translate x="5" y="-3" z="30" />
                 <rotate axis="x" angle="90" />
             </transformation>
 
@@ -363,6 +416,46 @@
             </children>
         </component>
 
+        <component id="floatingGlobe1">
+            <transformation>
+                <translate x="0" y="10" z="0" />
+            </transformation>
+
+            <animation>
+                <animationref id="rotateAroundSuperLong" />
+            </animation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="neon_circuit3" />
+
+            <children>
+                <primitiveref id="globe" />
+            </children>
+        </component>
+
+        <component id="floatingGlobe2">
+            <transformation>
+                <translate x="0" y="10" z="0" />
+            </transformation>
+
+            <animation>
+                <animationref id="rotateAroundSuperLong2" />
+            </animation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="neon_circuit1" />
+
+            <children>
+                <primitiveref id="globe" />
+            </children>
+        </component>
+
 
         <component id="table">
             <transformation>
@@ -375,7 +468,7 @@
                 <material id="inherit" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="neon_circuit2" />
 
             <children>
                 <primitiveref id="tableTop" />
