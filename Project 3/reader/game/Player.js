@@ -91,6 +91,13 @@ Player.prototype.getViewIndex = function () {
     return this.viewIndex;
 }
 
+/**
+ * Sets current view index
+ */
+Player.prototype.setViewIndex = function (value) {
+    this.viewIndex = value;
+}
+
 
 /**
  * Returns player team -> blue or red

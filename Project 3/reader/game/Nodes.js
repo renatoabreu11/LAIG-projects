@@ -386,9 +386,18 @@ Nodes.prototype.switchPlayer = function () {
             if(own.currentPlayer.getIsBot())
                 own.playState = Nodes.playState.AI_TURN;
             else own.playState = Nodes.playState.PIECE_SELECTION;
-            if(own.currentPlayer == own.player1)
-                own.scene.switchCamera("player1View1", "camReset");
-            else own.scene.switchCamera("player2View1", "camReset");
+            if(own.currentPlayer == own.player1){
+                if(own.player2.getViewIndex() == 3)
+                    own.scene.switchCamera("player1View1", "camFromLatToP1");
+                else own.scene.switchCamera("player1View1", "camReset");
+                own.player2.setViewIndex(0);
+            } else {
+                if(own.player1.getViewIndex() == 3)
+                    own.scene.switchCamera("player2View1", "camFromLatToP2");
+                else own.scene.switchCamera("player2View1", "camReset");
+
+                own.player1.setViewIndex(0);
+            }
         } else {
             own.playState = Nodes.playState.END_GAME;
         }
