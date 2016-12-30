@@ -12,12 +12,16 @@ function InfoMarker(scene){
 	this.twoDotsAppearance.loadTexture("../res/marker/twodots.png");
 
 	this.movieAppearance = new CGFappearance(this.scene);
+	this.movieAppearance.setAmbient(255,255,255,1);
 	this.movieAppearance.loadTexture("../res/MovieTime.jpg");
 	this.winner1Appearance = new CGFappearance(this.scene);
+	this.winner1Appearance.setAmbient(255,255,255,1);
 	this.winner1Appearance.loadTexture("../res/Winner1.jpg");
 	this.winner2Appearance = new CGFappearance(this.scene);
+	this.winner2Appearance.setAmbient(255,255,255,1);
 	this.winner2Appearance.loadTexture("../res/Winner1.jpg");
 	this.menuAppearance = new CGFappearance(this.scene);
+	this.menuAppearance.setAmbient(255,255,255,1);
 	this.menuAppearance.loadTexture("../res/Nodes.png");
 
 	this.numbersTextures = [];
