@@ -17,9 +17,11 @@ function InfoMarker(scene){
 	this.winner1Appearance = new CGFappearance(this.scene);
 	this.winner1Appearance.setAmbient(255,255,255,1);
 	this.winner1Appearance.loadTexture("../res/Winner1.jpg");
+    this.winner1Appearance.setTextureWrap('REPEAT', 'REPEAT');
 	this.winner2Appearance = new CGFappearance(this.scene);
 	this.winner2Appearance.setAmbient(255,255,255,1);
-	this.winner2Appearance.loadTexture("../res/Winner1.jpg");
+	this.winner2Appearance.loadTexture("../res/Winner2.jpg");
+    this.winner2Appearance.setTextureWrap('REPEAT', 'REPEAT');
 	this.menuAppearance = new CGFappearance(this.scene);
 	this.menuAppearance.setAmbient(255,255,255,1);
 	this.menuAppearance.loadTexture("../res/Nodes.png");
@@ -36,19 +38,20 @@ InfoMarker.prototype = Object.create(CGFobject.prototype);
 InfoMarker.prototype.constructor=InfoMarker;
 
 InfoMarker.prototype.display = function () {
-	this.updateTime();
-	var state=this.scene.nodes.gameState;
-	if(state==Nodes.gameState.MOVIE)
-		state=this.movieAppearance;
-	else if(state==Nodes.gameState.MENU){
-		var nodes = this.scene.nodes;
-		if(nodes.savedGames.length > 0){
-			var winner = nodes.savedGames[nodes.savedGames.length-1].getWinner();
-			if(winner==nodes.player1)
-				state=this.winner1Appearance;
-			else state=this.winner2Appearance;
-		} else state=this.menuAppearance;
-	} else state=null;
+    this.updateTime();
+    var state=this.scene.nodes.gameState;
+    if(state==Nodes.gameState.MOVIE)
+        state=this.movieAppearance;
+    else if(state==Nodes.gameState.MENU){
+        state=this.menuAppearance;
+    } else if(this.scene.nodes.savingGame){
+        var nodes = this.scene.nodes;
+        var winner = nodes.savedGames[nodes.savedGames.length-1].getWinner();
+        if(winner==nodes.player1)
+            state=this.winner1Appearance;
+        else state=this.winner2Appearance;
+    } else
+        state=null;
 
 
 	this.scene.pushMatrix();

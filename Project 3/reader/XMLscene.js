@@ -448,6 +448,13 @@ XMLscene.prototype.ExitGame = function (){
 }
 
 /**
+ * Sets marker winner appear
+ */
+XMLscene.prototype.setMarkerWinner = function (player) {
+    this.marker.setState(player);
+}
+
+/**
  * Calls the function to undo last move
  * @constructor
  */

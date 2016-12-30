@@ -430,6 +430,7 @@ Nodes.prototype.saveGame = function () {
     winner.score++;
     var saveGame = new Save(this.gameSequence, winner, this.mode, this.difficulty, index);
     this.savedGames.push(saveGame);
+    this.savingGame = true;
     this.scene.addMovie();
     this.scene.transitionCam=null;
     var camID = this.scene.getDefaultCamID();
@@ -468,7 +469,8 @@ Nodes.prototype.resetGame = function () {
         own.scene.switchCamera("menuView", "camFromLatToMenu");
         own.gameState = Nodes.gameState.MENU;
         own.turnFinishingTime=-1;
-    }, 1500);
+        own.savingGame = false;
+    }, 3000);
 }
 
 /**
