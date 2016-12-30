@@ -101,15 +101,10 @@ MyInterface.prototype.processKeyboard = function(event) {
 			break;
 		case(76): //debug [L]
 		case(108):
-			if(this.scene.transitionCam != null) //caso a transicao nao tenha acabado, nao permite iniciar uma nova
-				break;
-			transitionCam=[];
-			transitionCam["newCam"]=this.scene.graph.getNextView();
-			transitionCam["animation"]=this.scene.graph.animations[this.scene.graph.checkIfExists(this.scene.graph.animations, transitionCam["newCam"]["id"]=="player1" ? "camTransition1" : "camTransition2")];
-			transitionCam["finishTime"]=this.scene.elapsedTime+transitionCam["animation"].span;
-			this.scene.transitionCam=transitionCam;
+		    var view = this.scene.graph.getNextView();
+            var transition = "camTransition1";
+			this.scene.switchCamera(view, transition);
 			break;
-
 		default:
 			console.log("Unexpected keystroke with code "+event.keyCode);
 			break;
