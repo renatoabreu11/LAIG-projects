@@ -100,7 +100,8 @@ XMLscene.prototype.updateCamera = function () {
 /**
  * Sets camera to the next view with a smooth transition
  */
-XMLscene.prototype.switchCamera = function (view, transition) {
+XMLscene.prototype.switchCamera = function (viewID, transition) {
+    var view = this.graph.getView(viewID);
     if(this.transitionCam != null)
         return false;
     transitionCam=[];
@@ -294,9 +295,8 @@ XMLscene.prototype.ChangeView = function ()
         var player = this.nodes.getCurrentPlayer();
         player.updateView();
         var viewID = player.getCurrentView();
-        var view = this.graph.getView(viewID);
         var transition = "camTransition1";
-        var success = this.switchCamera(view, transition);
+        var success = this.switchCamera(viewID, transition);
         if(!success){
             player.reverseView();
         }
@@ -386,7 +386,8 @@ XMLscene.prototype.StartGame = function ()
  * @constructor
  */
 XMLscene.prototype.ExitGame = function (){
-    if(this.nodes.getGameState() == Nodes.gameState.PLAY){
+    if(this.nodes.getGameState() == Nodes.gameState.PLAY && this.transitionCam == null){
+        console.log(this.nodes.getGameState())
         var newGame = confirm("Do you really want to quit the current game?");
         if(newGame)
             this.nodes.resetGame();

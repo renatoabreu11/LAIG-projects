@@ -188,6 +188,13 @@
             <controlpoint xx="-30" yy="0" zz="-14" />
         </animation>
 
+        <animation id="camTransition3" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="20" zz="0" />
+            <controlpoint xx="0" yy="30" zz="-15" />
+            <controlpoint xx="0" yy="15" zz="-30" />
+        </animation>
+
         <!--jumps-->
         <animation id="jumpX+" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />

@@ -99,14 +99,14 @@ MyInterface.prototype.processKeyboard = function(event) {
 		case(77+32):
 			this.scene.updateMaterials();
 			break;
-		case(76): //debug [L]
+		case(76):
 		case(108):
 		    var view = this.scene.graph.getNextView();
 		    var transition;
             if(view["id"] == "player1View1" || view["id"] == "player1View2" || view["id"] == "player1View3")
                 transition = "camTransition2";
             else transition = "camTransition1";
-			this.scene.switchCamera(view, transition);
+			this.scene.switchCamera(view["id"], transition);
 			break;
 		default:
 			console.log("Unexpected keystroke with code "+event.keyCode);
