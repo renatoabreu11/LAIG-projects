@@ -305,6 +305,13 @@
             <marker/>
         </primitive>
 
+        <primitive id="block">
+        	<cylinder base="3" top="3" height="5" slices="4" stacks="5" />
+        </primitive>
+
+        <primitive id="sphere">
+            <sphere radius="3" slices="8" stacks="8" />
+        </primitive>
     </primitives>
 
     <components>
@@ -322,6 +329,12 @@
             <children>
                 <componentref id="marker1" />
                 <componentref id="marker2" />
+                <componentref id="statue1" />
+                <componentref id="statue2" />
+                <componentref id="statue3" />
+                <componentref id="statue4" />
+                <componentref id="bench1" />
+                <componentref id="bench2" />
                 <componentref id="table" />
                 <componentref id="skybox" />
             </children>
@@ -358,6 +371,185 @@
 
             <children>
                 <primitiveref id="marker" />
+            </children>
+        </component>
+
+        <component id="statue1">
+            <transformation>
+                <translate x="25" y="-1.5" z="25" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <componentref id="statueBase" />
+                <primitiveref id="sphere" />
+            </children>
+        </component>
+
+        <component id="statue2">
+            <transformation>
+                <translate x="-25" y="-1.5" z="25" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <componentref id="statueBase" />
+                <primitiveref id="sphere" />
+            </children>
+        </component>
+
+        <component id="statue3">
+            <transformation>
+                <translate x="25" y="-1.5" z="-25" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <componentref id="statueBase" />
+                <primitiveref id="sphere" />
+            </children>
+        </component>
+
+        <component id="statue4">
+            <transformation>
+                <translate x="-25" y="-1.5" z="-25" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <componentref id="statueBase" />
+                <primitiveref id="sphere" />
+            </children>
+        </component>
+
+        <component id="statueBase">
+            <transformation>
+            	<translate x="0" y="-7" z="-2.5" />
+            	<scale x="1.1" y="2" z="1" />
+                <rotate axis="z" angle="45" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <primitiveref id="block" />
+            </children>
+        </component>
+
+        <component id="bench1">
+            <transformation>
+                <translate x="7.5" y="-12" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <componentref id="benchLeg1" />
+                <componentref id="benchLeg2" />
+                <componentref id="benchTop" />
+            </children>
+        </component>
+
+        <component id="bench2">
+            <transformation>
+                <translate x="-12.5" y="-12" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <componentref id="benchLeg1" />
+                <componentref id="benchLeg2" />
+                <componentref id="benchTop" />
+            </children>
+        </component>
+
+        <component id="benchLeg1">
+            <transformation>
+            	<translate x="0" y="2.1" z="-10" />
+            	<scale x="1" y="2" z="1" />
+            	<rotate axis="y" angle="90" />
+                <rotate axis="z" angle="45" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <primitiveref id="block" />
+            </children>
+        </component>
+
+        <component id="benchLeg2">
+            <transformation>
+            	<translate x="0" y="2.1" z="10" />
+            	<scale x="1" y="2" z="1" />
+            	<rotate axis="y" angle="90" />
+                <rotate axis="z" angle="45" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <primitiveref id="block" />
+            </children>
+        </component>
+
+        <component id="benchTop">
+            <transformation>
+            	<translate x="0" y="7.4" z="0" />
+            	<scale x="1" y="0.5" z="5.71" />
+            	<rotate axis="y" angle="90" />
+                <rotate axis="z" angle="45" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="marble" />
+
+            <children>
+                <primitiveref id="block" />
             </children>
         </component>
 
