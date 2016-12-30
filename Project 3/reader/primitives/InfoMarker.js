@@ -25,6 +25,9 @@ function InfoMarker(scene){
 	this.menuAppearance = new CGFappearance(this.scene);
 	this.menuAppearance.setAmbient(255,255,255,1);
 	this.menuAppearance.loadTexture("../res/Nodes.png");
+	this.errorAppearance = new CGFappearance(this.scene);
+	this.errorAppearance.setAmbient(255,255,255,1);
+	this.errorAppearance.loadTexture("../res/Server.png");
 
 	this.numbersTextures = [];
 	for(n=0; n<=9; n++){
@@ -42,9 +45,11 @@ InfoMarker.prototype.display = function () {
     var state=this.scene.nodes.gameState;
     if(state==Nodes.gameState.MOVIE)
         state=this.movieAppearance;
-    else if(state==Nodes.gameState.MENU){
+    else if(state==Nodes.gameState.MENU)
         state=this.menuAppearance;
-    } else if(this.scene.nodes.savingGame){
+    else if(state == Nodes.gameState.CONNECTION_REFUSED)
+		state=this.errorAppearance;
+	else if(this.scene.nodes.savingGame){
         var nodes = this.scene.nodes;
         var winner = nodes.savedGames[nodes.savedGames.length-1].getWinner();
         if(winner==nodes.player1)

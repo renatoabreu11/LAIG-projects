@@ -13,10 +13,10 @@ Client.prototype.constructor = Client;
  * Makes a request to the prolog server
  * @param requestString
  */
-Client.prototype.makeRequest=function(requestString, handler)
+Client.prototype.makeRequest=function(requestString, success, error)
 {
     this.request = requestString;
-    this.getPrologRequest(handler);
+    this.getPrologRequest(success, error);
 }
 
 /**

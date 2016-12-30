@@ -15,6 +15,7 @@ Nodes.gameState = {
     MENU: 0,
     PLAY: 1,
     MOVIE: 2,
+    CONNECTION_REFUSED: 3,
 }
 
 Nodes.playState = {
@@ -83,22 +84,29 @@ Nodes.prototype.constructor = Nodes;
  */
 Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
-    this.client.makeRequest("getFinalBoard", function(data){
-        nodes.scene.transitionCam=null;
-        var randomValue = Math.floor((Math.random() * 10) + 1);
-        if(randomValue > 5){
-            nodes.currentPlayer = nodes.player1;
-            nodes.scene.switchCamera("player1View1", "camFromMenuToP1");
-        }else{
-            nodes.currentPlayer = nodes.player2;
-            nodes.scene.switchCamera("player2View1", "camFromMenuToP2");
-        }
+    this.client.makeRequest("getInitialBoard", function(data){
+            nodes.scene.transitionCam=null;
+            var randomValue = Math.floor((Math.random() * 10) + 1);
+            if(randomValue > 5){
+                nodes.currentPlayer = nodes.player1;
+                nodes.scene.switchCamera("player1View1", "camFromMenuToP1");
+            }else{
+                nodes.currentPlayer = nodes.player2;
+                nodes.scene.switchCamera("player2View1", "camFromMenuToP2");
+            }
 
-        nodes.initializeBoard(data);
-        setTimeout(function(){
-            nodes.startGame(mode, difficulty);
-        }, 1500);
-    });
+            nodes.initializeBoard(data);
+            setTimeout(function(){
+                nodes.startGame(mode, difficulty);
+            }, 1500);
+        },
+        function (error) {
+            nodes.gameState = Nodes.gameState.CONNECTION_REFUSED;
+            setTimeout(function(){
+                nodes.gameState = Nodes.gameState.MENU;
+            }, 4000);
+        }
+    );
 }
 
 /**
@@ -115,16 +123,24 @@ Nodes.prototype.initializeMovie = function (movieName) {
     }
     var nodes = this;
 
-    this.client.makeRequest("getFinalBoard", function(data){
-        nodes.scene.transitionCam=null;
-        nodes.scene.switchCamera("lateralView", "camFromMenuToLat");
-        nodes.initializeBoard(data);
-        setTimeout(function(){
-            nodes.playState = Nodes.playState.NONE;
-            nodes.gameState = Nodes.gameState.MOVIE;
-            nodes.updateMovie();
-        }, 1500);
-    });
+    this.client.makeRequest("getInitialBoard", function(data){
+            nodes.scene.transitionCam=null;
+            nodes.scene.switchCamera("lateralView", "camFromMenuToLat");
+            nodes.initializeBoard(data);
+            setTimeout(function(){
+                nodes.playState = Nodes.playState.NONE;
+                nodes.gameState = Nodes.gameState.MOVIE;
+                nodes.updateMovie();
+            }, 1500);
+        },
+        function (error) {
+            nodes.actualMovie = null;
+            nodes.gameState = Nodes.gameState.CONNECTION_REFUSED;
+            setTimeout(function(){
+                nodes.gameState = Nodes.gameState.MENU;
+            }, 4000);
+        }
+    );
 }
 
 /**
@@ -570,7 +586,7 @@ Nodes.prototype.resetHighlights = function () {
  * Displays nodes and all its elements
  */
 Nodes.prototype.display= function(){
-    if(this.gameState != Nodes.gameState.MENU){
+    if(this.gameState != Nodes.gameState.MENU && this.gameState != Nodes.gameState.CONNECTION_REFUSED){
         this.scene.pushMatrix();
         if((this.board != null && this.playState != Nodes.playState.NONE) || this.gameState == Nodes.gameState.MOVIE)
             this.board.display();
