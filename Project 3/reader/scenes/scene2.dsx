@@ -204,7 +204,21 @@
             <controlpoint xx="15" yy="0" zz="-37" />
         </animation>
 
-        <!-- cam for transitions related to the lateral view -->
+        <animation id="camFromMenuToLat" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="-15" yy="5" zz="-5" />
+            <controlpoint xx="-15" yy="7" zz="-10" />
+            <controlpoint xx="0" yy="5" zz="-15" />
+        </animation>
+
+        <animation id="camFromLatToMenu" span="1" type="keyframe">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="15" yy="1" zz="5" />
+            <controlpoint xx="15" yy="-4" zz="10" />
+            <controlpoint xx="0" yy="-5" zz="15" />
+        </animation>
+
+        <!-- cam for transitions related to the lateral view and normal views -->
         <animation id="camFromP1ToLat" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="5" yy="4" zz="3" />
