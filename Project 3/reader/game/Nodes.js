@@ -448,16 +448,15 @@ Nodes.prototype.saveGame = function () {
  * Resets variables used in a nodes game
  */
 Nodes.prototype.resetGame = function () {
-    this.turnFinishingTime=-1;
     this.pieces = [];
     this.tiles = [];
     this.resetHighlights();
 
-    this.difficulty = Nodes.difficulty.NONE;
-    this.playState = Nodes.playState.NONE;
-    this.gameState = Nodes.gameState.MENU;
     this.player1.setViewIndex(0);
     this.player2.setViewIndex(0)
+
+    this.difficulty = Nodes.difficulty.NONE;
+    this.playState = Nodes.playState.NONE;
 
     this.gameSequence = null;
     this.currentMove = null;
@@ -467,6 +466,8 @@ Nodes.prototype.resetGame = function () {
     setTimeout(function(){
         own.scene.transitionCam=null
         own.scene.switchCamera("menuView", "camFromLatToMenu");
+        own.gameState = Nodes.gameState.MENU;
+        own.turnFinishingTime=-1;
     }, 1500);
 }
 
@@ -569,19 +570,20 @@ Nodes.prototype.resetHighlights = function () {
 Nodes.prototype.display= function(){
     if(this.gameState != Nodes.gameState.MENU){
         this.scene.pushMatrix();
-        if(this.board != null)
+        if(this.board != null && this.playState != Nodes.playState.NONE)
             this.board.display();
 
         this.scene.pushMatrix();
         this.scene.translate(4, 0, 4);
-        for(var i = 0; i < this.tiles.length; i++){
+        if(this.playState != Nodes.playState.NONE)
+            for(var i = 0; i < this.tiles.length; i++){
 
-            var pickingMode = false;
-            if(this.playState == Nodes.playState.PIECE_SELECTION)
-                pickingMode = true;
+                var pickingMode = false;
+                if(this.playState == Nodes.playState.PIECE_SELECTION)
+                    pickingMode = true;
 
-            this.tiles[i].display(this.currentPlayer, this.currentMove, pickingMode, this.player1, this.player2);
-        }
+                this.tiles[i].display(this.currentPlayer, this.currentMove, pickingMode, this.player1, this.player2);
+            }
 
         this.scene.popMatrix();
         this.scene.popMatrix();
@@ -626,7 +628,7 @@ Nodes.prototype.update = function(currTime, player1, player2) {
         this.saveGame();
     }
 
-    if(this.gameState == Nodes.gameState.MOVIE){
+    if(this.gameState == Nodes.gameState.MOVIE && this.currentMove != null){
         var diff = this.elapsedTime - this.currentMove.getInitialTime();
         if(diff > this.currentMove.getAnimation().getSpan()) {
             this.currentMove.getPiece().setAnimation(null);

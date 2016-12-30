@@ -350,6 +350,7 @@ XMLscene.prototype.LoadScenario = function ()
 XMLscene.prototype.StartMovie = function ()
 {
     if(this.nodes.getGameState() == Nodes.gameState.MENU){
+        this.nodes.gameState = Nodes.gameState.MOVIE;
         this.nodes.initializeMovie(this.Movie);
     }
 }
@@ -406,7 +407,8 @@ XMLscene.prototype.addMovie = function ()
  */
 XMLscene.prototype.StartGame = function ()
 {
-    if(this.nodes.getGameState() == Nodes.gameState.MENU){
+    if(this.nodes.getGameState() == Nodes.gameState.MENU && this.transitionCam == null){
+        this.nodes.gameState = Nodes.gameState.PLAY;
         var mode;
         var difficulty;
         switch(this.Mode){
@@ -428,7 +430,7 @@ XMLscene.prototype.StartGame = function ()
  * @constructor
  */
 XMLscene.prototype.ExitGame = function (){
-    if(this.nodes.getGameState() == Nodes.gameState.PLAY && this.transitionCam == null){
+    if(this.nodes.getGameState() == Nodes.gameState.PLAY && this.transitionCam == null && this.nodes.playState != Nodes.playState.NONE){
         var newGame = confirm("Do you really want to quit the current game?");
         if(newGame){
             this.transitionCam=null;
