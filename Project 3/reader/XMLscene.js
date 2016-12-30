@@ -94,7 +94,6 @@ XMLscene.prototype.initCameras = function () {
  */
 XMLscene.prototype.updateCamera = function () {
     this.graph.setNextView();
-    this.camera = this.graph.getDefaultView();
 }
 
 /**
@@ -115,7 +114,9 @@ XMLscene.prototype.animateCameraTransition = function () {
     var camInfo=this.transitionCam;
 
     if(this.elapsedTime>=this.transitionCam["finishTime"]){
-        this.updateCamera();
+        var id = this.transitionCam["newCam"]["id"];
+        this.graph.setDefaultView(id);
+        this.camera = this.graph.getDefaultView();
         this.transitionCam=null;
         this.interface.setActiveCamera(this.camera);
         return;
@@ -289,9 +290,10 @@ XMLscene.prototype.display = function () {
 XMLscene.prototype.ChangeView = function ()
 {
     if(this.nodes.getGameState() == Nodes.gameState.PLAY){
-        var player = this.nodes.currentPlayer;
+        var player = this.nodes.getCurrentPlayer();
         player.updateView();
-        var view = player.getCurrentView();
+        var viewID = player.getCurrentView();
+        var view = this.graph.getView(viewID);
         var transition = "camTransition1";
         var success = this.switchCamera(view, transition);
         if(!success){

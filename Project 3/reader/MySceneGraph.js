@@ -1167,6 +1167,31 @@ MySceneGraph.prototype.getDefaultView=function() {
 }
 
 /**
+ * Sets the view with the specified id as default
+ * @return {CGFcamera} new default camera
+ */
+MySceneGraph.prototype.setDefaultView=function(id) {
+    for(view of this.views){
+        if(view["id"] == id){
+            this.defaultView = id;
+            break;
+        }
+    }
+}
+
+/**
+ * Returns the view with specified id
+ * @return {CGFcamera} new default camera
+ */
+MySceneGraph.prototype.getView=function(id) {
+    for(view of this.views){
+        if(view["id"] == id){
+           return view;
+        }
+    }
+}
+
+/**
  * Changes the default view to the next one on the list
  */
 MySceneGraph.prototype.setNextView=function() {

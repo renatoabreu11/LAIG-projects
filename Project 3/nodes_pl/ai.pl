@@ -218,13 +218,13 @@ evaluateOwnNode(Board, Coords, NodeRow-NodeCol, Value):-
     otherAdjacent(Piece1, Val1),
 
     getMatrixElement(AuxBoard, South, NodeCol, Piece2),
-    otherAdjacent(Piece1, Val2),
+    otherAdjacent(Piece2, Val2),
 
     getMatrixElement(AuxBoard, NodeRow, West, Piece3),
-    otherAdjacent(Piece1, Val3),
+    otherAdjacent(Piece3, Val3),
 
     getMatrixElement(AuxBoard, NodeRow, East, Piece4),
-    otherAdjacent(Piece1, Val4),
+    otherAdjacent(Piece4, Val4),
 
     Multiplier is -8,
     Value is Multiplier*(Val1+Val2+Val3+Val4).

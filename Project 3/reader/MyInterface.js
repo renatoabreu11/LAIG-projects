@@ -102,7 +102,10 @@ MyInterface.prototype.processKeyboard = function(event) {
 		case(76): //debug [L]
 		case(108):
 		    var view = this.scene.graph.getNextView();
-            var transition = "camTransition1";
+		    var transition;
+            if(view["id"] == "player1View1" || view["id"] == "player1View2" || view["id"] == "player1View3")
+                transition = "camTransition2";
+            else transition = "camTransition1";
 			this.scene.switchCamera(view, transition);
 			break;
 		default:

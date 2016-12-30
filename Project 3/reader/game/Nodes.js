@@ -413,6 +413,11 @@ Nodes.prototype.resetGame = function () {
  * Resets variables used in a movie sequence
  */
 Nodes.prototype.resetMovie = function () {
+    var diff = this.elapsedTime - this.currentMove.getInitialTime();
+    if(diff > this.currentMove.getAnimation().getSpan()) {
+        this.currentMove.getPiece().setAnimation(null);
+        this.currentMove.movePiece();
+    }
     this.playState = Nodes.playState.NONE;
     this.gameState = Nodes.gameState.MENU;
     this.actualMovie = null;

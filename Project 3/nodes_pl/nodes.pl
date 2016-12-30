@@ -176,7 +176,7 @@ selectDestiny(DestRow, DestColumn, SrcRow, SrcCol, Board):-
 	validateDestiny(DestRow, DestColumn, SrcRow, SrcCol, Board), !.
 
 %Verifies if the destiny is valid
-validateDestiny(DestRow, DestColumn, SrcRow, SrcCol, DestRow, DestCol, Board):-
+validateDestiny(DestRow, DestColumn, SrcRow, SrcCol, DestRow, DestColumn, Board):-
 	%nl, write('Write the coordinates of where to move it.'), nl,
 	%getCoords(DestRow, DestColumn),
 	%Verifies if the coordinates are from a cell outside the board boundaries
