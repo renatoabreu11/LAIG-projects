@@ -68,15 +68,15 @@ XMLscene.prototype.setInterface = function(myInterface){
  * Handler called when the graph is finally loaded.
  * As loading is asynchronous, this may be called already after the application has started the run loop
  */
-XMLscene.prototype.onGraphLoaded = function ()
+XMLscene.prototype.onGraphLoaded = function (graph)
 {
-    this.gl.clearColor(this.graph.illumination["background"]["r"],this.graph.illumination["background"]["g"],
-        this.graph.illumination["background"]["b"],this.graph.illumination["background"]["a"]);
+    this.gl.clearColor(graph.illumination["background"]["r"], graph.illumination["background"]["g"],
+        graph.illumination["background"]["b"],graph.illumination["background"]["a"]);
 
-    this.setAmbient(this.graph.illumination["ambient"]["r"],this.graph.illumination["ambient"]["g"],
-        this.graph.illumination["ambient"]["b"],this.graph.illumination["ambient"]["a"]);
+    this.setAmbient(graph.illumination["ambient"]["r"],graph.illumination["ambient"]["g"],
+        graph.illumination["ambient"]["b"],graph.illumination["ambient"]["a"]);
 
-    this.axis = new CGFaxis(this, this.graph.axisLength, 0.05);
+    this.axis = new CGFaxis(this, graph.axisLength, 0.05);
     this.camera = this.graph.getDefaultView();
     this.interface.setActiveCamera(this.camera);
     this.initLights();
