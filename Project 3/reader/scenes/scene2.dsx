@@ -401,9 +401,7 @@
             <texture id="none" />
 
             <children>
-                <componentref id="marker1" />
-                <componentref id="marker2" />
-                <componentref id="marker3" />
+                <componentref id="marker" />
                 <componentref id="statue1" />
                 <componentref id="statue2" />
                 <componentref id="statue3" />
@@ -415,41 +413,7 @@
             </children>
         </component>
 
-        <component id="marker1">
-            <transformation>
-                <translate x="-20" y="10" z="0" />
-                <rotate axis="y" angle="90" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-
-            <texture id="marble" />
-
-            <children>
-                <primitiveref id="marker" />
-            </children>
-        </component>
-
-        <component id="marker2">
-            <transformation>
-                <translate x="20" y="10" z="0" />
-                <rotate axis="y" angle="-90" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-
-            <texture id="marble" />
-
-            <children>
-                <primitiveref id="marker" />
-            </children>
-        </component>
-
-        <component id="marker3">
+        <component id="marker">
             <transformation>
                 <translate x="0" y="10" z="10" />
                 <rotate axis="y" angle="180" />
