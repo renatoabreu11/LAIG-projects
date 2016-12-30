@@ -570,12 +570,12 @@ Nodes.prototype.resetHighlights = function () {
 Nodes.prototype.display= function(){
     if(this.gameState != Nodes.gameState.MENU){
         this.scene.pushMatrix();
-        if(this.board != null && this.playState != Nodes.playState.NONE)
+        if((this.board != null && this.playState != Nodes.playState.NONE) || this.gameState == Nodes.gameState.MOVIE)
             this.board.display();
 
         this.scene.pushMatrix();
         this.scene.translate(4, 0, 4);
-        if(this.playState != Nodes.playState.NONE)
+        if(this.playState != Nodes.playState.NONE || this.gameState == Nodes.gameState.MOVIE)
             for(var i = 0; i < this.tiles.length; i++){
 
                 var pickingMode = false;
