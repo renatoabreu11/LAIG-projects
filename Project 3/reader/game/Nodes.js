@@ -357,14 +357,6 @@ Nodes.prototype.parseMoveFromAI = function (info) {
  * After the player terminates its turn, this function switches the current player
  */
 Nodes.prototype.switchPlayer = function () {
-    if(this.scene.transitionCam != null)
-        return;
-    transitionCam=[];
-    transitionCam["newCam"]=this.scene.graph.getNextView();
-    transitionCam["animation"]=this.scene.graph.animations[this.scene.graph.checkIfExists(this.scene.graph.animations, transitionCam["newCam"]["id"]=="player1" ? "camTransition1" : "camTransition2")];
-    transitionCam["finishTime"]=this.scene.elapsedTime+transitionCam["animation"].span;
-    this.scene.transitionCam=transitionCam;
-
     if(this.currentPlayer == this.player1)
         this.currentPlayer = this.player2;
     else this.currentPlayer = this.player1;
@@ -379,6 +371,7 @@ Nodes.prototype.switchPlayer = function () {
             if(own.currentPlayer.getIsBot())
                 own.playState = Nodes.playState.AI_TURN;
             else own.playState = Nodes.playState.PIECE_SELECTION;
+            this.scene.switchCamera();
         } else {
             own.playState = Nodes.playState.END_GAME;
         }

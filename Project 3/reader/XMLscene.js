@@ -97,6 +97,20 @@ XMLscene.prototype.updateCamera = function () {
     this.camera = this.graph.getDefaultView();
 }
 
+/**
+ * Sets camera to the next view with a smooth transition
+ */
+XMLscene.prototype.switchCamera = function (view, transition) {
+    if(this.transitionCam != null)
+        return false;
+    transitionCam=[];
+    transitionCam["newCam"]= view;
+    transitionCam["animation"]=this.graph.animations[this.graph.checkIfExists(this.graph.animations, transition)];
+    transitionCam["finishTime"]=this.elapsedTime+transitionCam["animation"].span;
+    this.transitionCam=transitionCam;
+    return true;
+}
+
 XMLscene.prototype.animateCameraTransition = function () {
     var camInfo=this.transitionCam;
 
@@ -275,7 +289,14 @@ XMLscene.prototype.display = function () {
 XMLscene.prototype.ChangeView = function ()
 {
     if(this.nodes.getGameState() == Nodes.gameState.PLAY){
-        //alternate between currentplayer View 1, 2, 3 or lateral view
+        var player = this.nodes.currentPlayer;
+        player.updateView();
+        var view = player.getCurrentView();
+        var transition = "camTransition1";
+        var success = this.switchCamera(view, transition);
+        if(!success){
+            player.reverseView();
+        }
     }
 }
 

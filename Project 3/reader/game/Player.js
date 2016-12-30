@@ -10,6 +10,10 @@ function Player(team, score, isBot, scene) {
 
     this.currAppear = null;
     this.appearAsRBG = null;
+    if(this.team == "blue")
+        this.views = ["player1View1", "player1View2", "player1View3", "lateralView"];
+    else this.views = ["player2View1", "player2View2", "player2View3", "lateralView"];
+    this.viewIndex = 0;
     this.playerAppear = new CGFappearance(scene);
     this.playerAppear.setShininess(50);
 }
@@ -44,6 +48,37 @@ Player.prototype.updateAppear = function (appear) {
         return true;
     }
     return false;
+}
+
+/**
+ * Get Player views
+ * @returns {Array|string[]}
+ */
+Player.prototype.getViews = function () {
+    return this.views;
+}
+
+/**
+ * Get current view
+ * @returns {*|string}
+ */
+Player.prototype.getCurrentView = function () {
+    return this.views[this.viewIndex];
+}
+
+/**
+ * Updates view index
+ */
+Player.prototype.updateView = function () {
+    this.viewIndex++;
+    if(this.viewIndex == this.views.length)
+        this.viewIndex = 0;
+}
+
+Player.prototype.reverseView = function () {
+    this.viewIndex--;
+    if(this.viewIndex == -1)
+        this.viewIndex = this.views.length-1;
 }
 
 /**
