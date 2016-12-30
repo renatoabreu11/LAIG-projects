@@ -295,7 +295,23 @@ XMLscene.prototype.ChangeView = function ()
         var player = this.nodes.getCurrentPlayer();
         player.updateView();
         var viewID = player.getCurrentView();
-        var transition = "camTransition1";
+        var viewIndex = player.getViewIndex();
+        var transition;
+        if(player.getTeam() == "blue"){
+            switch (viewIndex){
+                case 0: transition = "camFromLatToP1"; break;
+                case 1: transition = "camAdvance"; break;
+                case 2: transition = "camAdvance"; break;
+                case 3: transition = "camFromP1ToLat"; break;
+            }
+        } else{
+            switch (viewIndex){
+                case 0: transition = "camFromLatToP2"; break;
+                case 1: transition = "camAdvance"; break;
+                case 2: transition = "camAdvance"; break;
+                case 3: transition = "camFromP2ToLat"; break;
+            }
+        }
         var success = this.switchCamera(viewID, transition);
         if(!success){
             player.reverseView();
@@ -387,7 +403,6 @@ XMLscene.prototype.StartGame = function ()
  */
 XMLscene.prototype.ExitGame = function (){
     if(this.nodes.getGameState() == Nodes.gameState.PLAY && this.transitionCam == null){
-        console.log(this.nodes.getGameState())
         var newGame = confirm("Do you really want to quit the current game?");
         if(newGame)
             this.nodes.resetGame();

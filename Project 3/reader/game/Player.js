@@ -75,11 +75,22 @@ Player.prototype.updateView = function () {
         this.viewIndex = 0;
 }
 
+/**
+ * reverses last view update
+ */
 Player.prototype.reverseView = function () {
     this.viewIndex--;
     if(this.viewIndex == -1)
         this.viewIndex = this.views.length-1;
 }
+
+/**
+ * Returns current view index
+ */
+Player.prototype.getViewIndex = function () {
+    return this.viewIndex;
+}
+
 
 /**
  * Returns player team -> blue or red

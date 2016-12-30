@@ -88,10 +88,10 @@ Nodes.prototype.initializeGame = function (mode, difficulty) {
         var randomValue = Math.floor((Math.random() * 10) + 1);
         if(randomValue > 5){
             nodes.currentPlayer = nodes.player1;
-            nodes.scene.switchCamera("player1View2", "camTransition2");
+            nodes.scene.switchCamera("player1View1", "camFromMenuToP1");
         }else{
             nodes.currentPlayer = nodes.player2;
-            nodes.scene.switchCamera("player2View2", "camTransition1");
+            nodes.scene.switchCamera("player2View1", "camFromMenuToP2");
         }
 
         nodes.initializeBoard(data);
@@ -117,7 +117,7 @@ Nodes.prototype.initializeMovie = function (movieName) {
 
     this.client.makeRequest("getFinalBoard", function(data){
         nodes.scene.transitionCam=null;
-        nodes.scene.switchCamera("lateralView", "camTransition1");
+        nodes.scene.switchCamera("lateralView", "camFromMenuToLat");
         nodes.initializeBoard(data);
         setTimeout(function(){
             nodes.playState = Nodes.playState.NONE;
@@ -386,7 +386,9 @@ Nodes.prototype.switchPlayer = function () {
             if(own.currentPlayer.getIsBot())
                 own.playState = Nodes.playState.AI_TURN;
             else own.playState = Nodes.playState.PIECE_SELECTION;
-            own.scene.switchCamera("player2View2", "camTransition1");
+            if(own.currentPlayer == own.player1)
+                own.scene.switchCamera("player1View1", "camReset");
+            else own.scene.switchCamera("player2View1", "camReset");
         } else {
             own.playState = Nodes.playState.END_GAME;
         }
@@ -403,7 +405,12 @@ Nodes.prototype.saveGame = function () {
     var saveGame = new Save(this.gameSequence, winner, this.mode, this.difficulty, index);
     this.savedGames.push(saveGame);
     this.scene.addMovie();
-    this.resetGame();
+    this.scene.transitionCam=null;
+    console.log(this.currentPlayer)
+    //this.scene.switchCamera("menuView", "camFromLatToMenu");
+    setTimeout(function(){
+        this.resetGame();
+    }, 1000);
 };
 
 /**
@@ -415,7 +422,7 @@ Nodes.prototype.resetGame = function () {
     this.resetHighlights();
 
     this.scene.transitionCam=null;
-    this.scene.switchCamera("menuView", "camTransition3");
+    this.scene.switchCamera("menuView", "camFromLatToMenu");
     this.difficulty = Nodes.difficulty.NONE;
     this.playState = Nodes.playState.NONE;
     this.gameState = Nodes.gameState.MENU;
@@ -435,7 +442,7 @@ Nodes.prototype.resetMovie = function () {
         this.currentMove.movePiece();
     }
     this.scene.transitionCam=null;
-    this.scene.switchCamera("menuView", "camTransition3");
+    this.scene.switchCamera("menuView", "camFromLatToMenu");
     this.playState = Nodes.playState.NONE;
     this.gameState = Nodes.gameState.MENU;
     this.actualMovie = null;
