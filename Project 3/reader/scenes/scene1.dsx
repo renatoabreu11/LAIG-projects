@@ -185,18 +185,18 @@
 
    <animations>
         <!-- cam for transitions between players -->
-        <animation id="camTransition2" span="1" type="keyframe">
+        <animation id="camTransitionP1ToP2" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="5" zz="22" />
-            <controlpoint xx="25" yy="5" zz="27" />
-            <controlpoint xx="30" yy="0" zz="14" />
+            <controlpoint xx="0" yy="7" zz="10" />
+            <controlpoint xx="25" yy="7" zz="10" />
+            <controlpoint xx="30" yy="0" zz="0" />
         </animation>
 
-        <animation id="camTransition1" span="1" type="keyframe">
+        <animation id="camTransitionP2ToP1" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="5" zz="-22" />
-            <controlpoint xx="-25" yy="5" zz="-27" />
-            <controlpoint xx="-30" yy="0" zz="-14" />
+            <controlpoint xx="0" yy="7" zz="-10" />
+            <controlpoint xx="-25" yy="7" zz="-10" />
+            <controlpoint xx="-30" yy="0" zz="-0" />
         </animation>
 
         <!-- cam for transitions from menus -->
@@ -263,13 +263,6 @@
             <controlpoint xx="0" yy="2" zz="2" />
             <controlpoint xx="0" yy="2" zz="5" />
             <controlpoint xx="0" yy="0" zz="7" />
-        </animation>
-
-        <animation id="camReset" span="1" type="keyframe">
-            <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="3" zz="-4" />
-            <controlpoint xx="0" yy="3" zz="-10" />
-            <controlpoint xx="0" yy="0" zz="-14" />
         </animation>
 
         <!--jumps-->
