@@ -94,6 +94,7 @@ XMLscene.prototype.initCameras = function () {
  */
 XMLscene.prototype.updateCamera = function () {
     this.graph.setNextView();
+    this.camera = this.graph.getDefaultView();
 }
 
 /**
