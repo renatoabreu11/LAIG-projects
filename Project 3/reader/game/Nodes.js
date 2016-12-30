@@ -594,7 +594,7 @@ Nodes.prototype.display= function(){
  * @param player1
  * @param player2
  */
-Nodes.prototype.update = function(currTime, player1, player2) {
+Nodes.prototype.update = function(currTime, player1, player2) {console.log(this.playState+", "+this.gameState);
     if (this.initialTime == 0) {
         this.initialTime = currTime;
     }

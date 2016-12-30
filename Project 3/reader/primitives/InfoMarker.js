@@ -11,6 +11,15 @@ function InfoMarker(scene){
 	this.twoDotsAppearance = new CGFappearance(this.scene);
 	this.twoDotsAppearance.loadTexture("../res/marker/twodots.png");
 
+	this.movieAppearance = new CGFappearance(this.scene);
+	this.movieAppearance.loadTexture("../res/MovieTime.jpg");
+	this.winner1Appearance = new CGFappearance(this.scene);
+	this.winner1Appearance.loadTexture("../res/Winner1.jpg");
+	this.winner2Appearance = new CGFappearance(this.scene);
+	this.winner2Appearance.loadTexture("../res/Winner1.jpg");
+	this.menuAppearance = new CGFappearance(this.scene);
+	this.menuAppearance.loadTexture("../res/Nodes.png");
+
 	this.numbersTextures = [];
 	for(n=0; n<=9; n++){
 		number = new CGFappearance(this.scene);
@@ -24,6 +33,18 @@ InfoMarker.prototype.constructor=InfoMarker;
 
 InfoMarker.prototype.display = function () {
 	this.updateTime();
+	var state=this.scene.nodes.gameState;
+	if(state==Nodes.gameState.MOVIE)
+		state=this.movieAppearance;
+	else if(state==Nodes.gameState.MENU){
+		var nodes = this.scene.nodes;
+		if(nodes.savedGames.length > 0){
+			var winner = nodes.savedGames[nodes.savedGames.length-1].getWinner();
+			if(winner==nodes.player1)
+				state=this.winner1Appearance;
+			else state=this.winner2Appearance;
+		} else state=this.menuAppearance;
+	} else state=null;
 
 
 	this.scene.pushMatrix();
@@ -64,6 +85,10 @@ InfoMarker.prototype.display = function () {
 	this.rect.display();
 	this.scene.popMatrix();
 
+	if(state != null){
+		state.apply();
+		this.rect.updateTexCoords(-6,-6);
+	}
 	this.scene.pushMatrix(); //z+
 	this.scene.scale(6,3,1);
 	this.scene.translate(0,0,2.9);
@@ -71,19 +96,22 @@ InfoMarker.prototype.display = function () {
 	this.rect.display();
 	this.scene.popMatrix();
 	
-	this.scene.pushMatrix(); //time
-	this.scene.translate(0,6,0);
-	this.displayClock();
-	this.scene.popMatrix();
+	if(state == null)
+	{
+		this.scene.pushMatrix(); //time
+		this.scene.translate(0,6,0);
+		this.displayClock();
+		this.scene.popMatrix();
 
-	this.scene.pushMatrix(); //p1 score
-	this.displayScore(this.scene.nodes.player1.getTeam());
-	this.scene.popMatrix();
+		this.scene.pushMatrix(); //p1 score
+		this.displayScore(this.scene.nodes.player1.getTeam());
+		this.scene.popMatrix();
 
-	this.scene.pushMatrix(); //p2 score
-	this.scene.translate(0,-6,0);
-	this.displayScore(this.scene.nodes.player2.getTeam());
-	this.scene.popMatrix();
+		this.scene.pushMatrix(); //p2 score
+		this.scene.translate(0,-6,0);
+		this.displayScore(this.scene.nodes.player2.getTeam());
+		this.scene.popMatrix();
+	}
 
 	this.scene.popMatrix();
 }
