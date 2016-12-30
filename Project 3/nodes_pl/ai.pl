@@ -26,6 +26,7 @@ pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, Move)
     getNodeCoordinates(Board, Bot, NodeRowI-NodeColI),
     getValidCoords(Board, Bot, ValidMoves), !,
     bestMove(Board, Bot, ValidMoves, _,  -500, BestMove,BestValue),
+	write(ValidMoves), nl,
 	if1(
 		(BestValue>=0, not(equalMove(BestMove))),
 		(applyMove(Board, BestMove, FinalBoard), assert(lastMove(BestMove, BestValue)), groundMove(BestMove, Move)),
@@ -33,13 +34,14 @@ pickBestMove(Board, FinalBoard, Bot, NodeRowI-NodeColI, NodeRowF-NodeColF, Move)
 			(
 				listLength(ValidMoves, 0, Length),
 				random(0, Length, Value),
-				nth1(Value, ValidMoves, Aux),
+				nth0(Value, ValidMoves, Aux),
 				assert(lastMove(Aux, 0)),
 				applyMove(Board, Aux, FinalBoard),
                 groundMove(Aux, Move)
 			)
 		)
 	),
+	write(Move), nl,
     getNodeCoordinates(FinalBoard, Bot, NodeRowF-NodeColF).
 
 
