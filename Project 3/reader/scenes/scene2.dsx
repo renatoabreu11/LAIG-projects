@@ -174,7 +174,7 @@
     </transformations>
 
    <animations>
-        <!-- cam transitions and animations -->
+        <!-- cam for transitions between players -->
         <animation id="camTransition2" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="0" yy="5" zz="22" />
@@ -189,6 +189,7 @@
             <controlpoint xx="-30" yy="0" zz="-14" />
         </animation>
 
+        <!-- cam for transitions from menus -->
         <animation id="camFromMenuToP1" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="10" yy="5" zz="-12" />
@@ -203,6 +204,7 @@
             <controlpoint xx="15" yy="0" zz="-37" />
         </animation>
 
+        <!-- cam for transitions related to the lateral view -->
         <animation id="camFromP1ToLat" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="5" yy="4" zz="3" />
@@ -231,6 +233,7 @@
             <controlpoint xx="15" yy="-5" zz="-22" />
         </animation>
 
+        <!-- cam for transitions between simple views -->
         <animation id="camAdvance" span="1" type="keyframe">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="0" yy="2" zz="2" />
