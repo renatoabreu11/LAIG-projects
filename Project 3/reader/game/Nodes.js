@@ -84,8 +84,20 @@ Nodes.prototype.constructor = Nodes;
 Nodes.prototype.initializeGame = function (mode, difficulty) {
     var nodes = this;
     this.client.makeRequest("getFinalBoard", function(data){
+        nodes.scene.transitionCam=null;
+        var randomValue = Math.floor((Math.random() * 10) + 1);
+        if(randomValue > 5){
+            nodes.currentPlayer = nodes.player1;
+            nodes.scene.switchCamera("player1View2", "camTransition2");
+        }else{
+            nodes.currentPlayer = nodes.player2;
+            nodes.scene.switchCamera("player2View2", "camTransition1");
+        }
+
         nodes.initializeBoard(data);
-        nodes.startGame(mode, difficulty);
+        setTimeout(function(){
+            nodes.startGame(mode, difficulty);
+        }, 1500);
     });
 }
 
@@ -104,10 +116,14 @@ Nodes.prototype.initializeMovie = function (movieName) {
     var nodes = this;
 
     this.client.makeRequest("getFinalBoard", function(data){
-        nodes.playState = Nodes.playState.NONE;
-        nodes.gameState = Nodes.gameState.MOVIE;
+        nodes.scene.transitionCam=null;
+        nodes.scene.switchCamera("lateralView", "camTransition1");
         nodes.initializeBoard(data);
-        nodes.updateMovie();
+        setTimeout(function(){
+            nodes.playState = Nodes.playState.NONE;
+            nodes.gameState = Nodes.gameState.MOVIE;
+            nodes.updateMovie();
+        }, 1500);
     });
 }
 
@@ -192,7 +208,6 @@ Nodes.prototype.startGame = function (mode, difficulty) {
 
     this.gameSequence = new Sequence();
     this.currentMove = new Move(this.scene, null, null, null);
-    this.currentPlayer = this.player1;
     this.turnFinishingTime=this.elapsedTime+this.scene.getTurnTime();
 }
 
@@ -371,7 +386,7 @@ Nodes.prototype.switchPlayer = function () {
             if(own.currentPlayer.getIsBot())
                 own.playState = Nodes.playState.AI_TURN;
             else own.playState = Nodes.playState.PIECE_SELECTION;
-            this.scene.switchCamera();
+            own.scene.switchCamera("player2View2", "camTransition1");
         } else {
             own.playState = Nodes.playState.END_GAME;
         }
@@ -399,7 +414,8 @@ Nodes.prototype.resetGame = function () {
     this.tiles = [];
     this.resetHighlights();
 
-    this.mode = Nodes.mode.NONE;
+    this.scene.transitionCam=null;
+    this.scene.switchCamera("menuView", "camTransition3");
     this.difficulty = Nodes.difficulty.NONE;
     this.playState = Nodes.playState.NONE;
     this.gameState = Nodes.gameState.MENU;
@@ -418,6 +434,8 @@ Nodes.prototype.resetMovie = function () {
         this.currentMove.getPiece().setAnimation(null);
         this.currentMove.movePiece();
     }
+    this.scene.transitionCam=null;
+    this.scene.switchCamera("menuView", "camTransition3");
     this.playState = Nodes.playState.NONE;
     this.gameState = Nodes.gameState.MENU;
     this.actualMovie = null;
