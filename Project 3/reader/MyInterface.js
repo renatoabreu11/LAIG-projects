@@ -101,12 +101,20 @@ MyInterface.prototype.processKeyboard = function(event) {
 			break;
 		case(76):
 		case(108):
-		    var view = this.scene.graph.getNextView();
+		    var currentView = this.scene.getDefaultCamID();
+		    var nextView = this.scene.graph.getNextView();
 		    var transition;
-            if(view["id"] == "player1View1" || view["id"] == "player1View2" || view["id"] == "player1View3")
-                transition = "camTransition2";
-            else transition = "camTransition1";
-			this.scene.switchCamera(view["id"], transition);
+            switch(currentView){
+                case "menuView": transition = "camFromMenuToP1"; break;
+                case "player1View1": transition = "camAdvance"; break;
+                case "player1View2": transition = "camAdvance"; break;
+                case "player1View3": transition = "camFromP1ToLat"; break;
+                case "lateralView": transition = "camFromLatToP2"; break;
+                case "player2View1": transition = "camAdvance"; break;
+                case "player2View2": transition = "camAdvance"; break;
+                case "player2View3": transition = "camFromMenuToP1"; break;
+            }
+			this.scene.switchCamera(nextView["id"], transition);
 			break;
 		default:
 			console.log("Unexpected keystroke with code "+event.keyCode);
