@@ -415,11 +415,16 @@ Nodes.prototype.saveGame = function () {
     this.savedGames.push(saveGame);
     this.scene.addMovie();
     this.scene.transitionCam=null;
-    console.log(this.currentPlayer)
-    //this.scene.switchCamera("menuView", "camFromLatToMenu");
-    setTimeout(function(){
-        this.resetGame();
-    }, 1000);
+    var camID = this.scene.getDefaultCamID();
+
+    var transition;
+    if(camID.match(/player1/g))
+        transition = "camFromP1ToLat";
+    else if(camID.match(/player2/g))
+        transition = "camFromP2ToLat";
+
+    this.scene.switchCamera("lateralView", transition);
+    this.resetGame();
 };
 
 /**
@@ -430,15 +435,21 @@ Nodes.prototype.resetGame = function () {
     this.tiles = [];
     this.resetHighlights();
 
-    this.scene.transitionCam=null;
-    this.scene.switchCamera("menuView", "camFromLatToMenu");
     this.difficulty = Nodes.difficulty.NONE;
     this.playState = Nodes.playState.NONE;
     this.gameState = Nodes.gameState.MENU;
+    this.player1.setViewIndex(0);
+    this.player2.setViewIndex(0)
 
     this.gameSequence = null;
     this.currentMove = null;
     this.currentPlayer = null;
+
+    var own = this;
+    setTimeout(function(){
+        own.scene.transitionCam=null
+        own.scene.switchCamera("menuView", "camFromLatToMenu");
+    }, 1500);
 }
 
 /**

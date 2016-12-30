@@ -112,6 +112,16 @@ XMLscene.prototype.switchCamera = function (viewID, transition) {
     return true;
 }
 
+/**
+ * Returns current camera ID
+ */
+XMLscene.prototype.getDefaultCamID = function () {
+    return this.graph.defaultView;
+}
+
+/**
+ *
+ */
 XMLscene.prototype.animateCameraTransition = function () {
     var camInfo=this.transitionCam;
 
@@ -349,8 +359,21 @@ XMLscene.prototype.ExitMovie = function ()
 {
     if(this.nodes.getGameState() == Nodes.gameState.MOVIE){
         var exitMovie = confirm("Do you really want to quit the current movie?");
-        if(exitMovie)
-            this.nodes.resetMovie();
+        if(exitMovie){
+            this.transitionCam=null;
+            var camID = this.getDefaultCamID();
+            var transition;
+            if(camID.match(/player1/g))
+                transition = "camFromP1ToLat";
+            else if(camID.match(/player2/g))
+                transition = "camFromP2ToLat";
+
+            var own = this;
+            setTimeout(function(){
+                own.switchCamera("lateralView", transition);
+                own.nodes.resetMovie();
+            }, 1500);
+        }
     }
 }
 
@@ -404,8 +427,18 @@ XMLscene.prototype.StartGame = function ()
 XMLscene.prototype.ExitGame = function (){
     if(this.nodes.getGameState() == Nodes.gameState.PLAY && this.transitionCam == null){
         var newGame = confirm("Do you really want to quit the current game?");
-        if(newGame)
+        if(newGame){
+            this.transitionCam=null;
+            var camID = this.getDefaultCamID();
+            var transition;
+            if(camID.match(/player1/g))
+                transition = "camFromP1ToLat";
+            else if(camID.match(/player2/g))
+                transition = "camFromP2ToLat";
+
+            this.switchCamera("lateralView", transition);
             this.nodes.resetGame();
+        }
     }
 }
 
