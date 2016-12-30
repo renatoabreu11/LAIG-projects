@@ -337,7 +337,9 @@ XMLscene.prototype.ChangeView = function ()
 XMLscene.prototype.LoadScenario = function ()
 {
     if(this.nodes.getGameState() == Nodes.gameState.MENU){
-        // change scene
+        if(this.Scene == "Citadella")
+            this.graph=this.graphs["scene2.dsx"];
+        else this.graph=this.graphs["scene1.dsx"];
     }
 }
 
@@ -419,16 +421,6 @@ XMLscene.prototype.StartGame = function ()
         }
         this.nodes.initializeGame(mode, difficulty);
     }
-}
-
-/**
- * Loads a new scenario
- * @constructor
- */
-XMLscene.prototype.LoadScenario = function(){
-    if(this.Scene == "Citadella")
-        this.graph=this.graphs["scene2.dsx"];
-    else this.graph=this.graphs["scene1.dsx"];
 }
 
 /**

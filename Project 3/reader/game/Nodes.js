@@ -375,7 +375,6 @@ Nodes.prototype.switchPlayer = function () {
     if(this.currentPlayer == this.player1)
         this.currentPlayer = this.player2;
     else this.currentPlayer = this.player1;
-
     var own = this;
     var request = "endGame("+this.board.toPrologStruct()+","+this.currentPlayer.getTeam()+")";
 
@@ -408,6 +407,21 @@ Nodes.prototype.switchPlayer = function () {
 };
 
 /**
+ * Checks if occurred game over
+ */
+Nodes.prototype.checkIfGameOver = function () {
+    var own = this;
+    var request = "endGame("+this.board.toPrologStruct()+","+this.currentPlayer.getTeam()+")";
+
+    this.client.makeRequest(request, function(data) {
+        var response = data.target.response;
+        if(response=="t"){
+            own.playState = Nodes.playState.END_GAME;
+        }
+    });
+}
+
+/**
  * Saves a nodes game after its end, adds the save to savedGames array and updates the movie folder interface
  */
 Nodes.prototype.saveGame = function () {
@@ -434,6 +448,7 @@ Nodes.prototype.saveGame = function () {
  * Resets variables used in a nodes game
  */
 Nodes.prototype.resetGame = function () {
+    this.turnFinishingTime=-1;
     this.pieces = [];
     this.tiles = [];
     this.resetHighlights();
@@ -459,6 +474,7 @@ Nodes.prototype.resetGame = function () {
  * Resets variables used in a movie sequence
  */
 Nodes.prototype.resetMovie = function () {
+    this.turnFinishingTime=-1;
     this.scene.transitionCam=null;
     this.scene.switchCamera("menuView", "camFromLatToMenu");
     this.playState = Nodes.playState.NONE;
@@ -636,7 +652,8 @@ Nodes.prototype.update = function(currTime, player1, player2) {
     }
 
     if((this.mode == Nodes.mode.CvC || this.mode == Nodes.mode.PvC) && this.playState == Nodes.playState.AI_TURN){
-        this.moveAI();
+        this.moveAI()
+        this.checkIfGameOver();
     }
 }
 
