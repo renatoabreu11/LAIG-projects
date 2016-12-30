@@ -387,16 +387,19 @@ Nodes.prototype.switchPlayer = function () {
                 own.playState = Nodes.playState.AI_TURN;
             else own.playState = Nodes.playState.PIECE_SELECTION;
             if(own.currentPlayer == own.player1){
-                if(own.player2.getViewIndex() == 3)
-                    own.scene.switchCamera("player1View1", "camFromLatToP1");
-                else own.scene.switchCamera("player1View1", "camReset");
-                own.player2.setViewIndex(0);
+                switch(own.player2.getViewIndex()){
+                    case 0: own.scene.switchCamera("player1View1", "camTransitionP2ToP1"); break;
+                    case 1: own.scene.switchCamera("player1View2", "camTransitionP2ToP1"); break;
+                    case 2: own.scene.switchCamera("player1View3", "camTransitionP2ToP1"); break;
+                }
+                own.player1.setViewIndex(own.player2.getViewIndex());
             } else {
-                if(own.player1.getViewIndex() == 3)
-                    own.scene.switchCamera("player2View1", "camFromLatToP2");
-                else own.scene.switchCamera("player2View1", "camReset");
-
-                own.player1.setViewIndex(0);
+                switch(own.player1.getViewIndex()){
+                    case 0: own.scene.switchCamera("player2View1", "camTransitionP1ToP2"); break;
+                    case 1: own.scene.switchCamera("player2View2", "camTransitionP1ToP2"); break;
+                    case 2: own.scene.switchCamera("player2View3", "camTransitionP1ToP2"); break;
+                }
+                own.player2.setViewIndex(own.player1.getViewIndex());
             }
         } else {
             own.playState = Nodes.playState.END_GAME;
@@ -456,11 +459,6 @@ Nodes.prototype.resetGame = function () {
  * Resets variables used in a movie sequence
  */
 Nodes.prototype.resetMovie = function () {
-    var diff = this.elapsedTime - this.currentMove.getInitialTime();
-    if(diff > this.currentMove.getAnimation().getSpan()) {
-        this.currentMove.getPiece().setAnimation(null);
-        this.currentMove.movePiece();
-    }
     this.scene.transitionCam=null;
     this.scene.switchCamera("menuView", "camFromLatToMenu");
     this.playState = Nodes.playState.NONE;
