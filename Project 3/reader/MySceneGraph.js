@@ -9,6 +9,7 @@ function MySceneGraph(filename, scene) {
 	// Establish bidirectional references between scene and graph
 	this.scene = scene;
 	scene.graph=this;
+	scene.graphs[filename]=this;
 
 	//Scene block values
 	this.views = [];

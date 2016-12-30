@@ -29,6 +29,7 @@ XMLscene.prototype.init = function (application) {
 	this.gl.depthMask(true);
 
     this.enableTextures(true);
+    this.graphs=[];
 
 	this.lightStatus = [];
 	this.undo = false;
@@ -418,6 +419,16 @@ XMLscene.prototype.StartGame = function ()
         }
         this.nodes.initializeGame(mode, difficulty);
     }
+}
+
+/**
+ * Loads a new scenario
+ * @constructor
+ */
+XMLscene.prototype.LoadScenario = function(){
+    if(this.Scene == "Citadella")
+        this.graph=this.graphs["scene2.dsx"];
+    else this.graph=this.graphs["scene1.dsx"];
 }
 
 /**

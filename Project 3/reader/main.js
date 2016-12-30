@@ -41,9 +41,11 @@ main=function()
     myInterface.setActiveCamera(myScene.camera);
     myScene.setInterface(myInterface);
 
-	var filename=getUrlVars()['file'] || "scene2.dsx";
+	var filename1=getUrlVars()['file'] || "scene1.dsx";
+    var filename2=getUrlVars()['file'] || "scene2.dsx";
 
-	var myGraph = new MySceneGraph(filename, myScene);
+	var graph1 = new MySceneGraph(filename1, myScene);
+    var graph2 = new MySceneGraph(filename2, myScene);
 	
 	// start
     app.run();
