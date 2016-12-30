@@ -95,7 +95,6 @@ Nodes.prototype.initializeGame = function (mode, difficulty) {
         }
 
         nodes.initializeBoard(data);
-        nodes.startGame(mode, difficulty);
         setTimeout(function(){
             nodes.startGame(mode, difficulty);
         }, 1500);
@@ -417,7 +416,6 @@ Nodes.prototype.resetGame = function () {
 
     this.scene.transitionCam=null;
     this.scene.switchCamera("menuView", "camTransition3");
-    this.mode = Nodes.mode.NONE;
     this.difficulty = Nodes.difficulty.NONE;
     this.playState = Nodes.playState.NONE;
     this.gameState = Nodes.gameState.MENU;
