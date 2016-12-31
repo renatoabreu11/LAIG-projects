@@ -43,19 +43,19 @@ InfoMarker.prototype.constructor=InfoMarker;
 InfoMarker.prototype.display = function () {
     this.updateTime();
     var state=this.scene.nodes.gameState;
-    if(state==Nodes.gameState.MOVIE)
-        state=this.movieAppearance;
-    else if(state==Nodes.gameState.MENU)
-        state=this.menuAppearance;
-    else if(state == Nodes.gameState.CONNECTION_REFUSED)
-		state=this.errorAppearance;
-	else if(this.scene.nodes.savingGame){
+    if(this.scene.nodes.savingGame){
         var nodes = this.scene.nodes;
         var winner = nodes.savedGames[nodes.savedGames.length-1].getWinner();
         if(winner==nodes.player1)
             state=this.winner1Appearance;
         else state=this.winner2Appearance;
-    } else
+    } else if(state==Nodes.gameState.MOVIE)
+        state=this.movieAppearance;
+    else if(state==Nodes.gameState.MENU)
+        state=this.menuAppearance;
+    else if(state == Nodes.gameState.CONNECTION_REFUSED)
+		state=this.errorAppearance;
+	else
         state=null;
 
 

@@ -493,16 +493,21 @@ Nodes.prototype.resetGame = function () {
  * Resets variables used in a movie sequence
  */
 Nodes.prototype.resetMovie = function () {
+    this.savingGame = true;
     this.turnFinishingTime=-1;
     this.scene.transitionCam=null;
     this.scene.switchCamera("menuView", "camFromLatToMenu");
     this.playState = Nodes.playState.NONE;
     this.gameState = Nodes.gameState.MENU;
-    this.actualMovie = null;
-    this.gameSequence = null;
-    this.currentMove = null;
-    this.pieces = [];
-    this.tiles = [];
+    var own = this;
+    setTimeout(function(){
+        own.savingGame = false;
+        own.actualMovie = null;
+        own.gameSequence = null;
+        own.currentMove = null;
+        own.pieces = [];
+        own.tiles = [];
+    }, 3000);
 }
 
 /**
