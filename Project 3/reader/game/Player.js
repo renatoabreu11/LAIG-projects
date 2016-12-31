@@ -26,28 +26,16 @@ Player.prototype.constructor = Player;
  * @param appear
  */
 Player.prototype.updateAppear = function (appear) {
-    var equal = true;
-    if(this.currAppear == null){
-        this.currAppear = appear;
-        equal = false;
-    }
-    else{
-        if(this.currAppear != appear)
-            equal = false;
-    }
-    if(!equal){
-        this.currAppear = appear;
-        var rgb = hexToRgb(appear);
-        var r = rgb.r /  255 ;
-        var g = rgb.g /  255 ;
-        var b = rgb.b /  255 ;
-        this.appearAsRBG = [r, g, b];
-        this.playerAppear.setAmbient(r, g, b, 0.2);
-        this.playerAppear.setDiffuse(r, g, b, 0.2);
-        this.playerAppear.setSpecular(r, g, b, 0.2);
-        return true;
-    }
-    return false;
+    this.currAppear = appear;
+    var rgb = hexToRgb(appear);
+    var r = rgb.r /  255 ;
+    var g = rgb.g /  255 ;
+    var b = rgb.b /  255 ;
+    this.appearAsRBG = [r, g, b];
+    this.playerAppear.setAmbient(r, g, b, 0.2);
+    this.playerAppear.setDiffuse(r, g, b, 0.2);
+    this.playerAppear.setSpecular(r, g, b, 0.2);
+    return true;
 }
 
 /**
