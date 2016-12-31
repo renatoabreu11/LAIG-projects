@@ -361,10 +361,10 @@ XMLscene.prototype.StartMovie = function ()
  */
 XMLscene.prototype.ExitMovie = function ()
 {
-    if(this.nodes.getGameState() == Nodes.gameState.MOVIE){
+    if(this.nodes.getGameState() == Nodes.gameState.MOVIE && this.nodes.getResetCurrMove() == false){
         var exitMovie = confirm("Do you really want to quit the current movie?");
-        if(exitMovie && this.nodes.currentMove == null)
-            this.nodes.resetMovie();
+        if(exitMovie && this.nodes.getGameState() == Nodes.gameState.MOVIE)
+            this.nodes.setResetCurrMove(true);
     }
 }
 

@@ -48,6 +48,7 @@ function Nodes(scene) {
 
     this.savedGames = [];
     this.actualMovie = null;
+    this.resetCurrMovie = false;
 
     this.gameSequence = null;
     this.currentMove = null;
@@ -499,6 +500,7 @@ Nodes.prototype.resetMovie = function () {
     this.scene.switchCamera("menuView", "camFromLatToMenu");
     this.playState = Nodes.playState.NONE;
     this.gameState = Nodes.gameState.MENU;
+    this.resetCurrMovie = false;
     var own = this;
     setTimeout(function(){
         own.savingGame = false;
@@ -659,7 +661,9 @@ Nodes.prototype.update = function(currTime, player1, player2) {
         if(diff > this.currentMove.getAnimation().getSpan()) {
             this.currentMove.getPiece().setAnimation(null);
             this.currentMove.movePiece();
-            this.updateMovie();
+            if(this.resetCurrMovie)
+                this.resetMovie();
+            else this.updateMovie();
         } else {
             this.currentMove.display(diff);
         }
@@ -763,4 +767,18 @@ Nodes.prototype.deselectPieces = function () {
     for(var i = 0; i < this.pieces.length; i++){
         this.pieces[i].setSelected(false);
     }
+}
+
+/**
+ * Gets reset current movie value
+ */
+Nodes.prototype.getResetCurrMove = function () {
+    return this.resetCurrMovie;
+}
+
+/**
+ * Sets reset current movie value
+ */
+Nodes.prototype.setResetCurrMove = function (value) {
+    this.resetCurrMovie = value;
 }
