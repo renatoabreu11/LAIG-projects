@@ -363,21 +363,8 @@ XMLscene.prototype.ExitMovie = function ()
 {
     if(this.nodes.getGameState() == Nodes.gameState.MOVIE){
         var exitMovie = confirm("Do you really want to quit the current movie?");
-        if(exitMovie){
-            this.transitionCam=null;
-            var camID = this.getDefaultCamID();
-            var transition;
-            if(camID.match(/player1/g))
-                transition = "camFromP1ToLat";
-            else if(camID.match(/player2/g))
-                transition = "camFromP2ToLat";
-
-            var own = this;
-            setTimeout(function(){
-                own.switchCamera("lateralView", transition);
-                own.nodes.resetMovie();
-            }, 1500);
-        }
+        if(exitMovie && this.nodes.currentMove == null)
+            this.nodes.resetMovie();
     }
 }
 
