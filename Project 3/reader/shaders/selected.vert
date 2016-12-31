@@ -12,8 +12,9 @@ uniform mat4 uNMatrix;
 
 uniform vec3 colour;
 
-uniform float normScale;
+uniform float norm;
 
 void main() {
-    	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, normScale);
+	float scale = 0.9 + norm*0.1;
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, scale);
 }

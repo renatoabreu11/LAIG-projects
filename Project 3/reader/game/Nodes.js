@@ -628,19 +628,19 @@ Nodes.prototype.update = function(currTime, player1, player2) {
         var appearChange1 = this.player1.updateAppear(player1);
         var appearChange2 = this.player2.updateAppear(player2);
 
-        var normScale = .9+Math.sin(this.elapsedTime*3)*.1;
+        var norm = Math.sin(this.elapsedTime*3);
         if(this.currentPlayer == this.player1 && appearChange1){
             var colour = this.player1.getAppearAsRGB();
             this.selectedShader.setUniformsValues({
                 colour: colour,
-                normScale: normScale,
+                norm: norm,
             });
 
         } else if(this.currentPlayer == this.player2 && appearChange2){
             var colour = this.player2.getAppearAsRGB();
             this.selectedShader.setUniformsValues({
                 colour: colour,
-                normScale: normScale,
+                norm: norm,
             });
         }
     }
