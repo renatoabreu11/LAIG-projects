@@ -50,8 +50,3 @@ The goal was to develop a graphical interface for a Prolog game developed in the
 [Diogo Duque](https://github.com/DiogoDuque)
 
 [Renato Abreu](https://github.com/renatoabreu11)
-
-## Team 
-[Diogo Duque](https://github.com/DiogoDuque)
-
-[Renato Abreu](https://github.com/renatoabreu11)
