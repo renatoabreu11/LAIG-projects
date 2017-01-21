@@ -30,6 +30,10 @@ As such, by using the parser previously developed and extending the DSX language
 
 ### Project 3
 
+| [<img src="/res/PlayerVsPlayer.gif" width="256" heigth="256">](/res/PlayerVsPlayer.gif)                                                           | [<img src="/res/PlayerVsAI.gif" width="256" heigth="256">](/res/PlayerVsAI.gif)                                                         | [<img src="/res/GameMovie.gif" width="256" heigth="256">](/res/GameMovie.gif) |
+|:---:|:---:|:---:|
+| Player Vs Player | Player Vs AI | Game Movie |
+
 ## Team 
 [Diogo Duque](https://github.com/DiogoDuque)
 
