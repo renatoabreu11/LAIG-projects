@@ -6,7 +6,7 @@ LAIG is a course given at FEUP in the third year of the Master in Informatics an
 ## Goals
 
 ### Project 1
-The main goal of this project is to build a 3d graphic application. It reads the components of a given scene, specified by a text file, and displays it.
+The main goal of this project was to build a 3d graphic application. It reads the components of a given scene, specified by a text file, and displays it.
 
 The text file must comply with a defined language, DSX - Description of Scenes in XML, which obeys to a concept widely used in Computer Graphics: Scene graph. Furthermore, the syntax follows the XML tags format.
  
@@ -17,7 +17,7 @@ Therefore, the application reads and transverses all the dsx nodes, while simult
 | View 1 | View 2 | View 3 |
 
 ### Project 2
-The goal of this project is to add new graphic functionalities to the work developed in the last project.
+The goal of this project was to add new graphic functionalities to the work developed in the last project.
 
 As such, by using the parser previously developed and extending the DSX language, we added the following features: 
 * Animations (linear and circular)
@@ -29,10 +29,27 @@ As such, by using the parser previously developed and extending the DSX language
 | Scene | Animations and Shaders | Boards |
 
 ### Project 3
+The goal was to develop a graphical interface for a Prolog game developed in the [Logic Programming](https://github.com/renatoabreu11/PLOG-projects) course, which in our case was the puzzle game [Nodes](https://www.thegamecrafter.com/games/nodes).
+
+#### Features
+* Player Vs Player, Player Vs AI, AI Vs AI (with two difficulty modes)
+* Undo last play or reset turn plays
+* Game Movie
+* Key frame animations
+* Switching between predefined scenarios
+* Switching between predefined cameras (different for each player)
+* Game statistics and player turn timer
 
 | [<img src="/res/PlayerVsPlayer.gif" width="256" heigth="256">](/res/PlayerVsPlayer.gif)                                                           | [<img src="/res/PlayerVsAI.gif" width="256" heigth="256">](/res/PlayerVsAI.gif)                                                         | [<img src="/res/GameMovie.gif" width="256" heigth="256">](/res/GameMovie.gif) |
 |:---:|:---:|:---:|
 | Player Vs Player | Player Vs AI | Game Movie |
+
+[How to Play](https://github.com/renatoabreu11/LAIG-projects/blob/master/Project%203/docs/Manual.pdf)
+
+## Team 
+[Diogo Duque](https://github.com/DiogoDuque)
+
+[Renato Abreu](https://github.com/renatoabreu11)
 
 ## Team 
 [Diogo Duque](https://github.com/DiogoDuque)
