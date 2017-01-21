@@ -17,6 +17,16 @@ Therefore, the application reads and transverses all the dsx nodes, while simult
 | View 1 | View 2 | View 3 |
 
 ### Project 2
+The goal of this project is to add new graphic functionalities to the work developed in the last project.
+
+As such, by using the parser previously developed and extending the DSX language, we added the following features: 
+* Animations (linear and circular)
+* 2D/3D surfaces 
+* Shaders based in GLSL ES 1.0
+
+| [<img src="/res/MainScene.jpg" width="256" heigth="256">](/res/MainScene.jpg)                                                           | [<img src="/res/Animations.gif" width="256" heigth="256">](/res/Animations.gif)                                                         | [<img src="/res/Boards.gif" width="256" heigth="256">](/res/Boards.gif) |
+|:---:|:---:|:---:|
+| Scene | Animations and Shaders | Boards |
 
 ### Project 3
 
