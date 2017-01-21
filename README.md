@@ -32,7 +32,7 @@ As such, by using the parser previously developed and extending the DSX language
 The goal was to develop a graphical interface for a Prolog game developed in the [Logic Programming](https://github.com/renatoabreu11/PLOG-projects) course, which in our case was the puzzle game [Nodes](https://www.thegamecrafter.com/games/nodes).
 
 #### Features
-* Player Vs Player, Player Vs AI, AI Vs AI (with two difficulty modes)
+* Player Vs Player, [Player Vs AI](/res/PlayerVsAI.gif), AI Vs AI (with two difficulty modes)
 * Undo last play or reset turn plays
 * Game Movie
 * Key frame animations
@@ -40,9 +40,9 @@ The goal was to develop a graphical interface for a Prolog game developed in the
 * Switching between predefined cameras (different for each player)
 * Game statistics and player turn timer
 
-| [<img src="/res/PlayerVsPlayer.gif" width="256" heigth="256">](/res/PlayerVsPlayer.gif)                                                           | [<img src="/res/PlayerVsAI.gif" width="256" heigth="256">](/res/PlayerVsAI.gif)                                                         | [<img src="/res/GameMovie.gif" width="256" heigth="256">](/res/GameMovie.gif) |
-|:---:|:---:|:---:|
-| Player Vs Player | Player Vs AI | Game Movie |
+| [<img src="/res/PlayerVsPlayer.gif" width="256" heigth="256">](/res/PlayerVsPlayer.gif)                                               | [<img src="/res/GameMovie.gif" width="256" heigth="256">](/res/GameMovie.gif) |
+|:---:|:---:|
+| Player Vs Player | Game Movie |
 
 [How to Play](https://github.com/renatoabreu11/LAIG-projects/blob/master/Project%203/docs/Manual.pdf)
 
